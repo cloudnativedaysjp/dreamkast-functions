@@ -11,7 +11,7 @@ export class GetViewerCountStack extends Stack {
     constructor(scope: Construct, id: string, props: StackProps, buildConfig: BuildConfig) {
         super(scope, id, props)
 
-        const importedViewerCountTableName = Fn.importValue('viewerCountTableName');
+        const importedViewerCountTableName = Fn.importValue(`viewerCountTableName-${buildConfig.Environment}`);
 
         const getViewerCountFunction = new Function(this, 'getViewerCount', {
             runtime: Runtime.PYTHON_3_9,
