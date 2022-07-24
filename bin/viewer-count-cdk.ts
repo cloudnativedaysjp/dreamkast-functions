@@ -59,7 +59,7 @@ async function Main()
         env: {
             region: buildConfig.AWSProfileRegion,
         }
-    });
+    }, buildConfig);
     getViewerCountStack.addDependency(saveViewerCountStack);
 }
 Main();

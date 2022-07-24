@@ -4,17 +4,11 @@ import { Stack, StackProps, RemovalPolicy, Fn } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { BuildConfig } from './build-config'
 
 export class GetViewerCountStack extends Stack {
 
-    private api = new RestApi(this, 'viewerCountApi',{
-        restApiName: 'viewer-count',
-        deployOptions: {
-            stageName: 'v1'
-        },
-    });
-
-    constructor(scope: Construct, id: string, props: StackProps) {
+    constructor(scope: Construct, id: string, props: StackProps, buildConfig: BuildConfig) {
         super(scope, id, props)
 
         const importedViewerCountTableName = Fn.importValue('viewerCountTableName');
@@ -28,7 +22,6 @@ export class GetViewerCountStack extends Stack {
             handler: 'get_viewer_count.lambda_handler'
         });
 
-        //viewerCountTable.grantReadData(getViewerCountFunction)
         getViewerCountFunction.addToRolePolicy(new PolicyStatement({
             resources: [
                 'arn:aws:dynamodb:*:*:table/*'
@@ -38,9 +31,16 @@ export class GetViewerCountStack extends Stack {
             ]
         }));
 
+        const api = new RestApi(this, 'viewerCountApi',{
+            restApiName: `viewer-count-${buildConfig.Environment}`,
+            deployOptions: {
+                stageName: 'v1'
+            },
+        });
+
         // ViewerCount Api lambda integration:
         const getViewerCountLambdaIntegration = new LambdaIntegration(getViewerCountFunction);
-        const getViewerCountLambdaTrackIdResource = this.api.root.addResource('{trackId}');
+        const getViewerCountLambdaTrackIdResource = api.root.addResource('{trackId}');
         const getViewerCountLambdaResource = getViewerCountLambdaTrackIdResource.addResource('viewer_count');
         getViewerCountLambdaResource.addMethod('GET', getViewerCountLambdaIntegration);
 
