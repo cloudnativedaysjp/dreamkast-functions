@@ -15,26 +15,26 @@ def lambda_handler(event, context):
         print(e)
         return{
             'statusCode' : 400,
-            'body' : json.dumps('trackId is not number')
+            'body' : 'trackId is not number'
         }
-        
-    res = table.get_item(
+    
+    item = table.get_item(
         Key={
             'trackId': trackId,
         }
     )
     
-    if 'Item' not in res:
+    if 'Item' not in item:
         return{
             'statusCode' : '400',
-            'body' : json.dumps('not found Item')
+            'body' : 'not found Item'
         }
     
-    viewer_count = 0
-    if 'viewerCount' in res['Item'] :
-        viewer_count = res['Item']['viewerCount']
+    responce =  { 'trackId' : trackId, 'viewer_count' : 0 }
+    if 'viewerCount' in item['Item'] :
+        responce['viewer_count'] = int(item['Item']['viewerCount'])
     
     return {
         'statusCode': 200,
-        'body': json.dumps('viewer_count : ' + str(viewer_count))
+        'body': json.dumps(responce)
     }
