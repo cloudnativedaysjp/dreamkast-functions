@@ -31,8 +31,8 @@ def lambda_handler(event, context):
         }
     
     viewer_count = 0
-    if 'viewer_count' in res :
-        viewer_count = res['viewer_count']
+    if 'viewerCount' in res['Item'] :
+        viewer_count = res['Item']['viewerCount']
     
     return {
         'statusCode': 200,

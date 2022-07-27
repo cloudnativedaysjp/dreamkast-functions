@@ -35,7 +35,7 @@ def lambda_handler(event, context):
                 res = ivs_client.get_stream(
                         channelArn=track['channelArn']
                     )
-                item['viewerCount'] = res['viewerCount']
+                item['viewerCount'] = res['stream']['viewerCount']
             except Exception as e:
                 print(e)
 
