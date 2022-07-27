@@ -15,7 +15,7 @@ def lambda_handler(event, context):
         print(e)
         return{
             'statusCode' : 400,
-            'body' : json.dumps('Error')
+            'body' : json.dumps('trackId is not number')
         }
         
     res = table.get_item(
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
     if 'Item' not in res:
         return{
             'statusCode' : '400',
-            'body' : json.dumps('Error')
+            'body' : json.dumps('not found Item')
         }
     
     viewer_count = 0
