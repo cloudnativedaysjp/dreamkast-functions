@@ -47,7 +47,7 @@ async function Main()
 
     Tags.of(app).add('Environment', buildConfig.Environment);
 
-    const saveViewerCountStack = new SaveViewerCountStack(app, `SaveViwerCountStack-${buildConfig.Environment}`, {
+    const saveViewerCountStack = new SaveViewerCountStack(app, `SaveViewerCountStack-${buildConfig.Environment}`, {
         stackName: `SaveViewerCount-${buildConfig.Environment}`,
         env: {
             region: buildConfig.AWSProfileRegion,
