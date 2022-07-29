@@ -54,7 +54,7 @@ async function Main()
         }
     }, buildConfig);
     
-    const getViewerCountStack = new GetViewerCountStack(app, `GetViwerCountStack-${buildConfig.Environment}`, {
+    const getViewerCountStack = new GetViewerCountStack(app, `GetViewerCountStack-${buildConfig.Environment}`, {
         stackName: `GetViewerCount-${buildConfig.Environment}`,
         env: {
             region: buildConfig.AWSProfileRegion,
