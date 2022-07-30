@@ -4,6 +4,7 @@ import { Stack, StackProps, RemovalPolicy, Fn } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { BuildConfig } from './build-config'
 
 export class GetViewerCountStack extends Stack {
@@ -13,14 +14,21 @@ export class GetViewerCountStack extends Stack {
 
         const importedViewerCountTableName = Fn.importValue(`viewerCountTableName-${buildConfig.Environment}`);
 
-        const getViewerCountFunction = new Function(this, 'getViewerCount', {
-            runtime: Runtime.PYTHON_3_9,
-            code: Code.fromAsset(join(__dirname, '..', 'src')),
+        const getViewerCountFunction = new NodejsFunction(this, 'getViewerCount',{
+            entry: 'src/get_viewer_count.ts',
             environment: {
                 TABLENAME: importedViewerCountTableName,
             },
-            handler: 'get_viewer_count.lambda_handler'
         });
+        
+        //const getViewerCountFunction = new Function(this, 'getViewerCount', {
+        //    runtime: Runtime.PYTHON_3_9,
+        //    code: Code.fromAsset(join(__dirname, '..', 'src')),
+        //    environment: {
+        //        TABLENAME: importedViewerCountTableName,
+        //    },
+        //    handler: 'get_viewer_count.lambda_handler'
+        //});
 
         getViewerCountFunction.addToRolePolicy(new PolicyStatement({
             resources: [
