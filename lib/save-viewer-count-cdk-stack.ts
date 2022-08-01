@@ -3,7 +3,6 @@ import { join } from 'path';
 import { Stack, StackProps, RemovalPolicy, Duration, CfnOutput } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -16,8 +15,6 @@ export class SaveViewerCountStack extends Stack {
         const viewerCountTable = new Table(this, 'ViewerCountTable', {
             billingMode: BillingMode.PAY_PER_REQUEST,
             partitionKey: { name: 'trackId', type: AttributeType.NUMBER },
-            //partitionKey: { name: 'trackId', type: AttributeType.STRING },
-            //sortKey: { name: 'channelArn', type: AttributeType.STRING },
             removalPolicy: RemovalPolicy.DESTROY
         });
 
@@ -29,17 +26,6 @@ export class SaveViewerCountStack extends Stack {
                 GET_TRACKS_URL: buildConfig.GetTracksURL
             },
         });
-
-        //const saveViewerCountFunction = new Function(this, 'saveViewerCount', {
-        //    runtime: Runtime.NODEJS_16_X,
-        //    code: Code.fromAsset(join(__dirname, '..', 'src')),
-        //    environment: {
-        //        TABLENAME: viewerCountTable.tableName,
-        //        EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
-        //        GET_TRACKS_URL: buildConfig.GetTracksURL
-        //    },
-        //    handler: 'save_viewer_count.handler'
-        //});
 
         saveViewerCountFunction.addToRolePolicy(new PolicyStatement({
             resources: [
