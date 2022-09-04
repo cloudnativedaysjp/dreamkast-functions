@@ -12,7 +12,7 @@ if (eventAbbr == undefined){
 
 const app = new App({
     context: {
-        EVENTABBR: 'cnsec2022',
+        EVENTABBR: eventAbbr,
     }
 });
 
