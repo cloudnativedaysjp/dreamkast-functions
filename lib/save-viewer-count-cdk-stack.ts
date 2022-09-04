@@ -1,5 +1,4 @@
 import { Construct } from 'constructs';
-import { join } from 'path';
 import { Stack, StackProps, RemovalPolicy, Duration, CfnOutput } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';

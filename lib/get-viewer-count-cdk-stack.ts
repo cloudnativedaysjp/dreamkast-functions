@@ -1,5 +1,4 @@
 import { Construct } from 'constructs';
-import { join } from 'path';
 import { Stack, StackProps, RemovalPolicy, Fn } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';

@@ -36,12 +36,12 @@
       "aws-cn"
     ],
     "stg": {
-      "AWSProfileRegion" : "us-east-1",
+      "AWSProfileRegion" : "ap-northeast-1",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
       "Environment": "stg"
     },
     "prd": {
-      "AWSProfileRegion" : "us-east-1",
+      "AWSProfileRegion" : "ap-northeast-1",
       "GetTracksURL": "https://event.cloudnativedays.jp/api/v1/tracks",
       "Environment": "prd"
     }

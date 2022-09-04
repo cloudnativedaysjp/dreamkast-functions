@@ -11,5 +11,5 @@
 ## Usage
 
 ```
-make stg-cnsec2022-diff
+npm run cdk:stg-diff
 ```

@@ -20,10 +20,10 @@ export const handler = async (event: any = {}): Promise<any> => {
     const url = GET_TRACKS_URL + '?eventAbbr=' + EVENTABBR;
 
     const response: any = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
     })
     .then(response => response.json())
     
