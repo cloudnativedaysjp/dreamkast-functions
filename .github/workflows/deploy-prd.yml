@@ -1,4 +1,4 @@
-name: GitOps for production
+name: Deploy to production
 
 on:
   push:
