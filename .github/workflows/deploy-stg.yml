@@ -1,4 +1,4 @@
-name: GitOps for staging
+name: Deploy to staging
 
 on:
   push:
