@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - '.github/**'
+      - '!.github/workflows/ci.yml'
+      - '**.md'
+    branches:
+    - main
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - '!.github/workflows/ci.yml'
+      - '**.md'
+    branches:
+      - main
+    types: [opened, synchronize]
+
+jobs:
+  aws_cdk:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Setup dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+          
+      - name: CDK STG Diff Check
+        if: contains(github.event_name, 'pull_request')
+        run: npm run cdk:stg-diff
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: CDK PRD Diff Check
+        if: contains(github.event_name, 'pull_request')
+        run: npm run cdk:stg-diff
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
