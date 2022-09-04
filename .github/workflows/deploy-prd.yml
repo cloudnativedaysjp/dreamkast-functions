@@ -4,7 +4,7 @@ on:
   push:
     paths-ignore:
       - '.github/**'
-      - '!.github/workflows/gitops-stg.yml'
+      - '!.github/workflows/deploy-stg.yml'
       - '**.md'
     tags:
     - v*
