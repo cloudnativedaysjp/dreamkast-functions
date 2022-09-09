@@ -6,7 +6,6 @@ import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { BuildConfig } from './build-config'
-import { LambdaIntegration, Resource,RestApi } from 'aws-cdk-lib/aws-apigateway';
 
 
 export class ViewerCountStack extends Stack {
@@ -68,20 +67,12 @@ export class ViewerCountStack extends Stack {
             ]
         }));
 
-        // API Gateway 
+        // OutPut
 
-        const api = new RestApi(this, 'viewerCountApi',{
-            restApiName: `viewer-count-${buildConfig.Environment}`,
-            deployOptions: {
-                stageName: 'v1'
-            },
+        new CfnOutput(this, 'viewerCountArnOutPut', {
+            value: getViewerCountFunction.functionArn,
+            exportName: `viewerCountStack-GetViewerCountFunction-Arn-${buildConfig.Environment}`,
         });
-
-        // ViewerCount Api lambda integration:
-        const getViewerCountLambdaIntegration = new LambdaIntegration(getViewerCountFunction);
-        const getViewerCountLambdaTrackIdResource = api.root.addResource('{trackId}');
-        const getViewerCountLambdaResource = getViewerCountLambdaTrackIdResource.addResource('viewer_count');
-        getViewerCountLambdaResource.addMethod('GET', getViewerCountLambdaIntegration);
 
     }
 }

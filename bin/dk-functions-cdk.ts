@@ -2,6 +2,7 @@
 //import { Tags } from '@aws-cdk/core'
 import { App, Tags } from 'aws-cdk-lib';
 import { ViewerCountStack } from './../lib/viewer-count-stack';
+import { APIGatewayStack } from './../lib/apigateway-stack';
 import { BuildConfig } from './../lib/build-config';
 
 const eventAbbr =  process.env.EVENTABBR
@@ -53,5 +54,12 @@ async function Main()
         }
     }, buildConfig);
 
+    const apiGatewayStack = new APIGatewayStack(app, `apigGatewayStack-${buildConfig.Environment}`, {
+        stackName: `apiGatewayStack-${buildConfig.Environment}`,
+        env: {
+            region: buildConfig.AWSProfileRegion,
+        }
+    }, buildConfig);
+    apiGatewayStack.addDependency(viewerCountStack);
 }
 Main();
