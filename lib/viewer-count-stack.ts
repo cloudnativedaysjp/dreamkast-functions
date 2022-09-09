@@ -6,26 +6,31 @@ import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { BuildConfig } from './build-config'
+import { LambdaIntegration, Resource,RestApi } from 'aws-cdk-lib/aws-apigateway';
 
-export class SaveViewerCountStack extends Stack {
+
+export class ViewerCountStack extends Stack {
     constructor(scope: Construct, id: string, props: StackProps, buildConfig: BuildConfig) {
         super(scope, id, props)
+
+        // Dynamo DB
 
         const viewerCountTable = new Table(this, 'ViewerCountTable', {
             billingMode: BillingMode.PAY_PER_REQUEST,
             partitionKey: { name: 'trackId', type: AttributeType.NUMBER },
-            removalPolicy: RemovalPolicy.DESTROY
+            removalPolicy: RemovalPolicy.DESTROY,
         });
+
+        // Lambda: SaveViewerCount
 
         const saveViewerCountFunction = new NodejsFunction(this, 'saveViewerCount',{
             entry: 'src/save_viewer_count.ts',
             environment: {
                 TABLENAME: viewerCountTable.tableName,
                 EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
-                GET_TRACKS_URL: buildConfig.GetTracksURL
+                GET_TRACKS_URL: buildConfig.GetTracksURL,
             },
         });
-
         saveViewerCountFunction.addToRolePolicy(new PolicyStatement({
             resources: [
                 'arn:aws:dynamodb:*:*:table/*',
@@ -37,6 +42,8 @@ export class SaveViewerCountStack extends Stack {
             ]
         }));
 
+        // EventBridge
+
         new Rule(this, "saveViewerCountRule", {
             schedule: Schedule.rate(Duration.minutes(1)),
             targets: [
@@ -44,10 +51,38 @@ export class SaveViewerCountStack extends Stack {
             ]
         });
 
-        new CfnOutput(this, 'viewerCountTableOutPut',{
-            value: viewerCountTable.tableName,
-            exportName: `viewerCountTableName-${buildConfig.Environment}`,
+        // Lambda: GetViewerCount
+
+        const getViewerCountFunction = new NodejsFunction(this, 'getViewerCount',{
+            entry: 'src/get_viewer_count.ts',
+            environment: {
+                TABLENAME: viewerCountTable.tableName,
+            },
         });
+        getViewerCountFunction.addToRolePolicy(new PolicyStatement({
+            resources: [
+                'arn:aws:dynamodb:*:*:table/*'
+            ],
+            actions: [
+                'dynamodb:GetItem'
+            ]
+        }));
+
+        // API Gateway 
+
+        const api = new RestApi(this, 'viewerCountApi',{
+            restApiName: `viewer-count-${buildConfig.Environment}`,
+            deployOptions: {
+                stageName: 'v1'
+            },
+        });
+
+        // ViewerCount Api lambda integration:
+        const getViewerCountLambdaIntegration = new LambdaIntegration(getViewerCountFunction);
+        const getViewerCountLambdaTrackIdResource = api.root.addResource('{trackId}');
+        const getViewerCountLambdaResource = getViewerCountLambdaTrackIdResource.addResource('viewer_count');
+        getViewerCountLambdaResource.addMethod('GET', getViewerCountLambdaIntegration);
+
     }
 }
 
