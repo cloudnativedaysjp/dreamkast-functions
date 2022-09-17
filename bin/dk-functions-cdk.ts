@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 //import { Tags } from '@aws-cdk/core'
 import { App, Tags } from 'aws-cdk-lib';
-import { SaveViewerCountStack } from './../lib/save-viewer-count-cdk-stack';
-import { GetViewerCountStack } from './../lib/get-viewer-count-cdk-stack';
+import { ViewerCountStack } from './../lib/viewer-count-stack';
+import { APIGatewayStack } from './../lib/apigateway-stack';
 import { BuildConfig } from './../lib/build-config';
 
 const eventAbbr =  process.env.EVENTABBR
@@ -47,19 +47,19 @@ async function Main()
 
     Tags.of(app).add('Environment', buildConfig.Environment);
 
-    const saveViewerCountStack = new SaveViewerCountStack(app, `SaveViewerCountStack-${buildConfig.Environment}`, {
-        stackName: `SaveViewerCount-${buildConfig.Environment}`,
+    const viewerCountStack = new ViewerCountStack(app, `viewerCountStack-${buildConfig.Environment}`, {
+        stackName: `viewerCount-${buildConfig.Environment}`,
         env: {
             region: buildConfig.AWSProfileRegion,
         }
     }, buildConfig);
-    
-    const getViewerCountStack = new GetViewerCountStack(app, `GetViewerCountStack-${buildConfig.Environment}`, {
-        stackName: `GetViewerCount-${buildConfig.Environment}`,
+
+    const apiGatewayStack = new APIGatewayStack(app, `apigGatewayStack-${buildConfig.Environment}`, {
+        stackName: `apiGatewayStack-${buildConfig.Environment}`,
         env: {
             region: buildConfig.AWSProfileRegion,
         }
     }, buildConfig);
-    getViewerCountStack.addDependency(saveViewerCountStack);
+    apiGatewayStack.addDependency(viewerCountStack);
 }
 Main();

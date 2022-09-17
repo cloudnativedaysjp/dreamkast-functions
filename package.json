@@ -12,8 +12,10 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
+    "cdk:dev-diff": "EVENTABBR=$npm_package_config_event cdk diff -c config=dev",
     "cdk:stg-diff": "EVENTABBR=$npm_package_config_event cdk diff -c config=stg",
     "cdk:prd-diff": "EVENTABBR=$npm_package_config_event cdk diff -c config=prd",
+    "cdk:dev-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=dev",
     "cdk:stg-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=stg --require-approval never --all",
     "cdk:prd-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=prd --require-approval never --all"
   },

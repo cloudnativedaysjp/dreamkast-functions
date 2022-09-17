@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/viewer-count-cdk.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/dk-functions-cdk.ts",
   "watch": {
     "include": [
       "**"
@@ -35,6 +35,11 @@
       "aws",
       "aws-cn"
     ],
+    "dev": {
+      "AWSProfileRegion" : "us-east-2",
+      "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
+      "Environment": "stg"
+    },
     "stg": {
       "AWSProfileRegion" : "ap-northeast-1",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
