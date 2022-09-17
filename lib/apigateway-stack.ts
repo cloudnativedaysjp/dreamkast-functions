@@ -2,6 +2,7 @@ import { Construct } from 'constructs';
 import { Stack, StackProps, Fn } from 'aws-cdk-lib';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { BuildConfig } from './build-config'
+import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { LambdaIntegration, PassthroughBehavior, RestApi, Model } from 'aws-cdk-lib/aws-apigateway';
 import { ViewerCountSchema } from './schemas';
 
@@ -16,6 +17,22 @@ export class APIGatewayStack extends Stack {
             deployOptions: {
                 stageName: 'v1'
             },
+        });
+
+         /* # EXECUTION ROLE # */
+        const projectApiExecutionRole = new Role(this, 'ProjectApiExecutionRole', {
+            assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+            inlinePolicies: {
+            APIGWLambdaPolicy: new PolicyDocument({
+                statements: [
+                new PolicyStatement({
+                    actions: ['lambda:Invoke*'],
+                    effect: Effect.ALLOW,
+                    resources: ['arn:aws:lambda:*:607167088920:function:*'],
+                })
+                ]
+            })
+            }
         });
 
         /* === [ RESOURCES ] === */
@@ -74,6 +91,7 @@ export class APIGatewayStack extends Stack {
                 getViewerCountFunction,
                 {
                     proxy: false,
+                    credentialsRole: projectApiExecutionRole,
                     passthroughBehavior: PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{

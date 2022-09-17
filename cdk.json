@@ -39,7 +39,7 @@
       "AWSProfileRegion" : "us-east-2",
       "AccessControlAllowOrigin": "https://staging.dev.cloudnativedays.jp",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
-      "Environment": "stg"
+      "Environment": "dev"
     },
     "stg": {
       "AWSProfileRegion" : "ap-northeast-1",
