@@ -9,7 +9,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
     const trackId = Number(event.trackId) ;
     if (!trackId) {
-        throw new Error('Error: NaN');
+        throw new Error('Error400: NaN');
     }
 
     const record = await dynamodb.send(new GetItemCommand({
@@ -21,7 +21,7 @@ export const handler = async (event: any = {}): Promise<any> => {
 
     console.log(record)
     if( !record.Item ){
-        throw new Error('Error: NotFound');
+        throw new Error('Error404: NotFound');
     }
 
     const item = unmarshall(record.Item)

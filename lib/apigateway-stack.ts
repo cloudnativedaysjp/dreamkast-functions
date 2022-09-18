@@ -57,12 +57,12 @@ export class APIGatewayStack extends Stack {
         const CorsResponseParameters = {
             'method.response.header.Access-Control-Allow-Methods': "'GET'",
             'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
-            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
         }
         const CorsMethodResponseParameters = {
             'method.response.header.Access-Control-Allow-Methods': true,
             'method.response.header.Access-Control-Allow-Origin': true,
-            'method.response.header.Access-Control-Allow-Headers': true
+            'method.response.header.Access-Control-Allow-Headers': true,
         }
 
         /* === [   IntegrationResponse   ] === */
@@ -74,10 +74,19 @@ export class APIGatewayStack extends Stack {
 
         const integrationResponse400 = {
             statusCode: '400',
-            selectionPattern: 'Error:.*',
+            selectionPattern: 'Error400:.*',
             responseParameters: CorsResponseParameters,
             responseTemplates: {
                 'application/json': JSON.stringify({"message":"bad request"}),
+            },
+        }
+
+        const integrationResponse404 = {
+            statusCode: '404',
+            selectionPattern: 'Error404:.*',
+            responseParameters: CorsResponseParameters,
+            responseTemplates: {
+                'application/json': JSON.stringify({"message":"not found"}),
             },
         }
 
@@ -104,6 +113,7 @@ export class APIGatewayStack extends Stack {
                     integrationResponses: [
                         integrationResponse200,
                         integrationResponse400,
+                        integrationResponse404,
                     ],
                 },
             ),
@@ -123,6 +133,13 @@ export class APIGatewayStack extends Stack {
                     },
                     {
                         statusCode: '400',
+                        responseParameters: CorsMethodResponseParameters,
+                        responseModels: {
+                            'application/json': Model.ERROR_MODEL,
+                        },
+                    },
+                    {
+                        statusCode: '404',
                         responseParameters: CorsMethodResponseParameters,
                         responseModels: {
                             'application/json': Model.ERROR_MODEL,
