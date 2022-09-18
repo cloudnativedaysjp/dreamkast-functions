@@ -33,8 +33,9 @@ function getConfig()
     let unparsedEnv = app.node.tryGetContext(env);
 
     let buildConfig: BuildConfig = {
-        GetTracksURL: ensureString(unparsedEnv, 'GetTracksURL'),
         Environment: ensureString(unparsedEnv, 'Environment'),
+        AccessControlAllowOrigin: ensureString(unparsedEnv, 'AccessControlAllowOrigin'),
+        GetTracksURL: ensureString(unparsedEnv, 'GetTracksURL'),
         AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
     };
 

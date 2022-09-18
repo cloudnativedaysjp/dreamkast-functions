@@ -7,12 +7,9 @@ const TABLENAME = process.env.TABLENAME || "";
 
 export const handler = async (event: any = {}): Promise<any> => {
 
-    const trackId = Number(event.pathParameters.trackId) ;
+    const trackId = Number(event.trackId) ;
     if (!trackId) {
-        return {
-            statusCode: 400,
-            body: `Error: You are missing the path parameter trackId`,
-        };
+        throw new Error('Error400: NaN');
     }
 
     const record = await dynamodb.send(new GetItemCommand({
@@ -24,14 +21,13 @@ export const handler = async (event: any = {}): Promise<any> => {
 
     console.log(record)
     if( !record.Item ){
-        return { statusCode: 400, body: 'not found Item' };
+        throw new Error('Error404: NotFound');
     }
 
     const item = unmarshall(record.Item)
-    const response = {
-        trackId: trackId,
+    return {
+        track_id: trackId,
         viewer_count: item.viewerCount,
     }
-    return { statusCode: 200, body: JSON.stringify(response) };
 };
 

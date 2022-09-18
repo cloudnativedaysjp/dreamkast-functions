@@ -37,16 +37,19 @@
     ],
     "dev": {
       "AWSProfileRegion" : "us-east-2",
+      "AccessControlAllowOrigin": "https://staging.dev.cloudnativedays.jp",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
-      "Environment": "stg"
+      "Environment": "dev"
     },
     "stg": {
       "AWSProfileRegion" : "ap-northeast-1",
+      "AccessControlAllowOrigin": "https://staging.dev.cloudnativedays.jp",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
       "Environment": "stg"
     },
     "prd": {
       "AWSProfileRegion" : "ap-northeast-1",
+      "AccessControlAllowOrigin": "https://event.cloudnativedays.jp",
       "GetTracksURL": "https://event.cloudnativedays.jp/api/v1/tracks",
       "Environment": "prd"
     }

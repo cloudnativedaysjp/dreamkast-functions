@@ -2,7 +2,9 @@ import { Construct } from 'constructs';
 import { Stack, StackProps, Fn } from 'aws-cdk-lib';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { BuildConfig } from './build-config'
-import { LambdaIntegration, Resource,RestApi, Model } from 'aws-cdk-lib/aws-apigateway';
+import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { LambdaIntegration, PassthroughBehavior, RestApi, Model } from 'aws-cdk-lib/aws-apigateway';
+import { ViewerCountSchema } from './schemas';
 
 export class APIGatewayStack extends Stack {
     constructor(scope: Construct, id: string, props: StackProps, buildConfig: BuildConfig) {
@@ -10,11 +12,27 @@ export class APIGatewayStack extends Stack {
 
         // === [ API Gateway ] === 
 
-        const api = new RestApi(this, 'viewerCountApi',{
-            restApiName: `viewer-count-${buildConfig.Environment}`,
+        const api = new RestApi(this, 'dkFunctionsApi',{
+            restApiName: `dk-functions-${buildConfig.Environment}`,
             deployOptions: {
                 stageName: 'v1'
             },
+        });
+
+         /* # EXECUTION ROLE # */
+        const projectApiExecutionRole = new Role(this, 'ProjectApiExecutionRole', {
+            assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+            inlinePolicies: {
+            APIGWLambdaPolicy: new PolicyDocument({
+                statements: [
+                new PolicyStatement({
+                    actions: ['lambda:Invoke*'],
+                    effect: Effect.ALLOW,
+                    resources: ['arn:aws:lambda:*:607167088920:function:*'],
+                })
+                ]
+            })
+            }
         });
 
         /* === [ RESOURCES ] === */
@@ -25,8 +43,52 @@ export class APIGatewayStack extends Stack {
         const tracks = root.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
         const viewer_count = trackid.addResource('viewer_count');
-        const vote = trackid.addResource('vote');
 
+        /* === [   MODEL   ] === */
+
+        const viewerCountModel = api.addModel('viewerCountModel',{
+            contentType: 'application/json',
+            modelName: 'ViewerCount',
+            schema: ViewerCountSchema,
+        })
+
+        /* === [   ResponseParameters   ] === */
+
+        const CorsResponseParameters = {
+            'method.response.header.Access-Control-Allow-Methods': "'GET'",
+            'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
+            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        }
+        const CorsMethodResponseParameters = {
+            'method.response.header.Access-Control-Allow-Methods': true,
+            'method.response.header.Access-Control-Allow-Origin': true,
+            'method.response.header.Access-Control-Allow-Headers': true,
+        }
+
+        /* === [   IntegrationResponse   ] === */
+
+        const integrationResponse200 = {
+            statusCode: '200',
+            responseParameters: CorsResponseParameters,
+        }
+
+        const integrationResponse400 = {
+            statusCode: '400',
+            selectionPattern: 'Error400:.*',
+            responseParameters: CorsResponseParameters,
+            responseTemplates: {
+                'application/json': JSON.stringify({"message":"bad request"}),
+            },
+        }
+
+        const integrationResponse404 = {
+            statusCode: '404',
+            selectionPattern: 'Error404:.*',
+            responseParameters: CorsResponseParameters,
+            responseTemplates: {
+                'application/json': JSON.stringify({"message":"not found"}),
+            },
+        }
 
         /* === [   METHODS   ] === */
 
@@ -39,16 +101,48 @@ export class APIGatewayStack extends Stack {
             new LambdaIntegration(
                 getViewerCountFunction,
                 {
-                    proxy: true,
+                    proxy: false,
+                    credentialsRole: projectApiExecutionRole,
+                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    requestTemplates: {
+                        'application/json': `{
+                            #set($trackId = $util.escapeJavaScript($input.params().get("path").get("trackId")))
+                            "trackId": #if($trackId == "" ) 0 #{else} "$trackId" #end
+                        }`,
+                    },
+                    integrationResponses: [
+                        integrationResponse200,
+                        integrationResponse400,
+                        integrationResponse404,
+                    ],
                 },
             ),
             // MethodOptions
             {
+                requestParameters: {
+                    "method.request.path.trackId": true,
+                },
                 methodResponses: [
                     {
-                        statusCode: "200",
+                        statusCode: '200',
+                        responseParameters: CorsMethodResponseParameters,
                         responseModels: {
-                            'application/json': Model.EMPTY_MODEL,
+                            // Need ?
+                            'application/json': viewerCountModel,
+                        },
+                    },
+                    {
+                        statusCode: '400',
+                        responseParameters: CorsMethodResponseParameters,
+                        responseModels: {
+                            'application/json': Model.ERROR_MODEL,
+                        },
+                    },
+                    {
+                        statusCode: '404',
+                        responseParameters: CorsMethodResponseParameters,
+                        responseModels: {
+                            'application/json': Model.ERROR_MODEL,
                         },
                     }
                 ]
