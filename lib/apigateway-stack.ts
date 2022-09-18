@@ -55,10 +55,12 @@ export class APIGatewayStack extends Stack {
         /* === [   ResponseParameters   ] === */
 
         const CorsResponseParameters = {
+            'method.response.header.Access-Control-Allow-Methods': "'GET'",
             'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
             'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
         }
         const CorsMethodResponseParameters = {
+            'method.response.header.Access-Control-Allow-Methods': true,
             'method.response.header.Access-Control-Allow-Origin': true,
             'method.response.header.Access-Control-Allow-Headers': true
         }
