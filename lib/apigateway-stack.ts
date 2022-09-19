@@ -1,18 +1,21 @@
 import { Construct } from 'constructs';
 import { Stack, StackProps, Fn } from 'aws-cdk-lib';
-import { Function } from 'aws-cdk-lib/aws-lambda';
-import { BuildConfig } from './build-config'
+import { Function, IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { DomainName, LambdaIntegration, PassthroughBehavior, RestApi, Model, EndpointType } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, IHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
 
 import { ViewerCountSchema } from './schemas';
-import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { BuildConfig } from './build-config'
 
 export interface APIGatewayProps extends StackProps {
     readonly certificate: Certificate,
     readonly hostedZone: IHostedZone,
+    readonly lambda: {
+        readonly voteCFP: IFunction,
+    }
 }
 
 export class APIGatewayStack extends Stack {
@@ -64,11 +67,17 @@ export class APIGatewayStack extends Stack {
         /* === [ RESOURCES ] === */
         
         const root = api.root;
+        const event = root.addResource('{eventName}');
         
         // TRACKS API
-        const tracks = root.addResource('tracks');
+        const tracks = event.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
         const viewer_count = trackid.addResource('viewer_count');
+
+        // TALKS API
+        const talks = event.addResource('talks');
+        const talkId = talks.addResource('{talkId}')
+        const vote = talkId.addResource('vote');
 
         /* === [   MODEL   ] === */
 
@@ -81,7 +90,7 @@ export class APIGatewayStack extends Stack {
         /* === [   ResponseParameters   ] === */
 
         const CorsResponseParameters = {
-            'method.response.header.Access-Control-Allow-Methods': "'GET'",
+            'method.response.header.Access-Control-Allow-Methods': "'GET,POST'",
             'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
             'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
         }
@@ -116,6 +125,23 @@ export class APIGatewayStack extends Stack {
             },
         }
 
+        /* === [   MethodResponse   ] === */
+
+        const methodResponses400 = {
+            statusCode: '400',
+            responseParameters: CorsMethodResponseParameters,
+            responseModels: {
+                'application/json': Model.ERROR_MODEL,
+            },
+        }
+        const methodResponses404 = {
+            statusCode: '404',
+            responseParameters: CorsMethodResponseParameters,
+            responseModels: {
+                'application/json': Model.ERROR_MODEL,
+            },
+        }
+
         /* === [   METHODS   ] === */
 
         // GET /tracks/{trackID}/viewer_count -> GetViewerCountFunction
@@ -124,8 +150,7 @@ export class APIGatewayStack extends Stack {
         const getViewerCountFunction = Function.fromFunctionArn(this, 'GetViewerCountFunction', getViewerCountFunctionArn);
         viewer_count.addMethod('GET',
             // Integration
-            new LambdaIntegration(
-                getViewerCountFunction,
+            new LambdaIntegration( getViewerCountFunction,
                 {
                     proxy: false,
                     credentialsRole: projectApiExecutionRole,
@@ -157,20 +182,50 @@ export class APIGatewayStack extends Stack {
                             'application/json': viewerCountModel,
                         },
                     },
+                    methodResponses400,
+                    methodResponses404,
+                ]
+            },
+        );
+
+        // PUT /{event}/talk/{trackID}/viewer_count -> GetViewerCountFunction
+        vote.addMethod('POST',
+            // Integration
+            new LambdaIntegration( props.lambda.voteCFP,
+                {
+                    proxy: false,
+                    credentialsRole: projectApiExecutionRole,
+                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    requestTemplates: {
+                        'application/json': `{
+                            "eventName":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
+                            "talkId": "$util.escapeJavaScript($input.params().get("path").get("talkId"))",
+                            "globalIp": "$util.escapeJavaScript($context.identity.sourceIp)"
+                        }`,
+                    },
+                    integrationResponses: [
+                        integrationResponse200,
+                        integrationResponse400,
+                        integrationResponse404,
+                    ],
+                },
+            ),
+            // MethodOptions
+            {
+                requestParameters: {
+                    "method.request.path.eventName": true,
+                    "method.request.path.talkId": true,
+                },
+                methodResponses: [
                     {
-                        statusCode: '400',
+                        statusCode: '200',
                         responseParameters: CorsMethodResponseParameters,
                         responseModels: {
-                            'application/json': Model.ERROR_MODEL,
+                            'application/json': Model.EMPTY_MODEL,
                         },
                     },
-                    {
-                        statusCode: '404',
-                        responseParameters: CorsMethodResponseParameters,
-                        responseModels: {
-                            'application/json': Model.ERROR_MODEL,
-                        },
-                    }
+                    methodResponses400,
+                    methodResponses404,
                 ]
             },
         );
