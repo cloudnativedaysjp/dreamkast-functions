@@ -4,6 +4,7 @@ import { App, Tags } from 'aws-cdk-lib';
 import { ViewerCountStack } from './../lib/viewer-count-stack';
 import { APIGatewayStack } from './../lib/apigateway-stack';
 import { BuildConfig } from './../lib/build-config';
+import { CertManagerStack } from './../lib/cert-manager-stack';
 
 const eventAbbr =  process.env.EVENTABBR
 if (eventAbbr == undefined){
@@ -34,6 +35,9 @@ function getConfig()
 
     let buildConfig: BuildConfig = {
         Environment: ensureString(unparsedEnv, 'Environment'),
+        DomainName: ensureString(unparsedEnv, 'DomainName'),
+        HostedZoneID: ensureString(unparsedEnv, 'HostedZoneID'),
+        ZoneName: ensureString(unparsedEnv, 'ZoneName'),
         AccessControlAllowOrigin: ensureString(unparsedEnv, 'AccessControlAllowOrigin'),
         GetTracksURL: ensureString(unparsedEnv, 'GetTracksURL'),
         AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
@@ -55,7 +59,16 @@ async function Main()
         }
     }, buildConfig);
 
+    const certManager = new CertManagerStack(app, `certManagerStack-${buildConfig.Environment}`,{
+        stackName: `certManager-${buildConfig.Environment}`,
+        env: {
+            region: buildConfig.AWSProfileRegion,
+        }
+    }, buildConfig);
+
     const apiGatewayStack = new APIGatewayStack(app, `apigGatewayStack-${buildConfig.Environment}`, {
+        certificate: certManager.certificate,
+        hostedZone: certManager.hostedZone,
         stackName: `apiGatewayStack-${buildConfig.Environment}`,
         env: {
             region: buildConfig.AWSProfileRegion,
