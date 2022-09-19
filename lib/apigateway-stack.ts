@@ -3,11 +3,20 @@ import { Stack, StackProps, Fn } from 'aws-cdk-lib';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { BuildConfig } from './build-config'
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { LambdaIntegration, PassthroughBehavior, RestApi, Model } from 'aws-cdk-lib/aws-apigateway';
+import { DomainName, LambdaIntegration, PassthroughBehavior, RestApi, Model, EndpointType } from 'aws-cdk-lib/aws-apigateway';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { ARecord, IHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+
 import { ViewerCountSchema } from './schemas';
+import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+
+export interface APIGatewayProps extends StackProps {
+    readonly certificate: Certificate,
+    readonly hostedZone: IHostedZone,
+}
 
 export class APIGatewayStack extends Stack {
-    constructor(scope: Construct, id: string, props: StackProps, buildConfig: BuildConfig) {
+    constructor(scope: Construct, id: string, props: APIGatewayProps, buildConfig: BuildConfig) {
         super(scope, id, props)
 
         // === [ API Gateway ] === 
@@ -15,11 +24,28 @@ export class APIGatewayStack extends Stack {
         const api = new RestApi(this, 'dkFunctionsApi',{
             restApiName: `dk-functions-${buildConfig.Environment}`,
             deployOptions: {
-                stageName: 'v1'
+                stageName: 'v1',
             },
         });
 
-         /* # EXECUTION ROLE # */
+         // Custom Domain
+        const domainName = new DomainName(this, 'CustomDomain',{
+            certificate: props.certificate,
+            domainName: buildConfig.DomainName,
+            endpointType: EndpointType.REGIONAL,
+        });
+        domainName.addBasePathMapping(api,{
+            basePath: '',
+        })
+
+         // A Record
+        new ARecord(this, 'APIARecod', {
+            zone: props.hostedZone,
+            recordName: buildConfig.DomainName,
+            target: RecordTarget.fromAlias(new ApiGatewayDomain(domainName))
+        });
+
+         // EXECUTION ROLE
         const projectApiExecutionRole = new Role(this, 'ProjectApiExecutionRole', {
             assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
             inlinePolicies: {
