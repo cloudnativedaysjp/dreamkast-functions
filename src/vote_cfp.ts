@@ -18,13 +18,16 @@ export const handler = async (event: any = {}): Promise<any> => {
             throw new Error('Error400: cannot get talkId');
     }
     
+    // Timezone is in UTC.
+    const timestamp = Date.now();
     try {
         const command = new PutItemCommand({
             TableName: TABLENAME,
             Item: {
+                eventName: { S: String(eventName)},
+                timestamp: { N: String(timestamp)},
                 globalIp: { S: String(globalIp)},
                 talkId: { N: String(talkId) },
-                eventName: { S: String(eventName)},
             },
         });
         await dynamodb.send(command);

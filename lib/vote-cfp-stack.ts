@@ -17,8 +17,8 @@ export class VoteCFPStack extends Stack {
 
         const voteTable = new Table(this, 'VoteTable', {
             billingMode: BillingMode.PAY_PER_REQUEST,
-            partitionKey: { name: 'globalIp', type: AttributeType.STRING },
-            sortKey: { name: 'talkId', type: AttributeType.NUMBER }, 
+            partitionKey: { name: 'eventName', type: AttributeType.STRING },
+            sortKey: { name: 'timestamp', type: AttributeType.NUMBER },
             removalPolicy: RemovalPolicy.RETAIN,
         });
 
