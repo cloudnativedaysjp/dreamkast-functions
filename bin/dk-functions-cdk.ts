@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-//import { Tags } from '@aws-cdk/core'
 import { App, Tags } from 'aws-cdk-lib';
 import { ViewerCountStack } from './../lib/viewer-count-stack';
+import { VoteCFPStack } from './../lib/vote-cfp-stack';
 import { APIGatewayStack } from './../lib/apigateway-stack';
 import { BuildConfig } from './../lib/build-config';
 import { CertManagerStack } from './../lib/cert-manager-stack';
@@ -59,6 +59,13 @@ async function Main()
         }
     }, buildConfig);
 
+    const voteCFPStack = new VoteCFPStack(app, `voteCFPStack-${buildConfig.Environment}`, {
+        stackName: `voteCFP-${buildConfig.Environment}`,
+        env: {
+            region: buildConfig.AWSProfileRegion,
+        }
+    }, buildConfig);
+
     const certManager = new CertManagerStack(app, `certManagerStack-${buildConfig.Environment}`,{
         stackName: `certManager-${buildConfig.Environment}`,
         env: {
@@ -69,11 +76,16 @@ async function Main()
     const apiGatewayStack = new APIGatewayStack(app, `apigGatewayStack-${buildConfig.Environment}`, {
         certificate: certManager.certificate,
         hostedZone: certManager.hostedZone,
+        lambda: {
+            voteCFP: voteCFPStack.voteCFPFunction
+        },
         stackName: `apiGatewayStack-${buildConfig.Environment}`,
         env: {
             region: buildConfig.AWSProfileRegion,
         }
     }, buildConfig);
-    apiGatewayStack.addDependency(viewerCountStack);
+    //apiGatewayStack.addDependency(viewerCountStack);
+    //apiGatewayStack.addDependency(voteCFPStack);
+
 }
 Main();
