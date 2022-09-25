@@ -40,7 +40,7 @@
       "DomainName" : "api.dev.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
       "ZoneName" : "cloudnativedays.jp",
-      "AccessControlAllowOrigin": "https://staging.dev.cloudnativedays.jp",
+      "AccessControlAllowOrigin": "*",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
       "Environment": "dev"
     },
