@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "29.1.1",
-    "@types/node": "16.11.62",
+    "@types/node": "16.11.63",
     "@types/node-fetch": "2.6.2",
     "@types/prettier": "2.7.1",
     "aws-cdk": "2.44.0",
@@ -35,7 +35,7 @@
     "@aws-sdk/client-ivs": "3.181.0",
     "@aws-sdk/util-dynamodb": "3.181.0",
     "aws-cdk-lib": "2.44.0",
-    "constructs": "10.1.119",
+    "constructs": "10.1.120",
     "node-fetch": "3.2.10",
     "source-map-support": "0.5.21"
   }
