@@ -28,6 +28,8 @@ export class APIGatewayStack extends Stack {
             restApiName: `dk-functions-${buildConfig.Environment}`,
             deployOptions: {
                 stageName: 'v1',
+                throttlingRateLimit: 60,
+                throttlingBurstLimit: 3000,
             },
         });
 
