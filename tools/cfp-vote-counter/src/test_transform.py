@@ -20,6 +20,9 @@ def test_unique_over_time():
     got = unique_over_time(df)
     assert len(got.index) == 4
 
+    got = unique_over_time(df, 100000000)
+    assert len(got.index) == 3
+
 
 def test_count_vote():
     given = [
