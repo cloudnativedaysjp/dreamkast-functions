@@ -10,7 +10,7 @@ from pprint import pprint
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from src.types import DynamoResponse
+from src.types import DynamoResponse, Col
 
 EVENTS: Final = ["cndt2022"]
 DYNAMO_VOTE_TABLE_PRD: Final = "voteCFP-prd-VoteTableC0BC27A7-UKB7XFRIUIX1"
@@ -50,9 +50,9 @@ class Command:
 
         # TODO pagination if needed
         res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
-            KeyConditionExpression=Key("eventName").eq(conf.event_name),
-            ProjectionExpression="#timestamp, globalIp, talkId",
-            ExpressionAttributeNames={"#timestamp": "timestamp"},
+            KeyConditionExpression=Key(Col.EVENT_NAME).eq(conf.event_name),
+            ProjectionExpression=f"#{Col.TIMESTAMP}, {Col.GLOBAL_IP}, {Col.TALK_ID}",
+            ExpressionAttributeNames={f"#{Col.TIMESTAMP}": Col.TIMESTAMP},
             Limit=10000,
         )
         df = pd.DataFrame(res["Items"])
