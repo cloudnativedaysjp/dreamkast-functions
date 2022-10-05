@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+from typing import Literal, Final
+
 import fire
 import pandas as pd
 import os
@@ -9,7 +12,9 @@ from boto3.dynamodb.conditions import Key
 
 from src.types import DynamoResponse
 
-EVENTS = ["cndt2022"]
+EVENTS: Final = ["cndt2022"]
+DYNAMO_VOTE_TABLE_PRD: Final = "voteCFP-prd-VoteTableC0BC27A7-UKB7XFRIUIX1"
+DYNAMO_VOTE_TABLE_STG: Final = "voteCFP-stg-VoteTableC0BC27A7-84BXPDSTU937"
 
 
 class Config:
@@ -18,32 +23,41 @@ class Config:
 
     def __init__(self, event: str, env: str):
         if env == "prd":
-            self.cfp_votetable = "voteCFP-prd-VoteTableC0BC27A7-UKB7XFRIUIX1"
+            self.cfp_votetable = DYNAMO_VOTE_TABLE_PRD
+        elif env == "stg":
+            self.cfp_votetable = DYNAMO_VOTE_TABLE_STG
         else:
-            self.cfp_votetable = "voteCFP-stg-VoteTableC0BC27A7-84BXPDSTU937"
+            raise ValueError(f"event not exist: name={event}")
 
         if event not in EVENTS:
             raise ValueError(f"event not exist: name={event}")
         self.event_name = event
 
 
-def generate(event: str, env: str):
-    """
-    Generate transformed CFP vote csv
+class Command:
+    """CFP Vote Counter CLI"""
 
-    :param event: Event Abbreviation (e.g. cndt2022)
-    :param env: Environment [stg|prd]
-    """
-    conf = Config(event, env)
-    dynamo = boto3.resource("dynamodb")
-    # TODO pagination
-    res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
-        KeyConditionExpression=Key("eventName").eq(conf.event_name),
-        ProjectionExpression="#timestamp, globalIp, talkId",
-        ExpressionAttributeNames={"#timestamp": "timestamp"},
-    )
-    pprint(res)
+    def generate(self, event: str, env: str = "prd"):
+        """
+        Generate transformed CFP vote csv
+
+        :param event: Event Abbreviation (e.g. cndt2022)
+        :param env: Environment (stg|prd)
+        """
+        env: Literal["stg", "prd"]
+        conf = Config(event, env)
+        dynamo = boto3.resource("dynamodb")
+
+        # TODO pagination if needed
+        res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
+            KeyConditionExpression=Key("eventName").eq(conf.event_name),
+            ProjectionExpression="#timestamp, globalIp, talkId",
+            ExpressionAttributeNames={"#timestamp": "timestamp"},
+            Limit=10000,
+        )
+        df = pd.DataFrame(res["Items"])
+        print(df)
 
 
 if __name__ == "__main__":
-    fire.Fire()
+    fire.Fire(Command)
