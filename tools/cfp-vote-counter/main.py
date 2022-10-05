@@ -3,13 +3,11 @@ from typing import Literal, Final
 
 import fire
 import pandas as pd
-import os
-from dataclasses import dataclass
-from pprint import pprint
 
 import boto3
 from boto3.dynamodb.conditions import Key
 
+from src.transform import unique_over_time, count_votes
 from src.types import DynamoResponse, Col
 
 EVENTS: Final = ["cndt2022"]
@@ -48,7 +46,7 @@ class Command:
         conf = Config(event, env)
         dynamo = boto3.resource("dynamodb")
 
-        # TODO pagination if needed
+        # TODO pagination if there are too many votes to get by one query
         res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
             KeyConditionExpression=Key(Col.EVENT_NAME).eq(conf.event_name),
             ProjectionExpression=f"#{Col.TIMESTAMP}, {Col.GLOBAL_IP}, {Col.TALK_ID}",
@@ -56,7 +54,9 @@ class Command:
             Limit=10000,
         )
         df = pd.DataFrame(res["Items"])
-        print(df)
+        df = unique_over_time(df)
+        sr = count_votes(df)
+        print(sr.to_csv())
 
 
 if __name__ == "__main__":
