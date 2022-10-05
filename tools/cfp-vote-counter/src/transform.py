@@ -3,10 +3,10 @@ import pandas as pd
 from src.types import Col
 
 
-def unique_over_time(df: pd.DataFrame) -> pd.DataFrame:
+def unique_over_time(df: pd.DataFrame, span_sec: int = 3600) -> pd.DataFrame:
     df = (
         df.assign(**{
-            Col.TS_BY_HOUR: df[Col.TIMESTAMP] // (3600 * 1000)
+            Col.TS_BY_HOUR: df[Col.TIMESTAMP] // (span_sec * 1000)
         })
         .drop([Col.TIMESTAMP], axis=1)
         .drop_duplicates()
