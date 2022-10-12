@@ -17,7 +17,7 @@ DYNAMO_VOTE_TABLE_PRD: Final[str] = "voteCFP-prd-VoteTableC0BC27A7-UKB7XFRIUIX1"
 DYNAMO_VOTE_TABLE_STG: Final[str] = "voteCFP-stg-VoteTableC0BC27A7-84BXPDSTU937"
 
 VOTING_PERIOD: Final[dict[str, tuple[datetime, datetime]]] = {
-    "cndt2022": (datetime.fromisoformat('2022-10-01'), datetime.fromisoformat('2022-10-13'))
+    "cndt2022": (datetime.fromisoformat('2022-10-01'), datetime.fromisoformat('2022-10-13T18:00:00Z+09:00'))
 }
 
 
