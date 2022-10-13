@@ -3,6 +3,11 @@ CFP Vote Couter
 
 CFP投票を集計するツールです。
 
+## Requirements
+
+Python3.9+
+
+
 ## Installation
 
 ```
@@ -17,7 +22,12 @@ Run
 
 ```
 aws sso login
-./main.py generate cndt2022 [stg]
+
+# Generate CSV
+./main.py generate_csv cndt2022 [stg]
+
+# Show time-series graph
+./main.py time_series cndt2022 [stg]
 ```
 
 Help

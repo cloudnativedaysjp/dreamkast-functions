@@ -5,11 +5,12 @@ from typing import Literal, Final
 
 import fire
 import pandas as pd
+import matplotlib.pyplot as plt
 
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from src.transform import unique_over_time, count_votes
+from src.transform import unique_over_time, count_votes, time_series_total_count
 from src.types import DynamoResponse, Col
 
 
@@ -42,10 +43,23 @@ class Config:
         self.voting_end = Decimal(VOTING_PERIOD[event][1].timestamp() * 1000)
 
 
+def fetch_votes(conf: Config) -> DynamoResponse:
+    dynamo = boto3.resource("dynamodb")
+    res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
+        KeyConditionExpression=(
+                Key(Col.EVENT_NAME).eq(conf.event_name)
+                & Key(Col.TIMESTAMP).between(conf.voting_start, conf.voting_end)
+        ),
+        ProjectionExpression=f"#{Col.TIMESTAMP}, {Col.GLOBAL_IP}, {Col.TALK_ID}",
+        ExpressionAttributeNames={f"#{Col.TIMESTAMP}": Col.TIMESTAMP},
+        Limit=10000,
+    )
+    return res
+
 class Command:
     """CFP Vote Counter CLI"""
 
-    def generate(self, event: str, env: str = "prd", span: int = 3600):
+    def generate_csv(self, event: str, env: Literal["stg", "prd"] = "prd", span: int = 3600):
         """
         Generate transformed CFP vote csv
 
@@ -53,20 +67,8 @@ class Command:
         :param env: Environment (stg|prd)
         :param span: Seconds of span where multiple votes from the same GIP would be considered as the same one
         """
-        env: Literal["stg", "prd"]
         conf = Config(event, env)
-        dynamo = boto3.resource("dynamodb")
-
-        # TODO pagination if there are too many votes to get by one query
-        res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
-            KeyConditionExpression=(
-                Key(Col.EVENT_NAME).eq(conf.event_name)
-                & Key(Col.TIMESTAMP).between(conf.voting_start, conf.voting_end)
-            ),
-            ProjectionExpression=f"#{Col.TIMESTAMP}, {Col.GLOBAL_IP}, {Col.TALK_ID}",
-            ExpressionAttributeNames={f"#{Col.TIMESTAMP}": Col.TIMESTAMP},
-            Limit=10000,
-        )
+        res = fetch_votes(conf)
         if res["Count"] == 0:
             print("No votes found.")
             return
@@ -75,6 +77,27 @@ class Command:
         df = unique_over_time(df, span)
         sr = count_votes(df)
         print(sr.to_csv())
+
+    def time_series(self, event: str, env: Literal["stg", "prd"] = "prd", span: int = 3600):
+        """
+        Generate transformed CFP vote csv
+
+        :param event: Event Abbreviation (e.g. cndt2022)
+        :param env: Environment (stg|prd)
+        :param span: Seconds of span where multiple votes from the same GIP would be considered as the same one
+        """
+        conf = Config(event, env)
+        res = fetch_votes(conf)
+        if res["Count"] == 0:
+            print("No votes found.")
+            return
+
+        df = pd.DataFrame(res["Items"])
+        df = unique_over_time(df, span)
+        df = time_series_total_count(df, span)
+        print(df)
+        df.plot()
+        plt.show()
 
 
 if __name__ == "__main__":
