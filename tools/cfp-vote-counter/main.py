@@ -12,7 +12,8 @@ from src.transform import unique_over_time, count_votes, time_series_total_count
 class Command:
     """CFP Vote Counter CLI"""
 
-    def generate_csv(self, event: str, env: Literal["stg", "prd"] = "prd", span: int = 3600, region: Optional[str] = None):
+    def generate_csv(self, event: str, env: Literal["stg", "prd"] = "prd", span: int = 3600,
+                     region: Optional[str] = None):
         """
         Generate transformed CFP vote csv
 
@@ -33,7 +34,8 @@ class Command:
         sr = count_votes(df)
         print(sr.to_csv())
 
-    def time_series(self, event: str, env: Literal["stg", "prd"] = "prd", span: int = 3600, region: Optional[str] = None):
+    def time_series(self, event: str, env: Literal["stg", "prd"] = "prd", span: int = 3600,
+                    region: Optional[str] = None, file: str = None):
         """
         Generate transformed CFP vote csv
 
@@ -41,6 +43,7 @@ class Command:
         :param env: Environment (stg|prd)
         :param span: Seconds of span where multiple votes from the same GIP would be considered as the same one
         :param region: Region of Dynamo vote table
+        :param file: File name of time-series graph figure
         """
         conf = QueryConfig(event, env)
         boto3_conf = Boto3Config(region)
@@ -54,7 +57,10 @@ class Command:
         df = time_series_total_count(df, span)
         print(df)
         df.plot()
-        plt.show()
+        if file:
+            plt.savefig(file)
+        else:
+            plt.show()
 
 
 if __name__ == "__main__":
