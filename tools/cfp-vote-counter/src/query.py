@@ -1,6 +1,7 @@
+from dataclasses import dataclass, asdict
 from datetime import datetime
 from decimal import Decimal
-from typing import Final
+from typing import Final, TypedDict, Optional
 
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -14,6 +15,14 @@ DYNAMO_VOTE_TABLE_STG: Final[str] = "voteCFP-stg-VoteTableC0BC27A7-84BXPDSTU937"
 VOTING_PERIOD: Final[dict[str, tuple[datetime, datetime]]] = {
     "cndt2022": (datetime.fromisoformat('2022-10-01'), datetime.fromisoformat('2022-10-13T18:00:00Z+09:00'))
 }
+
+
+@dataclass
+class Boto3Config:
+    region_name: Optional[str] = None
+
+    def as_dict(self) -> dict:
+        return asdict(self, dict_factory=lambda x: {k: v for (k, v) in x if v is not None})
 
 
 class QueryConfig:
@@ -37,8 +46,8 @@ class QueryConfig:
         self.voting_end = Decimal(VOTING_PERIOD[event][1].timestamp() * 1000)
 
 
-def fetch_votes(conf: QueryConfig) -> DynamoResponse:
-    dynamo = boto3.resource("dynamodb")
+def fetch_votes(conf: QueryConfig, boto3_conf: Boto3Config) -> DynamoResponse:
+    dynamo = boto3.resource("dynamodb", **boto3_conf.as_dict())
     res: DynamoResponse = dynamo.Table(conf.cfp_votetable).query(
         KeyConditionExpression=(
                 Key(Col.EVENT_NAME).eq(conf.event_name)
