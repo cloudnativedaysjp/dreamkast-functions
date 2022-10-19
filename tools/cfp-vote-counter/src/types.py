@@ -9,6 +9,7 @@ class Col:
     GLOBAL_IP: Final[str] = "globalIp"
     EVENT_NAME: Final[str] = "eventName"
     COUNT: Final[str] = "count"
+    SUM: Final[str] = "sum"
 
 
 class VoteRecord(TypedDict):
