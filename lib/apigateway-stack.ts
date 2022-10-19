@@ -1,12 +1,13 @@
 import { Construct } from 'constructs';
-import { Stack, StackProps, Fn } from 'aws-cdk-lib';
+import { Stack, StackProps, Fn,RemovalPolicy  } from 'aws-cdk-lib';
 import { Function, IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { DomainName, LambdaIntegration, PassthroughBehavior, RestApi, Model, EndpointType,RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, IHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
 import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema } from './schemas';
 import { BuildConfig } from './build-config'
@@ -27,27 +28,34 @@ export class APIGatewayStack extends Stack {
 
         // === [ API Gateway ] === 
 
-        const api = new RestApi(this, 'dkFunctionsApi',{
+        const api = new apigateway.RestApi(this, 'dkFunctionsApi',{
             restApiName: `dk-functions-${buildConfig.Environment}`,
             deployOptions: {
                 stageName: 'v1',
                 throttlingRateLimit: 60,
                 throttlingBurstLimit: 3000,
                 dataTraceEnabled: true,
+                loggingLevel: apigateway.MethodLoggingLevel.INFO,
+                accessLogDestination: new apigateway.LogGroupLogDestination(new LogGroup(this, 'ApiLogGroup', {
+                    logGroupName: `${id}-apiGateway`,
+                    retention: RetentionDays.ONE_MONTH,
+                    removalPolicy: RemovalPolicy.DESTROY,
+                })),
+                accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields(),
             },
         });
 
-        const requestValidator = new RequestValidator(this, 'ApiRequestValidator', {
+        const requestValidator = new apigateway.RequestValidator(this, 'ApiRequestValidator', {
             restApi: api,
             validateRequestParameters: true,
             validateRequestBody: true
         });
 
          // Custom Domain
-        const domainName = new DomainName(this, 'CustomDomain',{
+        const domainName = new apigateway.DomainName(this, 'CustomDomain',{
             certificate: props.certificate,
             domainName: buildConfig.DomainName,
-            endpointType: EndpointType.REGIONAL,
+            endpointType: apigateway.EndpointType.REGIONAL,
         });
         domainName.addBasePathMapping(api,{
             basePath: '',
@@ -166,28 +174,28 @@ export class APIGatewayStack extends Stack {
             statusCode: '200',
             responseParameters: CorsMethodResponseParameters,
             responseModels: {
-                'application/json': Model.EMPTY_MODEL,
+                'application/json': apigateway.Model.EMPTY_MODEL,
             },
         }
         const methodResponses400 = {
             statusCode: '400',
             responseParameters: CorsMethodResponseParameters,
             responseModels: {
-                'application/json': Model.ERROR_MODEL,
+                'application/json': apigateway.Model.ERROR_MODEL,
             },
         }
         const methodResponses404 = {
             statusCode: '404',
             responseParameters: CorsMethodResponseParameters,
             responseModels: {
-                'application/json': Model.ERROR_MODEL,
+                'application/json': apigateway.Model.ERROR_MODEL,
             },
         }
         const methodResponses500 = {
             statusCode: '500',
             responseParameters: CorsMethodResponseParameters,
             responseModels: {
-                'application/json': Model.ERROR_MODEL,
+                'application/json': apigateway.Model.ERROR_MODEL,
             },
         }
 
@@ -199,11 +207,11 @@ export class APIGatewayStack extends Stack {
         const getViewerCountFunction = Function.fromFunctionArn(this, 'GetViewerCountFunction', getViewerCountFunctionArn);
         viewerCount.addMethod('GET',
             // Integration
-            new LambdaIntegration( getViewerCountFunction,
+            new apigateway.LambdaIntegration( getViewerCountFunction,
                 {
                     proxy: false,
                     credentialsRole: projectApiExecutionRole,
-                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
                             #set($trackId = $util.escapeJavaScript($input.params().get("path").get("trackId")))
@@ -241,11 +249,11 @@ export class APIGatewayStack extends Stack {
         // POST /{event}/talk/{trackID}/viewer_count -> GetViewerCountFunction
         vote.addMethod('POST',
             // Integration
-            new LambdaIntegration( props.lambda.voteCFP,
+            new apigateway.LambdaIntegration( props.lambda.voteCFP,
                 {
                     proxy: false,
                     credentialsRole: projectApiExecutionRole,
-                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
                             "eventName":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
@@ -278,11 +286,11 @@ export class APIGatewayStack extends Stack {
         // POST /profiles/{profileId}/point -> PostProfilePointFunction
         point.addMethod('POST',
             // Integration
-            new LambdaIntegration( props.lambda.postProfilePoint,
+            new apigateway.LambdaIntegration( props.lambda.postProfilePoint,
                 {
                     proxy: false,
                     credentialsRole: projectApiExecutionRole,
-                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
                             "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
@@ -319,11 +327,11 @@ export class APIGatewayStack extends Stack {
         // GET /profiles/{profileId}/points -> GetProfilePointFunction
         points.addMethod('GET',
         // Integration
-        new LambdaIntegration( props.lambda.getProfilePoint,
+        new apigateway.LambdaIntegration( props.lambda.getProfilePoint,
             {
                 proxy: false,
                 credentialsRole: projectApiExecutionRole,
-                passthroughBehavior: PassthroughBehavior.NEVER,
+                passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                 requestTemplates: {
                     'application/json': `{
                         "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
