@@ -13,3 +13,9 @@
 ```
 npm run cdk:stg-diff
 ```
+
+## Update snapshot
+
+```
+npm run test -- -u
+```
