@@ -12,8 +12,8 @@ class profilePoint{
 
 export const handler = async (event: any = {}): Promise<any> => {
 
-    const profileId = Number(event.profileId) ;
-    if (!profileId) {
+    const profileId = parseInt(event.profileId) ;
+    if (isNaN(profileId)) {
         throw new Error('Error400: NaN');
     }
     const conference = String(event.conference) ;

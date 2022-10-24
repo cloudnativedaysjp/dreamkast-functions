@@ -13,8 +13,8 @@ export const handler = async (event: any = {}): Promise<any> => {
     if (!eventName) {
             throw new Error('Error400: cannot get event name');
     }
-    const talkId =  Number(event.talkId);
-    if (!talkId) {
+    const talkId =  parseInt(event.talkId);
+    if (isNaN(talkId)) {
             throw new Error('Error400: cannot get talkId');
     }
     

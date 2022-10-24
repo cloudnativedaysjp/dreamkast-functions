@@ -5,13 +5,13 @@ const TABLENAME = process.env.TABLENAME || "";
 
 export const handler = async (event: any = {}): Promise<any> => {
     
-    const profileId =  Number(event.profileId);
-    if (!profileId) {
+    const profileId =  parseInt(event.profileId);
+    if (isNaN(profileId)) {
             throw new Error('Error400: cannot get profileId');
     }
     
-    const point =  Number(event.point);
-    if (!point) {
+    const point =  parseInt(event.point);
+    if (isNaN(point)) {
             throw new Error('Error400: cannot get point');
     }
 
@@ -20,8 +20,8 @@ export const handler = async (event: any = {}): Promise<any> => {
         throw new Error('Error400: cannot get conference')
     }
 
-    const reasonId = Number(event.reasonId);
-    if (!reasonId) {
+    const reasonId = parseInt(event.reasonId);
+    if (isNaN(reasonId)) {
         throw new Error('Error400: cannot get reason')
     }
 

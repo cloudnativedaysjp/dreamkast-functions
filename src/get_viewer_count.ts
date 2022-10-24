@@ -7,8 +7,8 @@ const TABLENAME = process.env.TABLENAME || "";
 
 export const handler = async (event: any = {}): Promise<any> => {
 
-    const trackId = Number(event.trackId) ;
-    if (!trackId) {
+    const trackId = parseInt(event.trackId) ;
+    if (isNaN(trackId)) {
         throw new Error('Error400: NaN');
     }
 
