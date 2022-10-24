@@ -3,9 +3,6 @@ import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb';
 const dynamodb = new DynamoDB({});
 const TABLENAME = process.env.TABLENAME || "";
 
-// the profileId#conference is separated by symbol '#'.
-const separotorChar = '#'
-
 export const handler = async (event: any = {}): Promise<any> => {
     
     const profileId =  Number(event.profileId);
@@ -35,7 +32,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         const command = new PutItemCommand({
             TableName: TABLENAME,
             Item: {
-                'profileId#conference': { S: String(profileId)+ separotorChar + String(conference)},
+                'profileId#conference': { S: `${profileId}#${conference}` },
                 'timestamp': { N: String(timestamp)},
                 'point': { N: String(point)},
                 'reasonId': { N: String(reasonId)},

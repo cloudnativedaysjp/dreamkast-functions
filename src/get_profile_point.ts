@@ -4,9 +4,6 @@ import { unmarshall } from '@aws-sdk/util-dynamodb';
 const dynamodb = new DynamoDB({})
 const TABLENAME = process.env.TABLENAME || "";
 
-// the profileId#conference is separated by symbol '#'.
-const separotorChar = '#'
-
 class profilePoint{
     point: number;
     reasonId: number;
@@ -31,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         },
         ExpressionAttributeValues: {
             ":pc": {
-                S: String(profileId) + separotorChar + String(conference),
+                S: `${profileId}#${conference}`,
             },
         },
         KeyConditionExpression: "#pk = :pc",
