@@ -25,6 +25,10 @@ export const handler = async (event: any = {}): Promise<any> => {
         throw new Error('Error400: cannot get reason')
     }
 
+    if (!TABLENAME) {
+        throw new Error('Error500: TABLENAME is not defined')
+    }
+
     // Timezone is UTC.
     const timestamp = Date.now();
     

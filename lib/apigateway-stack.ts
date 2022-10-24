@@ -320,6 +320,7 @@ export class APIGatewayStack extends Stack {
                     methodResponses200,
                     methodResponses400,
                     methodResponses404,
+                    methodResponses500,
                 ]
             },
         );

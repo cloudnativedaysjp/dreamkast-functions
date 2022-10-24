@@ -21,6 +21,10 @@ export const handler = async (event: any = {}): Promise<any> => {
         throw new Error('Error400: cannot get conference');
     }
 
+    if (!TABLENAME) {
+        throw new Error('Error500: TABLENAME is not defined')
+    }
+
     const records = await dynamodb.send(new QueryCommand({
         TableName: TABLENAME,
         ExpressionAttributeNames: {
