@@ -2,6 +2,7 @@
 import { App, Tags } from 'aws-cdk-lib';
 import { ViewerCountStack } from './../lib/viewer-count-stack';
 import { VoteCFPStack } from './../lib/vote-cfp-stack';
+import { ProfilePointStack } from './../lib/profile-point-stack';
 import { APIGatewayStack } from './../lib/apigateway-stack';
 import { BuildConfig } from './../lib/build-config';
 import { CertManagerStack } from './../lib/cert-manager-stack';
@@ -73,11 +74,20 @@ async function Main()
         }
     }, buildConfig);
 
+    const profilePointStack = new ProfilePointStack(app, `profilePointStack-${buildConfig.Environment}`, {
+        stackName: `profilePoint-${buildConfig.Environment}`,
+        env: {
+            region: buildConfig.AWSProfileRegion,
+        }
+    });
+
     const apiGatewayStack = new APIGatewayStack(app, `apigGatewayStack-${buildConfig.Environment}`, {
         certificate: certManager.certificate,
         hostedZone: certManager.hostedZone,
         lambda: {
-            voteCFP: voteCFPStack.voteCFPFunction
+            voteCFP: voteCFPStack.voteCFPFunction,
+            postProfilePoint: profilePointStack.postProfilePointFunction,
+            getProfilePoint: profilePointStack.getProfilePointFunction,
         },
         stackName: `apiGatewayStack-${buildConfig.Environment}`,
         env: {

@@ -1,13 +1,15 @@
 import { Construct } from 'constructs';
-import { Stack, StackProps, Fn } from 'aws-cdk-lib';
+import { Stack, StackProps, Fn,RemovalPolicy  } from 'aws-cdk-lib';
 import { Function, IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Effect, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { DomainName, LambdaIntegration, PassthroughBehavior, RestApi, Model, EndpointType } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, IHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 
-import { ViewerCountSchema } from './schemas';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+
+import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema } from './schemas';
 import { BuildConfig } from './build-config'
 
 export interface APIGatewayProps extends StackProps {
@@ -15,6 +17,8 @@ export interface APIGatewayProps extends StackProps {
     readonly hostedZone: IHostedZone,
     readonly lambda: {
         readonly voteCFP: IFunction,
+        readonly postProfilePoint: IFunction,
+        readonly getProfilePoint: IFunction,
     }
 }
 
@@ -24,24 +28,38 @@ export class APIGatewayStack extends Stack {
 
         // === [ API Gateway ] === 
 
-        const api = new RestApi(this, 'dkFunctionsApi',{
+        const api = new apigateway.RestApi(this, 'dkFunctionsApi',{
             restApiName: `dk-functions-${buildConfig.Environment}`,
             deployOptions: {
                 stageName: 'v1',
                 throttlingRateLimit: 60,
                 throttlingBurstLimit: 3000,
+                dataTraceEnabled: true,
+                loggingLevel: apigateway.MethodLoggingLevel.INFO,
+                accessLogDestination: new apigateway.LogGroupLogDestination(new LogGroup(this, 'ApiLogGroup', {
+                    logGroupName: `${id}-apiGateway`,
+                    retention: RetentionDays.ONE_MONTH,
+                    removalPolicy: RemovalPolicy.DESTROY,
+                })),
+                accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields(),
             },
         });
 
+        const requestValidator = new apigateway.RequestValidator(this, 'ApiRequestValidator', {
+            restApi: api,
+            validateRequestParameters: true,
+            validateRequestBody: true
+        });
+
          // Custom Domain
-        const domainName = new DomainName(this, 'CustomDomain',{
+        const domainName = new apigateway.DomainName(this, 'CustomDomain',{
             certificate: props.certificate,
             domainName: buildConfig.DomainName,
-            endpointType: EndpointType.REGIONAL,
+            endpointType: apigateway.EndpointType.REGIONAL,
         });
         domainName.addBasePathMapping(api,{
             basePath: '',
-        })
+        });
 
          // A Record
         new ARecord(this, 'APIARecod', {
@@ -60,9 +78,9 @@ export class APIGatewayStack extends Stack {
                     actions: ['lambda:Invoke*'],
                     effect: Effect.ALLOW,
                     resources: ['arn:aws:lambda:*:607167088920:function:*'],
-                })
+                }),
                 ]
-            })
+            }),
             }
         });
 
@@ -70,16 +88,22 @@ export class APIGatewayStack extends Stack {
         
         const root = api.root;
         const event = root.addResource('{eventName}');
-        
-        // TRACKS API
+
+        // TRACKS
         const tracks = event.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
-        const viewer_count = trackid.addResource('viewer_count');
+        const viewerCount = trackid.addResource('viewer_count');
 
-        // TALKS API
+        // TALKS
         const talks = event.addResource('talks');
         const talkId = talks.addResource('{talkId}')
         const vote = talkId.addResource('vote');
+
+        // Profile
+        const profiles = event.addResource('profile');
+        const profileId = profiles.addResource('{profileId}');
+        const point = profileId.addResource('point');
+        const points = profileId.addResource('points');
 
         /* === [   MODEL   ] === */
 
@@ -87,6 +111,17 @@ export class APIGatewayStack extends Stack {
             contentType: 'application/json',
             modelName: 'ViewerCount',
             schema: ViewerCountSchema,
+        })
+        const profilePointModel = api.addModel('profilePointModel',{
+            contentType: 'application/json',
+            modelName: 'ProfilePoint',
+            schema: ProfilePointSchema,
+        })
+        
+        const profilePointsModel = api.addModel('profilePointsModel',{
+            contentType: 'application/json',
+            modelName: 'ProfilePoints',
+            schema: ProfilePointsSchema,
         })
 
         /* === [   ResponseParameters   ] === */
@@ -108,7 +143,6 @@ export class APIGatewayStack extends Stack {
             statusCode: '200',
             responseParameters: CorsResponseParameters,
         }
-
         const integrationResponse400 = {
             statusCode: '400',
             selectionPattern: 'Error400:.*',
@@ -117,7 +151,6 @@ export class APIGatewayStack extends Stack {
                 'application/json': JSON.stringify({"message":"bad request"}),
             },
         }
-
         const integrationResponse404 = {
             statusCode: '404',
             selectionPattern: 'Error404:.*',
@@ -126,21 +159,43 @@ export class APIGatewayStack extends Stack {
                 'application/json': JSON.stringify({"message":"not found"}),
             },
         }
+        const integrationResponse500 = {
+            statusCode: '500',
+            selectionPattern: 'Error500:.*',
+            responseParameters: CorsResponseParameters,
+            responseTemplates: {
+                'application/json': JSON.stringify({"message":"internal server error"}),
+            },
+        }
 
         /* === [   MethodResponse   ] === */
 
+        const methodResponses200 = {
+            statusCode: '200',
+            responseParameters: CorsMethodResponseParameters,
+            responseModels: {
+                'application/json': apigateway.Model.EMPTY_MODEL,
+            },
+        }
         const methodResponses400 = {
             statusCode: '400',
             responseParameters: CorsMethodResponseParameters,
             responseModels: {
-                'application/json': Model.ERROR_MODEL,
+                'application/json': apigateway.Model.ERROR_MODEL,
             },
         }
         const methodResponses404 = {
             statusCode: '404',
             responseParameters: CorsMethodResponseParameters,
             responseModels: {
-                'application/json': Model.ERROR_MODEL,
+                'application/json': apigateway.Model.ERROR_MODEL,
+            },
+        }
+        const methodResponses500 = {
+            statusCode: '500',
+            responseParameters: CorsMethodResponseParameters,
+            responseModels: {
+                'application/json': apigateway.Model.ERROR_MODEL,
             },
         }
 
@@ -150,13 +205,13 @@ export class APIGatewayStack extends Stack {
 
         const getViewerCountFunctionArn = Fn.importValue(`viewerCountStack-GetViewerCountFunction-Arn-${buildConfig.Environment}`);
         const getViewerCountFunction = Function.fromFunctionArn(this, 'GetViewerCountFunction', getViewerCountFunctionArn);
-        viewer_count.addMethod('GET',
+        viewerCount.addMethod('GET',
             // Integration
-            new LambdaIntegration( getViewerCountFunction,
+            new apigateway.LambdaIntegration( getViewerCountFunction,
                 {
                     proxy: false,
                     credentialsRole: projectApiExecutionRole,
-                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
                             #set($trackId = $util.escapeJavaScript($input.params().get("path").get("trackId")))
@@ -175,6 +230,7 @@ export class APIGatewayStack extends Stack {
                 requestParameters: {
                     "method.request.path.trackId": true,
                 },
+                requestValidator: requestValidator,
                 methodResponses: [
                     {
                         statusCode: '200',
@@ -190,14 +246,14 @@ export class APIGatewayStack extends Stack {
             },
         );
 
-        // PUT /{event}/talk/{trackID}/viewer_count -> GetViewerCountFunction
+        // POST /{event}/talk/{trackID}/viewer_count -> GetViewerCountFunction
         vote.addMethod('POST',
             // Integration
-            new LambdaIntegration( props.lambda.voteCFP,
+            new apigateway.LambdaIntegration( props.lambda.voteCFP,
                 {
                     proxy: false,
                     credentialsRole: projectApiExecutionRole,
-                    passthroughBehavior: PassthroughBehavior.NEVER,
+                    passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
                             "eventName":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
@@ -214,22 +270,101 @@ export class APIGatewayStack extends Stack {
             ),
             // MethodOptions
             {
+                requestValidator: requestValidator,
                 requestParameters: {
                     "method.request.path.eventName": true,
                     "method.request.path.talkId": true,
                 },
                 methodResponses: [
-                    {
-                        statusCode: '200',
-                        responseParameters: CorsMethodResponseParameters,
-                        responseModels: {
-                            'application/json': Model.EMPTY_MODEL,
-                        },
-                    },
+                    methodResponses200,
                     methodResponses400,
                     methodResponses404,
                 ]
             },
         );
+
+        // POST /profiles/{profileId}/point -> PostProfilePointFunction
+        point.addMethod('POST',
+            // Integration
+            new apigateway.LambdaIntegration( props.lambda.postProfilePoint,
+                {
+                    proxy: false,
+                    credentialsRole: projectApiExecutionRole,
+                    passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+                    requestTemplates: {
+                        'application/json': `{
+                            "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
+                            "conference":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
+                            "point": "$util.escapeJavaScript($input.path('$').point)",
+                            "reasonId":"$util.escapeJavaScript($input.path('$').reasonId)"
+                        }`,
+                    },
+                    integrationResponses: [
+                        integrationResponse200,
+                        integrationResponse400,
+                        integrationResponse404,
+                    ],
+                },
+            ),
+            // MethodOptions
+            {
+                requestValidator: requestValidator,
+                requestParameters: {
+                    "method.request.path.eventName": true,
+                    "method.request.path.profileId": true,
+                },
+                requestModels: {
+                    'application/json': profilePointModel,
+                },
+                methodResponses: [
+                    methodResponses200,
+                    methodResponses400,
+                    methodResponses404,
+                    methodResponses500,
+                ]
+            },
+        );
+
+        // GET /profiles/{profileId}/points -> GetProfilePointFunction
+        points.addMethod('GET',
+        // Integration
+        new apigateway.LambdaIntegration( props.lambda.getProfilePoint,
+            {
+                proxy: false,
+                credentialsRole: projectApiExecutionRole,
+                passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+                requestTemplates: {
+                    'application/json': `{
+                        "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
+                        "conference":"$util.escapeJavaScript($input.params().get("path").get("eventName"))"
+                    }`,
+                },
+                integrationResponses: [
+                    integrationResponse200,
+                    integrationResponse400,
+                    integrationResponse500,
+                ],
+            },
+        ),
+        // MethodOptions
+        {
+            requestValidator: requestValidator,
+            requestParameters: {
+                "method.request.path.eventName": true,
+                "method.request.path.profileId": true,
+            },
+            methodResponses: [
+                {
+                    statusCode: '200',
+                    responseParameters: CorsMethodResponseParameters,
+                    responseModels: {
+                        'application/json': profilePointsModel,
+                    },
+                },
+                methodResponses400,
+                methodResponses500,
+            ]
+        },
+    );
     }
 }
