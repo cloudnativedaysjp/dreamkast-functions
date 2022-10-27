@@ -86,6 +86,21 @@ exports[`snapshot test 1`] = `
             },
             {
               "Action": "route53:changeResourceRecordSets",
+              "Condition": {
+                "ForAllValues:StringEquals": {
+                  "route53:ChangeResourceRecordSetsActions": [
+                    "UPSERT",
+                  ],
+                  "route53:ChangeResourceRecordSetsRecordTypes": [
+                    "CNAME",
+                  ],
+                },
+                "ForAllValues:StringLike": {
+                  "route53:ChangeResourceRecordSetsNormalizedRecordNames": [
+                    "*.api.test.cloudnativedays.jp",
+                  ],
+                },
+              },
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
