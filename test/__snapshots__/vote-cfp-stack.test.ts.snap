@@ -15,7 +15,7 @@ exports[`snapshot test 1`] = `
       "Properties": {
         "AttributeDefinitions": [
           {
-            "AttributeName": "eventName",
+            "AttributeName": "eventAbbr",
             "AttributeType": "S",
           },
           {
@@ -26,7 +26,7 @@ exports[`snapshot test 1`] = `
         "BillingMode": "PAY_PER_REQUEST",
         "KeySchema": [
           {
-            "AttributeName": "eventName",
+            "AttributeName": "eventAbbr",
             "KeyType": "HASH",
           },
           {
