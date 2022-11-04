@@ -255,7 +255,7 @@ export class APIGatewayStack extends Stack {
             },
         );
 
-        // POST /{event}/talk/{trackID}/viewer_count -> GetViewerCountFunction
+        // POST /talk/{trackID}/vote -> VoteCFP
         vote.addMethod('POST',
             // Integration
             new apigateway.LambdaIntegration( props.lambda.voteCFP,
@@ -265,7 +265,7 @@ export class APIGatewayStack extends Stack {
                     passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
-                            "eventName":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
+                            "eventAbbr":"$util.escapeJavaScript($input.path('$').eventAbbr)",
                             "talkId": "$util.escapeJavaScript($input.params().get("path").get("talkId"))",
                             "globalIp": "$util.escapeJavaScript($context.identity.sourceIp)"
                         }`,
@@ -281,7 +281,6 @@ export class APIGatewayStack extends Stack {
             {
                 requestValidator: requestValidator,
                 requestParameters: {
-                    "method.request.path.eventName": true,
                     "method.request.path.talkId": true,
                 },
                 methodResponses: [

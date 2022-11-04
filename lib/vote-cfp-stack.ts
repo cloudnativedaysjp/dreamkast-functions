@@ -17,7 +17,7 @@ export class VoteCFPStack extends Stack {
 
         const voteTable = new Table(this, 'VoteTable', {
             billingMode: BillingMode.PAY_PER_REQUEST,
-            partitionKey: { name: 'eventName', type: AttributeType.STRING },
+            partitionKey: { name: 'eventAbbr', type: AttributeType.STRING },
             sortKey: { name: 'timestamp', type: AttributeType.NUMBER },
             removalPolicy: RemovalPolicy.RETAIN,
         });
