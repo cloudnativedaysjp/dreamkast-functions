@@ -16,6 +16,19 @@ export const ViewerCountSchema: JsonSchema = {
     },
 }
 
+export const VoteSchema: JsonSchema = {
+    schema: JsonSchemaVersion.DRAFT4,
+    title: 'voteResponse',
+    type: JsonSchemaType.OBJECT,
+    additionalProperties: false,
+    required: [ "eventAbbr" ],
+    properties: {
+        eventAbbr: {
+            type: JsonSchemaType.STRING,
+        },
+    },
+}
+
 export const ProfilePointSchema: JsonSchema = {
     schema: JsonSchemaVersion.DRAFT4,
     title: 'profilePointResponse',

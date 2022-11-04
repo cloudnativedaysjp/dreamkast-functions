@@ -9,7 +9,7 @@ import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
-import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema } from './schemas';
+import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema, VoteSchema } from './schemas';
 import { BuildConfig } from './build-config'
 
 export interface APIGatewayProps extends StackProps {
@@ -121,6 +121,13 @@ export class APIGatewayStack extends Stack {
             modelName: 'DkfViewerCount',
             schema: ViewerCountSchema,
         })
+
+        const voteModel = api.addModel('voteModel',{
+            contentType: 'application/json',
+            modelName: 'Vote',
+            schema: VoteSchema,
+        })
+
         const profilePointModel = api.addModel('profilePointModel',{
             contentType: 'application/json',
             modelName: 'ProfilePoint',
@@ -282,6 +289,9 @@ export class APIGatewayStack extends Stack {
                 requestValidator: requestValidator,
                 requestParameters: {
                     "method.request.path.talkId": true,
+                },
+                requestModels: {
+                    'application/json': voteModel,
                 },
                 methodResponses: [
                     methodResponses200,
