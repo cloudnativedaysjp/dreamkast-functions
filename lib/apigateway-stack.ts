@@ -60,6 +60,10 @@ export class APIGatewayStack extends Stack {
         domainName.addBasePathMapping(api,{
             basePath: '',
         });
+        // Not used to follow the dk swagger specifications
+        //domainName.addApiMapping(api.deploymentStage,{
+        //    basePath: 'api/v1',
+        //});
 
          // A Record
         new ARecord(this, 'APIARecod', {
@@ -87,20 +91,21 @@ export class APIGatewayStack extends Stack {
         /* === [ RESOURCES ] === */
         
         const root = api.root;
-        const event = root.addResource('{eventName}');
+        const apiv1 = root.addResource('api').addResource('v1')
+        const event = apiv1.addResource('{eventAbbr}');
 
         // TRACKS
-        const tracks = event.addResource('tracks');
+        const tracks = apiv1.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
         const viewerCount = trackid.addResource('viewer_count', {
             defaultCorsPreflightOptions: {
                 statusCode: 200,
                 allowOrigins: [`'${buildConfig.AccessControlAllowOrigin}'`],
-              }
+            }
         });
 
         // TALKS
-        const talks = event.addResource('talks');
+        const talks = apiv1.addResource('talks');
         const talkId = talks.addResource('{talkId}')
         const vote = talkId.addResource('vote');
 
