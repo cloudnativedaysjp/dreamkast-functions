@@ -118,7 +118,7 @@ export class APIGatewayStack extends Stack {
 
         const viewerCountModel = api.addModel('viewerCountModel',{
             contentType: 'application/json',
-            modelName: 'DkfViewerCount',
+            modelName: 'ViewerCount',
             schema: ViewerCountSchema,
         })
 
