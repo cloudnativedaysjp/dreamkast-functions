@@ -5,12 +5,12 @@ export const ViewerCountSchema: JsonSchema = {
     title: 'viewerCountResponse',
     type: JsonSchemaType.OBJECT,
     additionalProperties: false,
-    required: [ "track_id", "viewer_count"],
+    required: [ "trackId", "viewerCount"],
     properties: {
-        track_id: {
+        trackId: {
             type: JsonSchemaType.NUMBER,
         },
-        viewer_count: {
+        viewerCount: {
             type: JsonSchemaType.NUMBER,
         },
     },

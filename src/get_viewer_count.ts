@@ -26,8 +26,8 @@ export const handler = async (event: any = {}): Promise<any> => {
 
     const item = unmarshall(record.Item)
     return {
-        track_id: trackId,
-        viewer_count: item.viewerCount,
+        trackId: trackId,
+        viewerCount: item.viewerCount,
     }
 };
 
