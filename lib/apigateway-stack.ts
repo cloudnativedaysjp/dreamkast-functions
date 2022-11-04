@@ -92,7 +92,12 @@ export class APIGatewayStack extends Stack {
         // TRACKS
         const tracks = event.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
-        const viewerCount = trackid.addResource('viewer_count');
+        const viewerCount = trackid.addResource('viewer_count', {
+            defaultCorsPreflightOptions: {
+                statusCode: 200,
+                allowOrigins: [`'${buildConfig.AccessControlAllowOrigin}'`],
+              }
+        });
 
         // TALKS
         const talks = event.addResource('talks');
