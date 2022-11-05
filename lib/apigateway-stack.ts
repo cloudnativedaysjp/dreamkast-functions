@@ -92,7 +92,6 @@ export class APIGatewayStack extends Stack {
         
         const root = api.root;
         const apiv1 = root.addResource('api').addResource('v1')
-        const event = apiv1.addResource('{eventAbbr}');
 
         // TRACKS
         const tracks = apiv1.addResource('tracks');
@@ -110,7 +109,7 @@ export class APIGatewayStack extends Stack {
         const vote = talkId.addResource('vote');
 
         // Profile
-        const profiles = event.addResource('profile');
+        const profiles = apiv1.addResource('profile');
         const profileId = profiles.addResource('{profileId}');
         const point = profileId.addResource('point');
         const points = profileId.addResource('points');
@@ -303,8 +302,8 @@ export class APIGatewayStack extends Stack {
                     passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
+                            "conference":"$util.escapeJavaScript($input.path('$').eventAbbr)",
                             "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                            "conference":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
                             "point": "$util.escapeJavaScript($input.path('$').point)",
                             "reasonId":"$util.escapeJavaScript($input.path('$').reasonId)"
                         }`,
@@ -320,7 +319,6 @@ export class APIGatewayStack extends Stack {
             {
                 requestValidator: requestValidator,
                 requestParameters: {
-                    "method.request.path.eventName": true,
                     "method.request.path.profileId": true,
                 },
                 requestModels: {
@@ -346,7 +344,7 @@ export class APIGatewayStack extends Stack {
                 requestTemplates: {
                     'application/json': `{
                         "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                        "conference":"$util.escapeJavaScript($input.params().get("path").get("eventName"))"
+                        "conference":"$util.escapeJavaScript($input.params("eventAbbr"))"
                     }`,
                 },
                 integrationResponses: [
@@ -360,7 +358,7 @@ export class APIGatewayStack extends Stack {
         {
             requestValidator: requestValidator,
             requestParameters: {
-                "method.request.path.eventName": true,
+                "method.request.querystring.eventAbbr": false,
                 "method.request.path.profileId": true,
             },
             methodResponses: [

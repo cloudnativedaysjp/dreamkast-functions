@@ -36,8 +36,8 @@ export const handler = async (event: any = {}): Promise<any> => {
         const command = new PutItemCommand({
             TableName: TABLENAME,
             Item: {
-                'profileId#conference': { S: `${profileId}#${conference}` },
-                'timestamp': { N: String(timestamp)},
+                'profileId': { N: String(profileId)},
+                'conference#timestamp': { S: `${conference}#${timestamp}`},
                 'point': { N: String(point)},
                 'reasonId': { N: String(reasonId)},
             },

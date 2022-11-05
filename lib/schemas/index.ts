@@ -21,10 +21,13 @@ export const ProfilePointSchema: JsonSchema = {
     title: 'profilePointResponse',
     type: JsonSchemaType.OBJECT,
     additionalProperties: false,
-    required: [ "point" ],
+    required: [ "point", "eventAbbr" ],
     properties: {
         point: {
             type: JsonSchemaType.NUMBER,
+        },
+        eventAbbr:{
+            type: JsonSchemaType.STRING,
         },
         reasonId: {
             type: JsonSchemaType.NUMBER,
