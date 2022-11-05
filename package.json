@@ -5,7 +5,7 @@
     "my-project": "bin/my-project.js"
   },
   "config": {
-    "event": "cnsec2022"
+    "event": "cndt2022"
   },
   "scripts": {
     "build": "tsc",
