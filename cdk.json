@@ -36,6 +36,7 @@
       "aws-cn"
     ],
     "dev": {
+      "DreamkastApiBaseUrl" : "https://dreamkast-dk-1621.dev.cloudnativedays.jp",
       "AWSProfileRegion" : "us-east-2",
       "DomainName" : "api.dev.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
@@ -45,6 +46,7 @@
       "Environment": "dev"
     },
     "stg": {
+      "DreamkastApiBaseUrl" : "https://staging.dev.cloudnativedays.jp",
       "AWSProfileRegion" : "ap-northeast-1",
       "DomainName" : "api.stg.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
@@ -54,6 +56,7 @@
       "Environment": "stg"
     },
     "prd": {
+      "DreamkastApiBaseUrl" : "https://event.cloudnativedays.jp",
       "AWSProfileRegion" : "ap-northeast-1",
       "DomainName" : "api.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
