@@ -121,7 +121,7 @@ export class APIGatewayStack extends Stack {
         const viewerCount = trackid.addResource('viewer_count', {
             defaultCorsPreflightOptions: {
                 statusCode: 200,
-                allowOrigins: [`'${buildConfig.AccessControlAllowOrigin}'`],
+                allowOrigins: apigateway.Cors.ALL_ORIGINS,
             }
         });
 
@@ -166,7 +166,7 @@ export class APIGatewayStack extends Stack {
 
         const CorsResponseParameters = {
             'method.response.header.Access-Control-Allow-Methods': "'GET,POST'",
-            'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
+            'method.response.header.Access-Control-Allow-Origin': buildConfig.AccessControlAllowOrigin,
             'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
         }
         const CorsMethodResponseParameters = {
