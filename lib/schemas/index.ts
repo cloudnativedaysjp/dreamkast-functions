@@ -5,13 +5,26 @@ export const ViewerCountSchema: JsonSchema = {
     title: 'viewerCountResponse',
     type: JsonSchemaType.OBJECT,
     additionalProperties: false,
-    required: [ "track_id", "viewer_count"],
+    required: [ "trackId", "viewerCount"],
     properties: {
-        track_id: {
+        trackId: {
             type: JsonSchemaType.NUMBER,
         },
-        viewer_count: {
+        viewerCount: {
             type: JsonSchemaType.NUMBER,
+        },
+    },
+}
+
+export const VoteSchema: JsonSchema = {
+    schema: JsonSchemaVersion.DRAFT4,
+    title: 'voteResponse',
+    type: JsonSchemaType.OBJECT,
+    additionalProperties: false,
+    required: [ "eventAbbr" ],
+    properties: {
+        eventAbbr: {
+            type: JsonSchemaType.STRING,
         },
     },
 }
@@ -21,10 +34,13 @@ export const ProfilePointSchema: JsonSchema = {
     title: 'profilePointResponse',
     type: JsonSchemaType.OBJECT,
     additionalProperties: false,
-    required: [ "point" ],
+    required: [ "point", "eventAbbr" ],
     properties: {
         point: {
             type: JsonSchemaType.NUMBER,
+        },
+        eventAbbr:{
+            type: JsonSchemaType.STRING,
         },
         reasonId: {
             type: JsonSchemaType.NUMBER,

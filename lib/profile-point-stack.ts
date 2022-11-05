@@ -19,8 +19,8 @@ export class ProfilePointStack extends Stack {
 
         const profilePointTable = new Table(this, 'Table', {
             billingMode: BillingMode.PAY_PER_REQUEST,
-            partitionKey: { name: 'profileId#conference', type: AttributeType.STRING },
-            sortKey: { name: 'timestamp', type: AttributeType.NUMBER },
+            partitionKey: { name: 'profileId', type: AttributeType.NUMBER },
+            sortKey: { name: 'conference#timestamp', type: AttributeType.STRING },
             removalPolicy: RemovalPolicy.RETAIN,
         });
 

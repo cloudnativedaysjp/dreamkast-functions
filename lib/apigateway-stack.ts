@@ -9,7 +9,7 @@ import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
-import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema } from './schemas';
+import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema, VoteSchema } from './schemas';
 import { BuildConfig } from './build-config'
 
 export interface APIGatewayProps extends StackProps {
@@ -60,6 +60,10 @@ export class APIGatewayStack extends Stack {
         domainName.addBasePathMapping(api,{
             basePath: '',
         });
+        // Not used to follow the dk swagger specifications
+        //domainName.addApiMapping(api.deploymentStage,{
+        //    basePath: 'api/v1',
+        //});
 
          // A Record
         new ARecord(this, 'APIARecod', {
@@ -87,20 +91,25 @@ export class APIGatewayStack extends Stack {
         /* === [ RESOURCES ] === */
         
         const root = api.root;
-        const event = root.addResource('{eventName}');
+        const apiv1 = root.addResource('api').addResource('v1')
 
         // TRACKS
-        const tracks = event.addResource('tracks');
+        const tracks = apiv1.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
-        const viewerCount = trackid.addResource('viewer_count');
+        const viewerCount = trackid.addResource('viewer_count', {
+            defaultCorsPreflightOptions: {
+                statusCode: 200,
+                allowOrigins: [`'${buildConfig.AccessControlAllowOrigin}'`],
+            }
+        });
 
         // TALKS
-        const talks = event.addResource('talks');
+        const talks = apiv1.addResource('talks');
         const talkId = talks.addResource('{talkId}')
         const vote = talkId.addResource('vote');
 
         // Profile
-        const profiles = event.addResource('profile');
+        const profiles = apiv1.addResource('profile');
         const profileId = profiles.addResource('{profileId}');
         const point = profileId.addResource('point');
         const points = profileId.addResource('points');
@@ -109,9 +118,16 @@ export class APIGatewayStack extends Stack {
 
         const viewerCountModel = api.addModel('viewerCountModel',{
             contentType: 'application/json',
-            modelName: 'DkfViewerCount',
+            modelName: 'ViewerCount',
             schema: ViewerCountSchema,
         })
+
+        const voteModel = api.addModel('voteModel',{
+            contentType: 'application/json',
+            modelName: 'Vote',
+            schema: VoteSchema,
+        })
+
         const profilePointModel = api.addModel('profilePointModel',{
             contentType: 'application/json',
             modelName: 'ProfilePoint',
@@ -246,7 +262,7 @@ export class APIGatewayStack extends Stack {
             },
         );
 
-        // POST /{event}/talk/{trackID}/viewer_count -> GetViewerCountFunction
+        // POST /talk/{trackID}/vote -> VoteCFP
         vote.addMethod('POST',
             // Integration
             new apigateway.LambdaIntegration( props.lambda.voteCFP,
@@ -256,7 +272,7 @@ export class APIGatewayStack extends Stack {
                     passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
-                            "eventName":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
+                            "eventAbbr":"$util.escapeJavaScript($input.path('$').eventAbbr)",
                             "talkId": "$util.escapeJavaScript($input.params().get("path").get("talkId"))",
                             "globalIp": "$util.escapeJavaScript($context.identity.sourceIp)"
                         }`,
@@ -272,8 +288,10 @@ export class APIGatewayStack extends Stack {
             {
                 requestValidator: requestValidator,
                 requestParameters: {
-                    "method.request.path.eventName": true,
                     "method.request.path.talkId": true,
+                },
+                requestModels: {
+                    'application/json': voteModel,
                 },
                 methodResponses: [
                     methodResponses200,
@@ -293,8 +311,8 @@ export class APIGatewayStack extends Stack {
                     passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
+                            "conference":"$util.escapeJavaScript($input.path('$').eventAbbr)",
                             "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                            "conference":"$util.escapeJavaScript($input.params().get("path").get("eventName"))",
                             "point": "$util.escapeJavaScript($input.path('$').point)",
                             "reasonId":"$util.escapeJavaScript($input.path('$').reasonId)"
                         }`,
@@ -310,7 +328,6 @@ export class APIGatewayStack extends Stack {
             {
                 requestValidator: requestValidator,
                 requestParameters: {
-                    "method.request.path.eventName": true,
                     "method.request.path.profileId": true,
                 },
                 requestModels: {
@@ -336,7 +353,7 @@ export class APIGatewayStack extends Stack {
                 requestTemplates: {
                     'application/json': `{
                         "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                        "conference":"$util.escapeJavaScript($input.params().get("path").get("eventName"))"
+                        "conference":"$util.escapeJavaScript($input.params("eventAbbr"))"
                     }`,
                 },
                 integrationResponses: [
@@ -350,7 +367,7 @@ export class APIGatewayStack extends Stack {
         {
             requestValidator: requestValidator,
             requestParameters: {
-                "method.request.path.eventName": true,
+                "method.request.querystring.eventAbbr": false,
                 "method.request.path.profileId": true,
             },
             methodResponses: [

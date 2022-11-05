@@ -1,4 +1,4 @@
-import { DynamoDB, PutItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
 const dynamodb = new DynamoDB({});
 const TABLENAME = process.env.TABLENAME || "";
@@ -9,9 +9,9 @@ export const handler = async (event: any = {}): Promise<any> => {
     if (!globalIp) {
             throw new Error('Error400: cannot get global ip');
     }
-    const eventName =  String(event.eventName);
-    if (!eventName) {
-            throw new Error('Error400: cannot get event name');
+    const eventAbbr =  String(event.eventAbbr);
+    if (!eventAbbr) {
+            throw new Error('Error400: cannot get eventAbbr');
     }
     const talkId =  parseInt(event.talkId);
     if (isNaN(talkId)) {
@@ -24,7 +24,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         const command = new PutItemCommand({
             TableName: TABLENAME,
             Item: {
-                eventName: { S: String(eventName)},
+                eventAbbr: { S: String(eventAbbr)},
                 timestamp: { N: String(timestamp)},
                 globalIp: { S: String(globalIp)},
                 talkId: { N: String(talkId) },
