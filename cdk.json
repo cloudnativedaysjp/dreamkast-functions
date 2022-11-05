@@ -36,7 +36,7 @@
       "aws-cn"
     ],
     "dev": {
-      "DreamkastApiBaseUrl" : "https://dreamkast-dk-1621.dev.cloudnativedays.jp",
+      "DreamkastApiBaseUrl" : "https://staging.dev.cloudnativedays.jp",
       "AWSProfileRegion" : "us-east-2",
       "DomainName" : "api.dev.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
