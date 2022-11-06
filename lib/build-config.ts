@@ -1,5 +1,6 @@
 export interface BuildConfig
 {
+    readonly DreamkastApiBaseUrl : string;
     readonly Environment : string;
     readonly DomainName : string;
     readonly HostedZoneID : string;

@@ -48,7 +48,7 @@ export class APIGatewayStack extends Stack {
         const requestValidator = new apigateway.RequestValidator(this, 'ApiRequestValidator', {
             restApi: api,
             validateRequestParameters: true,
-            validateRequestBody: true
+            validateRequestBody: true,
         });
 
          // Custom Domain
@@ -93,13 +93,35 @@ export class APIGatewayStack extends Stack {
         const root = api.root;
         const apiv1 = root.addResource('api').addResource('v1')
 
+        // Dreamkast
+        new apigateway.ProxyResource(this,'ProxyResource',{
+            parent: apiv1,
+            anyMethod: true,
+            defaultIntegration: new apigateway.HttpIntegration(`${buildConfig.DreamkastApiBaseUrl}/api/v1/{proxy}`,{
+                    proxy: true,
+                    httpMethod: 'ANY',
+                    options:{
+                        credentialsPassthrough: true,
+                        requestParameters: {
+                            "integration.request.path.proxy": "method.request.path.proxy"
+                        },
+                    },
+                }),
+            defaultMethodOptions: {
+                requestParameters:{
+                    "method.request.path.proxy": true,
+                }
+            },
+        });
+
+
         // TRACKS
         const tracks = apiv1.addResource('tracks');
         const trackid = tracks.addResource('{trackId}');
         const viewerCount = trackid.addResource('viewer_count', {
             defaultCorsPreflightOptions: {
                 statusCode: 200,
-                allowOrigins: [`'${buildConfig.AccessControlAllowOrigin}'`],
+                allowOrigins: apigateway.Cors.ALL_ORIGINS,
             }
         });
 
@@ -144,7 +166,7 @@ export class APIGatewayStack extends Stack {
 
         const CorsResponseParameters = {
             'method.response.header.Access-Control-Allow-Methods': "'GET,POST'",
-            'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
+            'method.response.header.Access-Control-Allow-Origin': buildConfig.AccessControlAllowOrigin,
             'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
         }
         const CorsMethodResponseParameters = {

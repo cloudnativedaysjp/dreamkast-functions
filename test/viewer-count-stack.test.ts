@@ -11,13 +11,14 @@ test("snapshot test", () => {
             region: 'ap-northeast-1',
         },
     }, {
+        DreamkastApiBaseUrl : "https://staging.dev.cloudnativedays.jp",
+        AWSProfileRegion : "us-east-2",
         Environment: 'test', 
         DomainName : 'api.test.cloudnativedays.jp',
         HostedZoneID : 'test',
         ZoneName: 'cloudnativedays.jp',
         AccessControlAllowOrigin: 'hoge.com',
         GetTracksURL : 'https://test.cloudnativedays.jp',
-        AWSProfileRegion : 'ap-northeast-1',
     });
 
     // スタックからテンプレート(JSON)を生成

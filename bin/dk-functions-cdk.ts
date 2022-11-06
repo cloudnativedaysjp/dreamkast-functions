@@ -34,7 +34,8 @@ function getConfig()
 
     let unparsedEnv = app.node.tryGetContext(env);
 
-    let buildConfig: BuildConfig = {
+    const buildConfig: BuildConfig = {
+        DreamkastApiBaseUrl: ensureString(unparsedEnv, 'DreamkastApiBaseUrl'),
         Environment: ensureString(unparsedEnv, 'Environment'),
         DomainName: ensureString(unparsedEnv, 'DomainName'),
         HostedZoneID: ensureString(unparsedEnv, 'HostedZoneID'),
@@ -49,7 +50,7 @@ function getConfig()
 
 async function Main()
 {
-    let buildConfig: BuildConfig = getConfig();
+    const buildConfig: BuildConfig = getConfig();
 
     Tags.of(app).add('Environment', buildConfig.Environment);
 
