@@ -9,7 +9,7 @@ import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
-import { ViewerCountSchema, ProfilePointSchema, ProfilePointsSchema, VoteSchema } from './schemas';
+import { ViewerCountSchema, ProfilePointRequestSchema, ProfilePointsResponseSchema, VoteSchema } from './schemas';
 import { BuildConfig } from './build-config'
 
 export interface APIGatewayProps extends StackProps {
@@ -153,13 +153,13 @@ export class APIGatewayStack extends Stack {
         const profilePointModel = api.addModel('profilePointModel',{
             contentType: 'application/json',
             modelName: 'ProfilePoint',
-            schema: ProfilePointSchema,
+            schema: ProfilePointRequestSchema,
         })
         
         const profilePointsModel = api.addModel('profilePointsModel',{
             contentType: 'application/json',
             modelName: 'ProfilePoints',
-            schema: ProfilePointsSchema,
+            schema: ProfilePointsResponseSchema,
         })
 
         /* === [   ResponseParameters   ] === */
@@ -333,10 +333,9 @@ export class APIGatewayStack extends Stack {
                     passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
                     requestTemplates: {
                         'application/json': `{
-                            "conference":"$util.escapeJavaScript($input.path('$').eventAbbr)",
+                            "conference":"$util.escapeJavaScript($input.path('$').conference)",
                             "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                            "point": "$util.escapeJavaScript($input.path('$').point)",
-                            "reasonId":"$util.escapeJavaScript($input.path('$').reasonId)"
+                            "pointEventId":"$util.escapeJavaScript($input.path('$').pointEventId)"
                         }`,
                     },
                     integrationResponses: [
@@ -375,7 +374,7 @@ export class APIGatewayStack extends Stack {
                 requestTemplates: {
                     'application/json': `{
                         "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                        "conference":"$util.escapeJavaScript($input.params("eventAbbr"))"
+                        "conference":"$util.escapeJavaScript($input.params("conference"))"
                     }`,
                 },
                 integrationResponses: [
@@ -389,7 +388,7 @@ export class APIGatewayStack extends Stack {
         {
             requestValidator: requestValidator,
             requestParameters: {
-                "method.request.querystring.eventAbbr": false,
+                "method.request.querystring.conference": true,
                 "method.request.path.profileId": true,
             },
             methodResponses: [
