@@ -53,7 +53,10 @@ exports[`snapshot test 1`] = `
         "Environment": {
           "Variables": {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-            "TABLENAME": {
+            "POINT_EVENT_TABLENAME": {
+              "Ref": "pointEventTable282FC179",
+            },
+            "PROFILE_POINT_TABLENAME": {
               "Ref": "TableCD117FA1",
             },
           },
@@ -76,12 +79,20 @@ exports[`snapshot test 1`] = `
             {
               "Action": "dynamodb:Query",
               "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TableCD117FA1",
-                  "Arn",
-                ],
-              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TableCD117FA1",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::GetAtt": [
+                    "pointEventTable282FC179",
+                    "Arn",
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
@@ -125,6 +136,34 @@ exports[`snapshot test 1`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "pointEventTable282FC179": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "conference",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "pointEventId",
+            "AttributeType": "N",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "conference",
+            "KeyType": "HASH",
+          },
+          {
+            "AttributeName": "pointEventId",
+            "KeyType": "RANGE",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
     },
     "postProfilePointEFB04901": {
       "DependsOn": [
