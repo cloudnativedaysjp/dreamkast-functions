@@ -71,9 +71,8 @@ export const handler = async (event: any = {}): Promise<any> => {
         pointEventRecords.Items?.forEach((v) => {
             const per = unmarshall(v);
             if (ppr['pointEventId'] == per['pointEventId']){                
-                // // Records with duplicate conference and pointEventId combinations are not retrieved
-                // const cp = `${ppr['conference']}#${ppr['pointEventId']}`
-                const cp = ppr['conference#timestamp']
+                // Records with duplicate conference and pointEventId combinations are not retrieved
+                const cp = `${ppr['conference']}#${ppr['pointEventId']}`
                 points[cp] = points[cp] || {
                         point: per['point'],
                         pointEventId: per['pointEventId'],
