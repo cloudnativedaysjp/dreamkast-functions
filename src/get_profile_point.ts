@@ -7,7 +7,7 @@ const POINT_EVENT_TABLENAME = process.env.POINT_EVENT_TABLENAME || "";
 
 class profilePointResponse{
     point: number;
-    pointEventId: number;
+    pointEventId: string;
     timestamp: number;
 }
 

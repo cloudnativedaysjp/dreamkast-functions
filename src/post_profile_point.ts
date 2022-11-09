@@ -15,8 +15,8 @@ export const handler = async (event: any = {}): Promise<any> => {
         throw new Error('Error400: cannot get conference')
     }
 
-    const pointEventId = parseInt(event.pointEventId);
-    if (isNaN(pointEventId)) {
+    const pointEventId = String(event.pointEventId);
+    if (!(pointEventId)) {
         throw new Error('Error400: cannot get pointEventId')
     }
 
@@ -33,7 +33,7 @@ export const handler = async (event: any = {}): Promise<any> => {
             Item: {
                 'profileId': { N: String(profileId)},
                 'conference#timestamp': { S: `${conference}#${timestamp}`},
-                'pointEventId': { N: String(pointEventId)},
+                'pointEventId': { S: String(pointEventId)},
             },
         });
         await dynamodb.send(command);

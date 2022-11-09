@@ -24,12 +24,12 @@ export class ProfilePointStack extends Stack {
             removalPolicy: RemovalPolicy.RETAIN,
         });
 
-        // Dynam DB: pointEventReason
+        // Dynamo DB: pointEventTable
 
         const pointEventTable = new Table(this, 'pointEventTable', {
             billingMode: BillingMode.PAY_PER_REQUEST,
             partitionKey: { name: 'conference', type: AttributeType.STRING },
-            sortKey: { name: 'pointEventId', type: AttributeType.NUMBER },
+            sortKey: { name: 'pointEventId', type: AttributeType.STRING },
             removalPolicy: RemovalPolicy.RETAIN,
         });
 
