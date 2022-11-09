@@ -147,7 +147,7 @@ exports[`snapshot test 1`] = `
           },
           {
             "AttributeName": "pointEventId",
-            "AttributeType": "N",
+            "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
