@@ -29,21 +29,37 @@ export const VoteSchema: JsonSchema = {
     },
 }
 
-export const ProfilePointSchema: JsonSchema = {
+export const ProfilePointRequestSchema: JsonSchema = {
+    schema: JsonSchemaVersion.DRAFT4,
+    title: 'profilePointRequest',
+    type: JsonSchemaType.OBJECT,
+    additionalProperties: false,
+    required: [ "pointEventId", "conference" ],
+    properties: {
+        conference:{
+            type: JsonSchemaType.STRING,
+        },
+        pointEventId: {
+            type: JsonSchemaType.STRING,
+        },
+    },
+}
+
+export const ProfilePointResponseSchema: JsonSchema = {
     schema: JsonSchemaVersion.DRAFT4,
     title: 'profilePointResponse',
     type: JsonSchemaType.OBJECT,
     additionalProperties: false,
-    required: [ "point", "eventAbbr" ],
+    required: [ "pointEventId", "conference" ],
     properties: {
         point: {
             type: JsonSchemaType.NUMBER,
         },
-        eventAbbr:{
+        conference:{
             type: JsonSchemaType.STRING,
         },
-        reasonId: {
-            type: JsonSchemaType.NUMBER,
+        pointEventId: {
+            type: JsonSchemaType.STRING,
         },
         timestamp: {
             type: JsonSchemaType.NUMBER,
@@ -52,16 +68,16 @@ export const ProfilePointSchema: JsonSchema = {
     },
 }
 
-export const ProfilePointsSchema: JsonSchema = {
+export const ProfilePointsResponseSchema: JsonSchema = {
     schema: JsonSchemaVersion.DRAFT4,
-    title: 'profilePointResponse',
+    title: 'profilePointsResponse',
     type: JsonSchemaType.OBJECT,
     additionalProperties: false,
     required: [ "points", "total"],
     properties: {
         points: {
             type: JsonSchemaType.ARRAY,
-            items: ProfilePointSchema,
+            items: ProfilePointResponseSchema,
         },
         total: {
             type: JsonSchemaType.NUMBER

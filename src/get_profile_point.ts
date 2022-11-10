@@ -2,13 +2,13 @@ import { DynamoDB, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 const dynamodb = new DynamoDB({})
-const TABLENAME = process.env.TABLENAME || "";
+const PROFILE_POINT_TABLENAME = process.env.PROFILE_POINT_TABLENAME || "";
+const POINT_EVENT_TABLENAME = process.env.POINT_EVENT_TABLENAME || "";
 
-class profilePoint{
+class profilePointResponse{
     point: number;
-    reasonId: number;
+    pointEventId: string;
     timestamp: number;
-    eventAbbr: string;
 }
 
 export const handler = async (event: any = {}): Promise<any> => {
@@ -18,15 +18,16 @@ export const handler = async (event: any = {}): Promise<any> => {
         throw new Error('Error400: NaN');
     }
 
-    if (!TABLENAME) {
+    if (!PROFILE_POINT_TABLENAME) {
         throw new Error('Error500: TABLENAME is not defined')
     }
 
     const conference = String(event.conference) ;
-    const cmd = (() => {
+
+    const profilePointRecords = await dynamodb.send((() => {
         if (conference) {
             return new QueryCommand({
-                TableName: TABLENAME,
+                TableName: PROFILE_POINT_TABLENAME,
                 ExpressionAttributeNames: {
                     "#pk": "profileId",
                     "#sk": "conference#timestamp",
@@ -39,7 +40,7 @@ export const handler = async (event: any = {}): Promise<any> => {
             });
         } else {
             return new QueryCommand({
-                TableName: TABLENAME,
+                TableName: PROFILE_POINT_TABLENAME,
                 ExpressionAttributeNames: {
                     "#pk": "profileId",
                 },
@@ -49,30 +50,43 @@ export const handler = async (event: any = {}): Promise<any> => {
                 KeyConditionExpression: "#pk = :pc",
             });
         }
-    })();
+    })());
 
-    const records = await dynamodb.send(cmd);
+    const pointEventRecords = await dynamodb.send((() => {
+        return new QueryCommand({
+            TableName: POINT_EVENT_TABLENAME,
+            ExpressionAttributeNames: {
+                "#pk": "conference",
+            },
+            ExpressionAttributeValues: marshall({
+                ":pc": conference,
+            }),
+            KeyConditionExpression: "#pk = :pc",
+        });
+    })());
 
-    const points = records.Items?.map((item) => {
-        const record = unmarshall(item);
-
-        const pp: profilePoint = {
-            point: record['point'],
-            reasonId: record['reasonId'],
-            timestamp: record['profileId'],
-            eventAbbr: record['conference#timestamp'].split('#')[0],
-        };
-        return pp;
-    }) || [];
+    let points: { [key: string]: profilePointResponse } = {};
+    profilePointRecords.Items?.forEach((item) => {
+        const ppr = unmarshall(item);
+        pointEventRecords.Items?.forEach((v) => {
+            const per = unmarshall(v);
+            if (ppr['pointEventId'] == per['pointEventId']){                
+                // Records with duplicate conference and pointEventId combinations are not retrieved
+                const cp = `${ppr['conference']}#${ppr['pointEventId']}`
+                points[cp] = points[cp] || {
+                        point: per['point'],
+                        pointEventId: per['pointEventId'],
+                        timestamp: parseInt(ppr['conference#timestamp'].split('#')[1]),
+                };
+            };
+        });
+    })
 
     console.log(points)
-    const total = points.reduce((accumulator, current) => {
-        if (current.point == undefined ) return accumulator;
-        return accumulator + Number(current.point);
-    }, 0);
+    const total = Object.values(points).reduce((t, v) => t + v.point, 0);
 
     return {
-        points: points,
+        points: Object.values(points),
         total: total,
     }
 };

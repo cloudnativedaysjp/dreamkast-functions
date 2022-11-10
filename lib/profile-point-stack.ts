@@ -15,12 +15,21 @@ export class ProfilePointStack extends Stack {
     constructor(scope: Construct, id: string, props: ProfilePointProps ) {
         super(scope, id, props)
 
-        // Dynamo DB
+        // Dynamo DB: profilePointTable
 
         const profilePointTable = new Table(this, 'Table', {
             billingMode: BillingMode.PAY_PER_REQUEST,
             partitionKey: { name: 'profileId', type: AttributeType.NUMBER },
             sortKey: { name: 'conference#timestamp', type: AttributeType.STRING },
+            removalPolicy: RemovalPolicy.RETAIN,
+        });
+
+        // Dynamo DB: pointEventTable
+
+        const pointEventTable = new Table(this, 'pointEventTable', {
+            billingMode: BillingMode.PAY_PER_REQUEST,
+            partitionKey: { name: 'conference', type: AttributeType.STRING },
+            sortKey: { name: 'pointEventId', type: AttributeType.STRING },
             removalPolicy: RemovalPolicy.RETAIN,
         });
 
@@ -46,12 +55,14 @@ export class ProfilePointStack extends Stack {
         this.getProfilePointFunction = new NodejsFunction(this, 'getProfilePoint',{
             entry: 'src/get_profile_point.ts',
             environment: {
-                TABLENAME: profilePointTable.tableName,
+                PROFILE_POINT_TABLENAME: profilePointTable.tableName,
+                POINT_EVENT_TABLENAME: pointEventTable.tableName,
             },
         });
         this.getProfilePointFunction.addToRolePolicy(new PolicyStatement({
             resources: [
                 profilePointTable.tableArn,
+                pointEventTable.tableArn,
             ],
             actions: [
                 'dynamodb:Query',
