@@ -18,7 +18,8 @@
     "cdk:dev-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=dev --require-approval never --all",
     "cdk:stg-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=stg --require-approval never --all",
     "cdk:prd-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=prd --require-approval never --all",
-    "lint": "prettier --write '**/*.{js,jsx,ts,tsx}' && eslint --fix './**/*.{js,jsx,ts,tsx}' && eslint '*/**/*.{js,ts}' --quiet --fix"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}' --quiet && eslint '*/**/*.{js,ts}' --quiet ",
+    "lint-fix": "prettier --write '**/*.{js,jsx,ts,tsx}' && eslint --fix './**/*.{js,jsx,ts,tsx}' && eslint '*/**/*.{js,ts}' --quiet --fix"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
