@@ -1,18 +1,20 @@
 import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb'
+import { APIGatewayEvent } from 'aws-lambda'
+import { MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const TABLENAME = process.env.TABLENAME || ''
 
-export const handler = async (event: any = {}): Promise<any> => {
-  const globalIp = String(event.globalIp)
-  if (!globalIp) {
-    throw new Error('Error400: cannot get global ip')
-  }
-  const eventAbbr = String(event.eventAbbr)
-  if (!eventAbbr) {
-    throw new Error('Error400: cannot get eventAbbr')
-  }
-  const talkId = parseInt(event.talkId)
+type Body = {
+  eventAbbr: string
+  talkId: string
+}
+
+export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
+  const { body, context } = transformEvent(event)
+  const { eventAbbr } = body
+  const { sourceIp } = context
+  const talkId = parseInt(body.talkId)
   if (isNaN(talkId)) {
     throw new Error('Error400: cannot get talkId')
   }
@@ -25,7 +27,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       Item: {
         eventAbbr: { S: String(eventAbbr) },
         timestamp: { N: String(timestamp) },
-        globalIp: { S: String(globalIp) },
+        globalIp: { S: String(sourceIp) },
         talkId: { N: String(talkId) },
       },
     })

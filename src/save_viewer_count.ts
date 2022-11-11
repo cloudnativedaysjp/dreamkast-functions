@@ -1,6 +1,8 @@
 import { IvsClient, GetStreamCommand } from '@aws-sdk/client-ivs'
 import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import fetch from 'node-fetch'
+import { APIGatewayEvent } from 'aws-lambda'
+import { MappedEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const ivs = new IvsClient({})
@@ -15,7 +17,7 @@ type Record = {
   viewerCount: number
 }
 
-export const handler = async (event: any = {}): Promise<any> => {
+export const handler = async (_: APIGatewayEvent | MappedEvent<null>) => {
   const url = GET_TRACKS_URL + '?eventAbbr=' + EVENTABBR
 
   const response: any = await fetch(url, {

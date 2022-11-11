@@ -1,27 +1,29 @@
 import { DynamoDB, QueryCommand } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
+import { APIGatewayEvent } from 'aws-lambda'
+import { MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const PROFILE_POINT_TABLENAME = process.env.PROFILE_POINT_TABLENAME || ''
 const POINT_EVENT_TABLENAME = process.env.POINT_EVENT_TABLENAME || ''
 
-class profilePointResponse {
+type profilePointResponse = {
   point: number
   pointEventId: string
   timestamp: number
 }
 
-export const handler = async (event: any = {}): Promise<any> => {
-  const profileId = parseInt(event.profileId)
-  if (isNaN(profileId)) {
-    throw new Error('Error400: NaN')
-  }
-
+export const handler = async (event: APIGatewayEvent | MappedEvent<null>) => {
   if (!PROFILE_POINT_TABLENAME) {
     throw new Error('Error500: TABLENAME is not defined')
   }
 
-  const conference = String(event.conference)
+  const { path, querystring } = transformEvent(event)
+  const { conference } = querystring
+  const profileId = parseInt(path.profileId || '')
+  if (isNaN(profileId)) {
+    throw new Error('Error400: NaN')
+  }
 
   const profilePointRecords = await dynamodb.send(
     (() => {

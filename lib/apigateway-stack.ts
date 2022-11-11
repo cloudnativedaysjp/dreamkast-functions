@@ -23,6 +23,25 @@ import {
 } from './schemas'
 import { BuildConfig } from './build-config'
 
+const requestPassThroughTemplate = `
+#set($allParams = $input.params())
+{
+  "body" : $input.json('$'),
+  #foreach($type in $allParams.keySet())
+  #set($params = $allParams.get($type))
+  "$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+    #if($foreach.hasNext),#end
+    #end
+  },
+  #end
+  "context" : {
+    "sourceIp" : "$context.identity.sourceIp"
+  }
+}
+`
+
 export interface APIGatewayProps extends StackProps {
   readonly certificate: Certificate
   readonly hostedZone: IHostedZone
@@ -285,10 +304,7 @@ export class APIGatewayStack extends Stack {
         credentialsRole: projectApiExecutionRole,
         passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
         requestTemplates: {
-          'application/json': `{
-                            #set($trackId = $util.escapeJavaScript($input.params().get("path").get("trackId")))
-                            "trackId": #if($trackId == "" ) 0 #{else} "$trackId" #end
-                        }`,
+          'application/json': requestPassThroughTemplate,
         },
         integrationResponses: [
           integrationResponse200,
@@ -326,11 +342,7 @@ export class APIGatewayStack extends Stack {
         credentialsRole: projectApiExecutionRole,
         passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
         requestTemplates: {
-          'application/json': `{
-                            "eventAbbr":"$util.escapeJavaScript($input.path('$').eventAbbr)",
-                            "talkId": "$util.escapeJavaScript($input.params().get("path").get("talkId"))",
-                            "globalIp": "$util.escapeJavaScript($context.identity.sourceIp)"
-                        }`,
+          'application/json': requestPassThroughTemplate,
         },
         integrationResponses: [
           integrationResponse200,
@@ -364,11 +376,7 @@ export class APIGatewayStack extends Stack {
         credentialsRole: projectApiExecutionRole,
         passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
         requestTemplates: {
-          'application/json': `{
-                            "conference":"$util.escapeJavaScript($input.path('$').conference)",
-                            "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                            "pointEventId":"$util.escapeJavaScript($input.path('$').pointEventId)"
-                        }`,
+          'application/json': requestPassThroughTemplate,
         },
         integrationResponses: [
           integrationResponse200,
@@ -403,10 +411,7 @@ export class APIGatewayStack extends Stack {
         credentialsRole: projectApiExecutionRole,
         passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
         requestTemplates: {
-          'application/json': `{
-                        "profileId":"$util.escapeJavaScript($input.params().get("path").get("profileId"))",
-                        "conference":"$util.escapeJavaScript($input.params("conference"))"
-                    }`,
+          'application/json': requestPassThroughTemplate,
         },
         integrationResponses: [
           integrationResponse200,
