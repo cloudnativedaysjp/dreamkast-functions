@@ -1,5 +1,5 @@
 import { DynamoDB, QueryCommand } from '@aws-sdk/client-dynamodb'
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 const dynamodb = new DynamoDB({})
 const PROFILE_POINT_TABLENAME = process.env.PROFILE_POINT_TABLENAME || ''
