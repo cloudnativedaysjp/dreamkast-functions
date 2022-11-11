@@ -1,0 +1,1988 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot test 1`] = `
+{
+  "Outputs": {
+    "dkFunctionsApiEndpointF175EA1E": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "dkFunctionsApiC9834555",
+            },
+            ".execute-api.ap-northeast-1.",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "dkFunctionsApiDeploymentStagev15CB66942",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "viewerCountArnOutPut": {
+      "Export": {
+        "Name": "viewerCountStack-GetViewerCountFunction-Arn-test",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "getViewerCount01DE1D78",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "APIARecod9D720AA7": {
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "CustomDomain21DD44B6",
+              "RegionalDomainName",
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "CustomDomain21DD44B6",
+              "RegionalHostedZoneId",
+            ],
+          },
+        },
+        "HostedZoneId": "Z0898116244TOPT4X7AGI",
+        "Name": "api.test.cloudnativedays.jp.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "ApiLogGroup1DEDFC07": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "apiGateway-apiGateway",
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ApiRequestValidatorAB2F6E5B": {
+      "Properties": {
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "ValidateRequestBody": true,
+        "ValidateRequestParameters": true,
+      },
+      "Type": "AWS::ApiGateway::RequestValidator",
+    },
+    "CustomDomain21DD44B6": {
+      "Properties": {
+        "DomainName": "api.test.cloudnativedays.jp",
+        "EndpointConfiguration": {
+          "Types": [
+            "REGIONAL",
+          ],
+        },
+        "RegionalCertificateArn": {
+          "Fn::ImportValue": "test:ExportsOutputFnGetAttCertificateCertificateRequestorResource2890C6B7Arn29E196AE",
+        },
+      },
+      "Type": "AWS::ApiGateway::DomainName",
+    },
+    "CustomDomainMapstatelessdkFunctionsApiBAFD2EA48D828B1D": {
+      "Properties": {
+        "BasePath": "",
+        "DomainName": {
+          "Ref": "CustomDomain21DD44B6",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "Stage": {
+          "Ref": "dkFunctionsApiDeploymentStagev15CB66942",
+        },
+      },
+      "Type": "AWS::ApiGateway::BasePathMapping",
+    },
+    "ProjectApiExecutionRole2594024F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "lambda:Invoke*",
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:lambda:*:607167088920:function:*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "APIGWLambdaPolicy",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ProxyResourceANYD2521206": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": {
+          "Credentials": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::*:user/*",
+              ],
+            ],
+          },
+          "IntegrationHttpMethod": "ANY",
+          "RequestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": "https://staging.dev.cloudnativedays.jp/api/v1/{proxy}",
+        },
+        "RequestParameters": {
+          "method.request.path.proxy": true,
+        },
+        "ResourceId": {
+          "Ref": "ProxyResourceD65343FB",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ProxyResourceD65343FB": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv131D6C896",
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiAccountA7BC248F": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "dkFunctionsApiC9834555",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "dkFunctionsApiCloudWatchRoleAB05CE12",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "dkFunctionsApiC9834555": {
+      "Properties": {
+        "Name": "dk-functions-test",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "dkFunctionsApiCloudWatchRoleAB05CE12": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "dkFunctionsApiDeployment047790414809f0709340762008a7e097f78ae56e": {
+      "DependsOn": [
+        "ApiRequestValidatorAB2F6E5B",
+        "dkFunctionsApiapiF0E97CB4",
+        "dkFunctionsApiapiv1profileprofileIdpointPOSTC602EA7B",
+        "dkFunctionsApiapiv1profileprofileIdpointDBDEEAF5",
+        "dkFunctionsApiapiv1profileprofileIdpointsGET150C0ECB",
+        "dkFunctionsApiapiv1profileprofileIdpoints49944CE8",
+        "dkFunctionsApiapiv1profileprofileId5C432D2B",
+        "dkFunctionsApiapiv1profile4FDD0D74",
+        "dkFunctionsApiapiv131D6C896",
+        "dkFunctionsApiapiv1talkstalkId78EEC939",
+        "dkFunctionsApiapiv1talkstalkIdvotePOSTB27A2612",
+        "dkFunctionsApiapiv1talkstalkIdvoteFBE9426C",
+        "dkFunctionsApiapiv1talksB0BA12F9",
+        "dkFunctionsApiapiv1trackstrackId67C58612",
+        "dkFunctionsApiapiv1trackstrackIdviewercountGETBD29CDA4",
+        "dkFunctionsApiapiv1trackstrackIdviewercountOPTIONS4D301753",
+        "dkFunctionsApiapiv1trackstrackIdviewercountCD2AE862",
+        "dkFunctionsApiapiv1tracksECC8C314",
+        "dkFunctionsApiprofilePointModel7CA22706",
+        "dkFunctionsApiprofilePointsModel3B1E4B79",
+        "dkFunctionsApiviewerCountModel89CA9AD0",
+        "dkFunctionsApivoteModel23CDE1C0",
+        "ProxyResourceANYD2521206",
+        "ProxyResourceD65343FB",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "dkFunctionsApiDeploymentStagev15CB66942": {
+      "DependsOn": [
+        "dkFunctionsApiAccountA7BC248F",
+      ],
+      "Properties": {
+        "AccessLogSetting": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "ApiLogGroup1DEDFC07",
+              "Arn",
+            ],
+          },
+          "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","user":"$context.identity.user","caller":"$context.identity.caller","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
+        },
+        "DeploymentId": {
+          "Ref": "dkFunctionsApiDeployment047790414809f0709340762008a7e097f78ae56e",
+        },
+        "MethodSettings": [
+          {
+            "DataTraceEnabled": true,
+            "HttpMethod": "*",
+            "LoggingLevel": "INFO",
+            "ResourcePath": "/*",
+            "ThrottlingBurstLimit": 3000,
+            "ThrottlingRateLimit": 60,
+          },
+        ],
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "StageName": "v1",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "dkFunctionsApiapiF0E97CB4": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "dkFunctionsApiC9834555",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "api",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv131D6C896": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiF0E97CB4",
+        },
+        "PathPart": "v1",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1profile4FDD0D74": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv131D6C896",
+        },
+        "PathPart": "profile",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1profileprofileId5C432D2B": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1profile4FDD0D74",
+        },
+        "PathPart": "{profileId}",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointDBDEEAF5": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1profileprofileId5C432D2B",
+        },
+        "PathPart": "point",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointPOSTApiPermissionTeststatelessdkFunctionsApiBAFD2EA4POSTapiv1profileprofileIdpoint7B330757": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "postProfilePointEFB04901",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/test-invoke-stage/POST/api/v1/profile/*/point",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointPOSTApiPermissionstatelessdkFunctionsApiBAFD2EA4POSTapiv1profileprofileIdpointE69D19C4": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "postProfilePointEFB04901",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/",
+              {
+                "Ref": "dkFunctionsApiDeploymentStagev15CB66942",
+              },
+              "/POST/api/v1/profile/*/point",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointPOSTC602EA7B": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "ProjectApiExecutionRole2594024F",
+              "Arn",
+            ],
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "StatusCode": "200",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"bad request"}",
+              },
+              "SelectionPattern": "Error400:.*",
+              "StatusCode": "400",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"not found"}",
+              },
+              "SelectionPattern": "Error404:.*",
+              "StatusCode": "404",
+            },
+          ],
+          "PassthroughBehavior": "NEVER",
+          "RequestTemplates": {
+            "application/json": "
+#set($allParams = $input.params())
+{
+  "body" : $input.json('$'),
+  #foreach($type in $allParams.keySet())
+  #set($params = $allParams.get($type))
+  "$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+    #if($foreach.hasNext),#end
+    #end
+  },
+  #end
+  "context" : {
+    "sourceIp" : "$context.identity.sourceIp"
+  }
+}
+",
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "postProfilePointEFB04901",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "200",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "400",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "404",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "500",
+          },
+        ],
+        "RequestModels": {
+          "application/json": {
+            "Ref": "dkFunctionsApiprofilePointModel7CA22706",
+          },
+        },
+        "RequestParameters": {
+          "method.request.path.profileId": true,
+        },
+        "RequestValidatorId": {
+          "Ref": "ApiRequestValidatorAB2F6E5B",
+        },
+        "ResourceId": {
+          "Ref": "dkFunctionsApiapiv1profileprofileIdpointDBDEEAF5",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpoints49944CE8": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1profileprofileId5C432D2B",
+        },
+        "PathPart": "points",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointsGET150C0ECB": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "ProjectApiExecutionRole2594024F",
+              "Arn",
+            ],
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "StatusCode": "200",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"bad request"}",
+              },
+              "SelectionPattern": "Error400:.*",
+              "StatusCode": "400",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"internal server error"}",
+              },
+              "SelectionPattern": "Error500:.*",
+              "StatusCode": "500",
+            },
+          ],
+          "PassthroughBehavior": "NEVER",
+          "RequestTemplates": {
+            "application/json": "
+#set($allParams = $input.params())
+{
+  "body" : $input.json('$'),
+  #foreach($type in $allParams.keySet())
+  #set($params = $allParams.get($type))
+  "$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+    #if($foreach.hasNext),#end
+    #end
+  },
+  #end
+  "context" : {
+    "sourceIp" : "$context.identity.sourceIp"
+  }
+}
+",
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "getProfilePoint58F6A9AB",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": {
+                "Ref": "dkFunctionsApiprofilePointsModel3B1E4B79",
+              },
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "200",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "400",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "500",
+          },
+        ],
+        "RequestParameters": {
+          "method.request.path.profileId": true,
+          "method.request.querystring.conference": true,
+        },
+        "RequestValidatorId": {
+          "Ref": "ApiRequestValidatorAB2F6E5B",
+        },
+        "ResourceId": {
+          "Ref": "dkFunctionsApiapiv1profileprofileIdpoints49944CE8",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointsGETApiPermissionTeststatelessdkFunctionsApiBAFD2EA4GETapiv1profileprofileIdpoints0771A04E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "getProfilePoint58F6A9AB",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/test-invoke-stage/GET/api/v1/profile/*/points",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1profileprofileIdpointsGETApiPermissionstatelessdkFunctionsApiBAFD2EA4GETapiv1profileprofileIdpoints9CDB32EC": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "getProfilePoint58F6A9AB",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/",
+              {
+                "Ref": "dkFunctionsApiDeploymentStagev15CB66942",
+              },
+              "/GET/api/v1/profile/*/points",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1talksB0BA12F9": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv131D6C896",
+        },
+        "PathPart": "talks",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1talkstalkId78EEC939": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1talksB0BA12F9",
+        },
+        "PathPart": "{talkId}",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1talkstalkIdvoteFBE9426C": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1talkstalkId78EEC939",
+        },
+        "PathPart": "vote",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1talkstalkIdvotePOSTApiPermissionTeststatelessdkFunctionsApiBAFD2EA4POSTapiv1talkstalkIdvote11E823F4": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "voteCFP7341FB29",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/test-invoke-stage/POST/api/v1/talks/*/vote",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1talkstalkIdvotePOSTApiPermissionstatelessdkFunctionsApiBAFD2EA4POSTapiv1talkstalkIdvote5E714DB4": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "voteCFP7341FB29",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/",
+              {
+                "Ref": "dkFunctionsApiDeploymentStagev15CB66942",
+              },
+              "/POST/api/v1/talks/*/vote",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1talkstalkIdvotePOSTB27A2612": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "ProjectApiExecutionRole2594024F",
+              "Arn",
+            ],
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "StatusCode": "200",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"bad request"}",
+              },
+              "SelectionPattern": "Error400:.*",
+              "StatusCode": "400",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"not found"}",
+              },
+              "SelectionPattern": "Error404:.*",
+              "StatusCode": "404",
+            },
+          ],
+          "PassthroughBehavior": "NEVER",
+          "RequestTemplates": {
+            "application/json": "
+#set($allParams = $input.params())
+{
+  "body" : $input.json('$'),
+  #foreach($type in $allParams.keySet())
+  #set($params = $allParams.get($type))
+  "$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+    #if($foreach.hasNext),#end
+    #end
+  },
+  #end
+  "context" : {
+    "sourceIp" : "$context.identity.sourceIp"
+  }
+}
+",
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "voteCFP7341FB29",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "200",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "400",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "404",
+          },
+        ],
+        "RequestModels": {
+          "application/json": {
+            "Ref": "dkFunctionsApivoteModel23CDE1C0",
+          },
+        },
+        "RequestParameters": {
+          "method.request.path.talkId": true,
+        },
+        "RequestValidatorId": {
+          "Ref": "ApiRequestValidatorAB2F6E5B",
+        },
+        "ResourceId": {
+          "Ref": "dkFunctionsApiapiv1talkstalkIdvoteFBE9426C",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "dkFunctionsApiapiv1tracksECC8C314": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv131D6C896",
+        },
+        "PathPart": "tracks",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1trackstrackId67C58612": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1tracksECC8C314",
+        },
+        "PathPart": "{trackId}",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1trackstrackIdviewercountCD2AE862": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "dkFunctionsApiapiv1trackstrackId67C58612",
+        },
+        "PathPart": "viewer_count",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "dkFunctionsApiapiv1trackstrackIdviewercountGETApiPermissionTeststatelessdkFunctionsApiBAFD2EA4GETapiv1trackstrackIdviewercount70E28AAB": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "getViewerCount01DE1D78",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/test-invoke-stage/GET/api/v1/tracks/*/viewer_count",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1trackstrackIdviewercountGETApiPermissionstatelessdkFunctionsApiBAFD2EA4GETapiv1trackstrackIdviewercount89FFC5B7": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "getViewerCount01DE1D78",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "dkFunctionsApiC9834555",
+              },
+              "/",
+              {
+                "Ref": "dkFunctionsApiDeploymentStagev15CB66942",
+              },
+              "/GET/api/v1/tracks/*/viewer_count",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "dkFunctionsApiapiv1trackstrackIdviewercountGETBD29CDA4": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "ProjectApiExecutionRole2594024F",
+              "Arn",
+            ],
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "StatusCode": "200",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"bad request"}",
+              },
+              "SelectionPattern": "Error400:.*",
+              "StatusCode": "400",
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "hoge.com",
+              },
+              "ResponseTemplates": {
+                "application/json": "{"message":"not found"}",
+              },
+              "SelectionPattern": "Error404:.*",
+              "StatusCode": "404",
+            },
+          ],
+          "PassthroughBehavior": "NEVER",
+          "RequestTemplates": {
+            "application/json": "
+#set($allParams = $input.params())
+{
+  "body" : $input.json('$'),
+  #foreach($type in $allParams.keySet())
+  #set($params = $allParams.get($type))
+  "$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+    #if($foreach.hasNext),#end
+    #end
+  },
+  #end
+  "context" : {
+    "sourceIp" : "$context.identity.sourceIp"
+  }
+}
+",
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "getViewerCount01DE1D78",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": {
+                "Ref": "dkFunctionsApiviewerCountModel89CA9AD0",
+              },
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "200",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "400",
+          },
+          {
+            "ResponseModels": {
+              "application/json": "Error",
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "404",
+          },
+        ],
+        "RequestParameters": {
+          "method.request.path.trackId": true,
+        },
+        "RequestValidatorId": {
+          "Ref": "ApiRequestValidatorAB2F6E5B",
+        },
+        "ResourceId": {
+          "Ref": "dkFunctionsApiapiv1trackstrackIdviewercountCD2AE862",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "dkFunctionsApiapiv1trackstrackIdviewercountOPTIONS4D301753": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+              },
+              "StatusCode": "200",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+            },
+            "StatusCode": "200",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "dkFunctionsApiapiv1trackstrackIdviewercountCD2AE862",
+        },
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "dkFunctionsApiprofilePointModel7CA22706": {
+      "Properties": {
+        "ContentType": "application/json",
+        "Name": "ProfilePoint",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "additionalProperties": false,
+          "properties": {
+            "conference": {
+              "type": "string",
+            },
+            "pointEventId": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "pointEventId",
+            "conference",
+          ],
+          "title": "profilePointRequest",
+          "type": "object",
+        },
+      },
+      "Type": "AWS::ApiGateway::Model",
+    },
+    "dkFunctionsApiprofilePointsModel3B1E4B79": {
+      "Properties": {
+        "ContentType": "application/json",
+        "Name": "ProfilePoints",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "additionalProperties": false,
+          "properties": {
+            "points": {
+              "items": {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "additionalProperties": false,
+                "properties": {
+                  "conference": {
+                    "type": "string",
+                  },
+                  "point": {
+                    "type": "number",
+                  },
+                  "pointEventId": {
+                    "type": "string",
+                  },
+                  "timestamp": {
+                    "type": "number",
+                  },
+                },
+                "required": [
+                  "pointEventId",
+                  "conference",
+                ],
+                "title": "profilePointResponse",
+                "type": "object",
+              },
+              "type": "array",
+            },
+            "total": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "points",
+            "total",
+          ],
+          "title": "profilePointsResponse",
+          "type": "object",
+        },
+      },
+      "Type": "AWS::ApiGateway::Model",
+    },
+    "dkFunctionsApiviewerCountModel89CA9AD0": {
+      "Properties": {
+        "ContentType": "application/json",
+        "Name": "ViewerCount",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "additionalProperties": false,
+          "properties": {
+            "trackId": {
+              "type": "number",
+            },
+            "viewerCount": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "trackId",
+            "viewerCount",
+          ],
+          "title": "viewerCountResponse",
+          "type": "object",
+        },
+      },
+      "Type": "AWS::ApiGateway::Model",
+    },
+    "dkFunctionsApivoteModel23CDE1C0": {
+      "Properties": {
+        "ContentType": "application/json",
+        "Name": "Vote",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "additionalProperties": false,
+          "properties": {
+            "eventAbbr": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "eventAbbr",
+          ],
+          "title": "voteResponse",
+          "type": "object",
+        },
+      },
+      "Type": "AWS::ApiGateway::Model",
+    },
+    "getProfilePoint58F6A9AB": {
+      "DependsOn": [
+        "getProfilePointServiceRoleDefaultPolicyD399569A",
+        "getProfilePointServiceRoleEC991F3A",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "[HASH REMOVED]",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "POINT_EVENT_TABLENAME": "pointEvent-test",
+            "PROFILE_POINT_TABLENAME": "profilePoint-test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "getProfilePointServiceRoleEC991F3A",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "getProfilePointServiceRoleDefaultPolicyD399569A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:Query",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "test:ExportsOutputFnGetAttProfilePointTableEBEBD5ADArnFB2B5652",
+                },
+                {
+                  "Fn::ImportValue": "test:ExportsOutputFnGetAttPointEventTableCC881BC1Arn4AA9359D",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "getProfilePointServiceRoleDefaultPolicyD399569A",
+        "Roles": [
+          {
+            "Ref": "getProfilePointServiceRoleEC991F3A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "getProfilePointServiceRoleEC991F3A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "getViewerCount01DE1D78": {
+      "DependsOn": [
+        "getViewerCountServiceRoleDefaultPolicy23F6B6D0",
+        "getViewerCountServiceRole8DF97757",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "[HASH REMOVED]",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "TABLENAME": "viewerCount-test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "getViewerCountServiceRole8DF97757",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "getViewerCountServiceRole8DF97757": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "getViewerCountServiceRoleDefaultPolicy23F6B6D0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:GetItem",
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:*:*:table/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "getViewerCountServiceRoleDefaultPolicy23F6B6D0",
+        "Roles": [
+          {
+            "Ref": "getViewerCountServiceRole8DF97757",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "postProfilePointEFB04901": {
+      "DependsOn": [
+        "postProfilePointServiceRoleDefaultPolicyF57921C5",
+        "postProfilePointServiceRole0F5C54F5",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "[HASH REMOVED]",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "TABLENAME": "profilePoint-test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "postProfilePointServiceRole0F5C54F5",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "postProfilePointServiceRole0F5C54F5": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "postProfilePointServiceRoleDefaultPolicyF57921C5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:PutItem",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "test:ExportsOutputFnGetAttProfilePointTableEBEBD5ADArnFB2B5652",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "postProfilePointServiceRoleDefaultPolicyF57921C5",
+        "Roles": [
+          {
+            "Ref": "postProfilePointServiceRole0F5C54F5",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "saveViewerCount311FBA34": {
+      "DependsOn": [
+        "saveViewerCountServiceRoleDefaultPolicyA5138DFA",
+        "saveViewerCountServiceRoleDC54D3E3",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "[HASH REMOVED]",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "GET_TRACKS_URL": "https://test.cloudnativedays.jp",
+            "TABLENAME": "viewerCount-test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "saveViewerCountServiceRoleDC54D3E3",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "saveViewerCountRuleAllowEventRulestatelesssaveViewerCount6DD38E9EA55D6A44": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "saveViewerCount311FBA34",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "saveViewerCountRuleDB40B18D",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "saveViewerCountRuleDB40B18D": {
+      "Properties": {
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "saveViewerCount311FBA34",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "saveViewerCountServiceRoleDC54D3E3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "saveViewerCountServiceRoleDefaultPolicyA5138DFA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:PutItem",
+                "ivs:GetStream",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:dynamodb:*:*:table/*",
+                "arn:aws:ivs:*:*:channel/*",
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "saveViewerCountServiceRoleDefaultPolicyA5138DFA",
+        "Roles": [
+          {
+            "Ref": "saveViewerCountServiceRoleDC54D3E3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "voteCFP7341FB29": {
+      "DependsOn": [
+        "voteCFPServiceRoleDefaultPolicy49FDC81F",
+        "voteCFPServiceRole6841857B",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "[HASH REMOVED]",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "TABLENAME": "vote-test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "voteCFPServiceRole6841857B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "voteCFPServiceRole6841857B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "voteCFPServiceRoleDefaultPolicy49FDC81F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:PutItem",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "test:ExportsOutputFnGetAttVoteTableC0BC27A7Arn61E440B5",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "voteCFPServiceRoleDefaultPolicy49FDC81F",
+        "Roles": [
+          {
+            "Ref": "voteCFPServiceRole6841857B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
