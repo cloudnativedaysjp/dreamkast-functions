@@ -1,4 +1,4 @@
-import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { APIGatewayEvent } from 'aws-lambda'
 
 export type MappedEvent<T> = {
   body: T

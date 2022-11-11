@@ -6,8 +6,8 @@ const dynamodb = new DynamoDB({})
 const TABLENAME = process.env.TABLENAME || ''
 
 type Body = {
-  conference?: string
-  pointEventId?: string
+  conference: string
+  pointEventId: string
 }
 
 export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
@@ -18,6 +18,12 @@ export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
 
   const { body, path } = transformEvent(event)
   const { conference, pointEventId } = body
+  if (!conference) {
+    throw new Error('Error400: conference must be set')
+  }
+  if (!pointEventId) {
+    throw new Error('Error400: pointEventId must be set')
+  }
   const profileId = parseInt(path.profileId || '')
   if (isNaN(profileId)) {
     throw new Error('Error400: cannot get profileId')

@@ -12,13 +12,17 @@ type Body = {
 
 export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
   const transformResp = genTransformResponse(event)
-  const { body, context } = transformEvent(event)
+
+  const { body, path, context } = transformEvent(event)
   const { eventAbbr } = body
-  const { sourceIp } = context
-  const talkId = parseInt(body.talkId)
+  if (!eventAbbr) {
+    throw new Error('Error400: eventAbbr must be set')
+  }
+  const talkId = parseInt(path.talkId || '')
   if (isNaN(talkId)) {
     throw new Error('Error400: cannot get talkId')
   }
+  const { sourceIp } = context
 
   // Timezone is in UTC.
   const timestamp = Date.now()
