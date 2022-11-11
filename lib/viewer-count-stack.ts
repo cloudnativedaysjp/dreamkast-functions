@@ -5,7 +5,7 @@ import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { BuildConfig } from './build-config'
-import { StatefulStack } from './statefulStack'
+import { StatefulStack, tableNameMap } from './statefulStack'
 
 export function newViewerCountResources(
   scope: Construct,
@@ -14,12 +14,14 @@ export function newViewerCountResources(
   buildConfig: BuildConfig,
   statefulStack: StatefulStack,
 ) {
+  const tableNames = tableNameMap(buildConfig.Environment)
+
   // Lambda: SaveViewerCount
 
   const saveViewerCountFunction = new NodejsFunction(scope, 'saveViewerCount', {
     entry: 'src/save_viewer_count.ts',
     environment: {
-      TABLENAME: statefulStack.viewerCountTable.tableName,
+      TABLENAME: tableNames.viewerCount,
       EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
       GET_TRACKS_URL: buildConfig.GetTracksURL,
     },
@@ -43,7 +45,7 @@ export function newViewerCountResources(
   const getViewerCountFunction = new NodejsFunction(scope, 'getViewerCount', {
     entry: 'src/get_viewer_count.ts',
     environment: {
-      TABLENAME: statefulStack.viewerCountTable.tableName,
+      TABLENAME: tableNames.viewerCount,
     },
   })
   getViewerCountFunction.addToRolePolicy(

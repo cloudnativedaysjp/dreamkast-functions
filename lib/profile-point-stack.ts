@@ -1,9 +1,9 @@
 import { Construct } from 'constructs'
 import { Stack, StackProps } from 'aws-cdk-lib'
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
-import { IFunction } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
-import { StatefulStack } from './statefulStack'
+import { StatefulStack, tableNameMap } from './statefulStack'
+import { BuildConfig } from './build-config'
 
 export type ProfilePointProps = StackProps
 
@@ -11,8 +11,11 @@ export function newProfilePointResources(
   scope: Construct,
   id: string,
   props: ProfilePointProps,
+  buildConfig: BuildConfig,
   statefulStack: StatefulStack,
 ) {
+  const tableNames = tableNameMap(buildConfig.Environment)
+
   // Lambda: postProfilePoint
 
   const postProfilePointFunction = new NodejsFunction(
@@ -21,7 +24,7 @@ export function newProfilePointResources(
     {
       entry: 'src/post_profile_point.ts',
       environment: {
-        TABLENAME: statefulStack.profilePointTable.tableName,
+        TABLENAME: tableNames.profilePoint,
       },
     },
   )
@@ -37,8 +40,8 @@ export function newProfilePointResources(
   const getProfilePointFunction = new NodejsFunction(scope, 'getProfilePoint', {
     entry: 'src/get_profile_point.ts',
     environment: {
-      PROFILE_POINT_TABLENAME: statefulStack.profilePointTable.tableName,
-      POINT_EVENT_TABLENAME: statefulStack.pointEventTable.tableName,
+      PROFILE_POINT_TABLENAME: tableNames.profilePoint,
+      POINT_EVENT_TABLENAME: tableNames.pointEvent,
     },
   })
   getProfilePointFunction.addToRolePolicy(

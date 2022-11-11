@@ -1,7 +1,7 @@
 import { Construct } from 'constructs'
 import { Stack, StackProps } from 'aws-cdk-lib'
 import { BuildConfig } from './build-config'
-import { newCertManagerResources } from './cert-manager-stack'
+import { CertManagerStack } from './cert-manager-stack'
 import { newProfilePointResources } from './profile-point-stack'
 import { newAPIGatewayResources } from './apigateway-stack'
 import { newVoteCFPResources } from './vote-cfp-stack'
@@ -15,6 +15,7 @@ export class StatelessStack extends Stack {
     props: StackProps,
     buildConfig: BuildConfig,
     statefulStack: StatefulStack,
+    certManagerStack: CertManagerStack,
   ) {
     super(scope, id, props)
 
@@ -44,18 +45,6 @@ export class StatelessStack extends Stack {
       statefulStack,
     )
 
-    const certManager = newCertManagerResources(
-      this,
-      `certManager`,
-      {
-        stackName: `certManager`,
-        env: {
-          region: buildConfig.AWSProfileRegion,
-        },
-      },
-      buildConfig,
-    )
-
     const profilePointStack = newProfilePointResources(
       this,
       `profilePoint`,
@@ -65,6 +54,7 @@ export class StatelessStack extends Stack {
           region: buildConfig.AWSProfileRegion,
         },
       },
+      buildConfig,
       statefulStack,
     )
 
@@ -72,8 +62,8 @@ export class StatelessStack extends Stack {
       this,
       `apiGateway`,
       {
-        certificate: certManager.certificate,
-        hostedZone: certManager.hostedZone,
+        certificate: certManagerStack.certificate,
+        hostedZone: certManagerStack.hostedZone,
         lambda: {
           getViewerCount: viewerCountResources.getViewerCountFunction,
           voteCFP: voteCFPStack.voteCFPFunction,

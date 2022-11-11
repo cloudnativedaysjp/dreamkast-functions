@@ -3,6 +3,7 @@ import { App, Tags } from 'aws-cdk-lib'
 import { BuildConfig } from '../lib/build-config'
 import { StatefulStack } from '../lib/statefulStack'
 import { StatelessStack } from '../lib/statelessStack'
+import {CertManagerStack} from "../lib/cert-manager-stack";
 
 const eventAbbr = process.env.EVENTABBR
 if (eventAbbr == undefined) {
@@ -68,6 +69,18 @@ async function Main() {
     buildConfig,
   )
 
+  const certManagerStack = new CertManagerStack(
+    app,
+    `certManagerStack-${buildConfig.Environment}`,
+    {
+      stackName: `certManager-${buildConfig.Environment}`,
+      env: {
+        region: buildConfig.AWSProfileRegion,
+      },
+    },
+    buildConfig,
+  )
+
   const statelessStack = new StatelessStack(
     app,
     `stateless-${buildConfig.Environment}`,
@@ -79,6 +92,7 @@ async function Main() {
     },
     buildConfig,
     statefulStack,
+    certManagerStack,
   )
 }
 Main()

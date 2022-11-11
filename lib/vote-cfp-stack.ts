@@ -4,7 +4,7 @@ import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { BuildConfig } from './build-config'
 import { IFunction } from 'aws-cdk-lib/aws-lambda'
-import { StatefulStack } from './statefulStack'
+import { StatefulStack, tableNameMap } from './statefulStack'
 
 export function newVoteCFPResources(
   scope: Construct,
@@ -13,11 +13,13 @@ export function newVoteCFPResources(
   buildConfig: BuildConfig,
   statefulStack: StatefulStack,
 ) {
+  const tableNames = tableNameMap(buildConfig.Environment)
+
   // Lambda: Vote
   const voteCFPFunction = new NodejsFunction(scope, 'voteCFP', {
     entry: 'src/vote_cfp.ts',
     environment: {
-      TABLENAME: statefulStack.voteTable.tableName,
+      TABLENAME: tableNames.vote,
     },
   })
   voteCFPFunction.addToRolePolicy(
