@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { App, Tags } from 'aws-cdk-lib'
-import { BuildConfig } from '../lib/build-config'
+import { BuildConfig } from '../lib/buildConfig'
 import { StatefulStack } from '../lib/statefulStack'
 import { StatelessStack } from '../lib/statelessStack'
-import {CertManagerStack} from "../lib/cert-manager-stack";
+import { CertManagerStack } from '../lib/certManagerStack'
 
 const eventAbbr = process.env.EVENTABBR
 if (eventAbbr == undefined) {

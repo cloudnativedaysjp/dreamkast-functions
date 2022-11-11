@@ -6,7 +6,7 @@ import {
   DnsValidatedCertificate,
 } from 'aws-cdk-lib/aws-certificatemanager'
 import { HostedZone, IHostedZone } from 'aws-cdk-lib/aws-route53'
-import { BuildConfig } from './build-config'
+import { BuildConfig } from './buildConfig'
 
 export class CertManagerStack extends Stack {
   public readonly certificate: Certificate

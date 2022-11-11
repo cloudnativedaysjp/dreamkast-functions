@@ -1,7 +1,7 @@
 import { Construct } from 'constructs'
 import { Stack, StackProps, RemovalPolicy } from 'aws-cdk-lib'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
-import { BuildConfig } from './build-config'
+import { BuildConfig } from './buildConfig'
 
 export function tableNameMap(env: string) {
   return {

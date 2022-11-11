@@ -1,12 +1,12 @@
 import { Construct } from 'constructs'
 import { Stack, StackProps } from 'aws-cdk-lib'
-import { BuildConfig } from './build-config'
-import { CertManagerStack } from './cert-manager-stack'
-import { newProfilePointResources } from './profile-point-stack'
-import { newAPIGatewayResources } from './apigateway-stack'
-import { newVoteCFPResources } from './vote-cfp-stack'
+import { BuildConfig } from './buildConfig'
+import { CertManagerStack } from './certManagerStack'
+import { newProfilePointResources } from './profilePointLambda'
+import { newAPIGatewayResources } from './apigateway'
+import { newVoteCFPResources } from './voteCfpLambda'
 import { StatefulStack } from './statefulStack'
-import { newViewerCountResources } from './viewer-count-stack'
+import { newViewerCountResources } from './viewerCountLambda'
 
 export class StatelessStack extends Stack {
   constructor(

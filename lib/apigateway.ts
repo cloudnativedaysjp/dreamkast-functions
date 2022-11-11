@@ -21,7 +21,7 @@ import {
   ProfilePointsResponseSchema,
   VoteSchema,
 } from './schemas'
-import { BuildConfig } from './build-config'
+import { BuildConfig } from './buildConfig'
 
 const requestPassThroughTemplate = `
 #set($allParams = $input.params())

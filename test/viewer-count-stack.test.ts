@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib'
 import { Template } from 'aws-cdk-lib/assertions'
-import { ViewerCountStack } from '../lib/viewer-count-stack'
+import { ViewerCountStack } from '../lib/viewerCountLambda'
 
 test('snapshot test', () => {
   const app = new cdk.App()

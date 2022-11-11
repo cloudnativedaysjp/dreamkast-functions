@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib'
 import { Template } from 'aws-cdk-lib/assertions'
-import { ProfilePointStack } from '../lib/profile-point-stack'
+import { ProfilePointStack } from '../lib/profilePointLambda'
 
 test('snapshot test', () => {
   const app = new cdk.App()

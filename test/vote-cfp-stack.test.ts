@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib'
 import { Template } from 'aws-cdk-lib/assertions'
-import { VoteCFPStack } from '../lib/vote-cfp-stack'
+import { VoteCFPStack } from '../lib/voteCfpLambda'
 
 test('snapshot test', () => {
   const app = new cdk.App()

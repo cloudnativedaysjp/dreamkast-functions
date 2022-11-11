@@ -3,7 +3,7 @@ import { Stack, StackProps } from 'aws-cdk-lib'
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { StatefulStack, tableNameMap } from './statefulStack'
-import { BuildConfig } from './build-config'
+import { BuildConfig } from './buildConfig'
 
 export type ProfilePointProps = StackProps
 

@@ -4,7 +4,7 @@ import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
-import { BuildConfig } from './build-config'
+import { BuildConfig } from './buildConfig'
 import { StatefulStack, tableNameMap } from './statefulStack'
 
 export function newViewerCountResources(
