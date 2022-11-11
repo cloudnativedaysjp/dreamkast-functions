@@ -23,9 +23,6 @@ jobs:
       - name: npm install
         run: npm install
 
-      - name: eslint
-        run: npm run lint
-      
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -37,3 +34,8 @@ jobs:
 
             [1]: https://github.com/peter-evans/create-or-update-comment
           reactions: '+1'
+
+      - name: eslint
+        run: npm run lint
+      
+
