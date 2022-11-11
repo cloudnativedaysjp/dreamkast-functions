@@ -1,7 +1,7 @@
 import { DynamoDB, QueryCommand } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 import { APIGatewayEvent } from 'aws-lambda'
-import { MappedEvent, transformEvent } from './common'
+import { genTransformResponse, MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const PROFILE_POINT_TABLENAME = process.env.PROFILE_POINT_TABLENAME || ''
@@ -17,6 +17,7 @@ export const handler = async (event: APIGatewayEvent | MappedEvent<null>) => {
   if (!PROFILE_POINT_TABLENAME) {
     throw new Error('Error500: TABLENAME is not defined')
   }
+  const transformResp = genTransformResponse(event)
 
   const { path, querystring } = transformEvent(event)
   const { conference } = querystring
@@ -90,8 +91,8 @@ export const handler = async (event: APIGatewayEvent | MappedEvent<null>) => {
   console.log(points)
   const total = Object.values(points).reduce((t, v) => t + v.point, 0)
 
-  return {
+  return transformResp({
     points: Object.values(points),
     total: total,
-  }
+  })
 }

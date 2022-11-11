@@ -1,6 +1,6 @@
 import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import { APIGatewayEvent } from 'aws-lambda'
-import { MappedEvent, transformEvent } from './common'
+import { genTransformResponse, MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const TABLENAME = process.env.TABLENAME || ''
@@ -11,6 +11,7 @@ type Body = {
 }
 
 export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
+  const transformResp = genTransformResponse(event)
   if (!TABLENAME) {
     throw new Error('Error500: TABLENAME is not defined')
   }
@@ -40,5 +41,5 @@ export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
     throw new Error("Error500: don't put item")
   }
 
-  return { message: 'ok' }
+  return transformResp({ message: 'ok' })
 }

@@ -1,4 +1,4 @@
-import { APIGatewayEvent } from 'aws-lambda'
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 export type MappedEvent<T> = {
   body: T
@@ -10,14 +10,14 @@ export type MappedEvent<T> = {
   }
 }
 
-export function isAPIGatewayEvent(e: any): e is APIGatewayEvent {
+export function isRawEvent(e: any): e is APIGatewayEvent {
   return !!e.requestContext
 }
 
 export function transformEvent<T>(
   e: APIGatewayEvent | MappedEvent<T>,
 ): MappedEvent<T> {
-  if (!isAPIGatewayEvent(e)) {
+  if (!isRawEvent(e)) {
     return e
   }
   return {
@@ -28,5 +28,18 @@ export function transformEvent<T>(
     context: {
       sourceIp: 'unknown',
     },
+  }
+}
+
+export function genTransformResponse(
+  e: APIGatewayEvent | MappedEvent<unknown>,
+): (resp: unknown) => unknown {
+  if (!isRawEvent(e)) {
+    return (resp: unknown) => resp
+  } else {
+    return (resp: unknown) => ({
+      statusCode: 200,
+      body: JSON.stringify(resp),
+    })
   }
 }
