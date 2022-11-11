@@ -1,4 +1,4 @@
-name: CI
+name: CDK
 
 on:
   push:
