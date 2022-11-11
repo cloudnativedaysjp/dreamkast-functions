@@ -1,5 +1,5 @@
 import { IvsClient, GetStreamCommand } from '@aws-sdk/client-ivs'
-import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb'
+import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import fetch from 'node-fetch'
 
 const dynamodb = new DynamoDB({})
