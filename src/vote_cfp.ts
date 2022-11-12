@@ -1,21 +1,28 @@
 import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb'
+import { APIGatewayEvent } from 'aws-lambda'
+import { genTransformResponse, MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const TABLENAME = process.env.TABLENAME || ''
 
-export const handler = async (event: any = {}): Promise<any> => {
-  const globalIp = String(event.globalIp)
-  if (!globalIp) {
-    throw new Error('Error400: cannot get global ip')
-  }
-  const eventAbbr = String(event.eventAbbr)
+type Body = {
+  eventAbbr: string
+  talkId: string
+}
+
+export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
+  const transformResp = genTransformResponse(event)
+
+  const { body, path, context } = transformEvent(event)
+  const { eventAbbr } = body
   if (!eventAbbr) {
-    throw new Error('Error400: cannot get eventAbbr')
+    throw new Error('Error400: eventAbbr must be set')
   }
-  const talkId = parseInt(event.talkId)
+  const talkId = parseInt(path.talkId || '')
   if (isNaN(talkId)) {
     throw new Error('Error400: cannot get talkId')
   }
+  const { sourceIp } = context
 
   // Timezone is in UTC.
   const timestamp = Date.now()
@@ -25,7 +32,7 @@ export const handler = async (event: any = {}): Promise<any> => {
       Item: {
         eventAbbr: { S: String(eventAbbr) },
         timestamp: { N: String(timestamp) },
-        globalIp: { S: String(globalIp) },
+        globalIp: { S: String(sourceIp) },
         talkId: { N: String(talkId) },
       },
     })
@@ -34,5 +41,5 @@ export const handler = async (event: any = {}): Promise<any> => {
     console.log(error)
   }
 
-  return { message: 'ok' }
+  return transformResp({ message: 'ok' })
 }

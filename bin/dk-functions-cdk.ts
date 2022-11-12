@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 import { App, Tags } from 'aws-cdk-lib'
-import { ViewerCountStack } from '../lib/viewer-count-stack'
-import { VoteCFPStack } from './../lib/vote-cfp-stack'
-import { ProfilePointStack } from './../lib/profile-point-stack'
-import { APIGatewayStack } from './../lib/apigateway-stack'
-import { BuildConfig } from './../lib/build-config'
-import { CertManagerStack } from './../lib/cert-manager-stack'
+import { BuildConfig } from '../lib/buildConfig'
+import { StatefulStack } from '../lib/statefulStack'
+import { StatelessStack } from '../lib/statelessStack'
+import { CertManagerStack } from '../lib/certManagerStack'
 
 const eventAbbr = process.env.EVENTABBR
 if (eventAbbr == undefined) {
@@ -59,11 +57,11 @@ async function Main() {
 
   Tags.of(app).add('Environment', buildConfig.Environment)
 
-  const viewerCountStack = new ViewerCountStack(
+  const statefulStack = new StatefulStack(
     app,
-    `viewerCountStack-${buildConfig.Environment}`,
+    `stateful-${buildConfig.Environment}`,
     {
-      stackName: `viewerCount-${buildConfig.Environment}`,
+      stackName: `stateful-${buildConfig.Environment}`,
       env: {
         region: buildConfig.AWSProfileRegion,
       },
@@ -71,19 +69,7 @@ async function Main() {
     buildConfig,
   )
 
-  const voteCFPStack = new VoteCFPStack(
-    app,
-    `voteCFPStack-${buildConfig.Environment}`,
-    {
-      stackName: `voteCFP-${buildConfig.Environment}`,
-      env: {
-        region: buildConfig.AWSProfileRegion,
-      },
-    },
-    buildConfig,
-  )
-
-  const certManager = new CertManagerStack(
+  const certManagerStack = new CertManagerStack(
     app,
     `certManagerStack-${buildConfig.Environment}`,
     {
@@ -95,36 +81,18 @@ async function Main() {
     buildConfig,
   )
 
-  const profilePointStack = new ProfilePointStack(
+  const statelessStack = new StatelessStack(
     app,
-    `profilePointStack-${buildConfig.Environment}`,
+    `stateless-${buildConfig.Environment}`,
     {
-      stackName: `profilePoint-${buildConfig.Environment}`,
-      env: {
-        region: buildConfig.AWSProfileRegion,
-      },
-    },
-  )
-
-  const apiGatewayStack = new APIGatewayStack(
-    app,
-    `apigGatewayStack-${buildConfig.Environment}`,
-    {
-      certificate: certManager.certificate,
-      hostedZone: certManager.hostedZone,
-      lambda: {
-        voteCFP: voteCFPStack.voteCFPFunction,
-        postProfilePoint: profilePointStack.postProfilePointFunction,
-        getProfilePoint: profilePointStack.getProfilePointFunction,
-      },
-      stackName: `apiGatewayStack-${buildConfig.Environment}`,
+      stackName: `stateless-${buildConfig.Environment}`,
       env: {
         region: buildConfig.AWSProfileRegion,
       },
     },
     buildConfig,
+    statefulStack,
+    certManagerStack,
   )
-  //apiGatewayStack.addDependency(viewerCountStack);
-  //apiGatewayStack.addDependency(voteCFPStack);
 }
 Main()

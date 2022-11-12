@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib'
 import { Template } from 'aws-cdk-lib/assertions'
-import { CertManagerStack } from '../lib/cert-manager-stack'
+import { CertManagerStack } from '../lib/certManagerStack'
 
 test('snapshot test', () => {
   const app = new cdk.App()

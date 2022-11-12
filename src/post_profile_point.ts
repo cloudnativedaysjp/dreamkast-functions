@@ -1,26 +1,32 @@
 import { DynamoDB, PutItemCommand } from '@aws-sdk/client-dynamodb'
+import { APIGatewayEvent } from 'aws-lambda'
+import { genTransformResponse, MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 const TABLENAME = process.env.TABLENAME || ''
 
-export const handler = async (event: any = {}): Promise<any> => {
-  const profileId = parseInt(event.profileId)
-  if (isNaN(profileId)) {
-    throw new Error('Error400: cannot get profileId')
-  }
+type Body = {
+  conference: string
+  pointEventId: string
+}
 
-  const conference = String(event.conference)
-  if (!conference) {
-    throw new Error('Error400: cannot get conference')
-  }
-
-  const pointEventId = String(event.pointEventId)
-  if (!pointEventId) {
-    throw new Error('Error400: cannot get pointEventId')
-  }
-
+export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
+  const transformResp = genTransformResponse(event)
   if (!TABLENAME) {
     throw new Error('Error500: TABLENAME is not defined')
+  }
+
+  const { body, path } = transformEvent(event)
+  const { conference, pointEventId } = body
+  if (!conference) {
+    throw new Error('Error400: conference must be set')
+  }
+  if (!pointEventId) {
+    throw new Error('Error400: pointEventId must be set')
+  }
+  const profileId = parseInt(path.profileId || '')
+  if (isNaN(profileId)) {
+    throw new Error('Error400: cannot get profileId')
   }
 
   // Timezone is UTC.
@@ -41,5 +47,5 @@ export const handler = async (event: any = {}): Promise<any> => {
     throw new Error("Error500: don't put item")
   }
 
-  return { message: 'ok' }
+  return transformResp({ message: 'ok' })
 }

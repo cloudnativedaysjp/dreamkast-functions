@@ -1,12 +1,16 @@
 import { DynamoDB, GetItemCommand } from '@aws-sdk/client-dynamodb'
 import { unmarshall } from '@aws-sdk/util-dynamodb'
+import { APIGatewayEvent } from 'aws-lambda'
+import { genTransformResponse, MappedEvent, transformEvent } from './common'
 
 const dynamodb = new DynamoDB({})
 
 const TABLENAME = process.env.TABLENAME || ''
 
-export const handler = async (event: any = {}): Promise<any> => {
-  const trackId = parseInt(event.trackId)
+export const handler = async (event: APIGatewayEvent | MappedEvent<null>) => {
+  const transformResp = genTransformResponse(event)
+  const { path } = transformEvent(event)
+  const trackId = parseInt(path.trackId || '')
   if (isNaN(trackId)) {
     throw new Error('Error400: NaN')
   }
@@ -26,8 +30,8 @@ export const handler = async (event: any = {}): Promise<any> => {
   }
 
   const item = unmarshall(record.Item)
-  return {
+  return transformResp({
     trackId: trackId,
     viewerCount: item.viewerCount,
-  }
+  })
 }

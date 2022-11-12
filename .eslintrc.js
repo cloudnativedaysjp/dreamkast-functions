@@ -24,6 +24,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     'prettier/prettier': [
       'error',
       // eslint-disable-next-line @typescript-eslint/no-var-requires

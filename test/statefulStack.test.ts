@@ -1,11 +1,11 @@
 import * as cdk from 'aws-cdk-lib'
 import { Template } from 'aws-cdk-lib/assertions'
-import { VoteCFPStack } from '../lib/vote-cfp-stack'
+import { StatefulStack } from '../lib/statefulStack'
 
 test('snapshot test', () => {
   const app = new cdk.App()
 
-  const stack = new VoteCFPStack(
+  const stack = new StatefulStack(
     app,
     `stack`,
     {
