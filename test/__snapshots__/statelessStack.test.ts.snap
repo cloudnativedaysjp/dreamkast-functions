@@ -59,7 +59,7 @@ exports[`snapshot test 1`] = `
     "ApiLogGroup1DEDFC07": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "LogGroupName": "apiGateway-apiGateway",
+        "LogGroupName": "apiGateway-apiGateway-test",
         "RetentionInDays": 30,
       },
       "Type": "AWS::Logs::LogGroup",
