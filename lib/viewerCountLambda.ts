@@ -55,13 +55,6 @@ export function newViewerCountResources(
     }),
   )
 
-  // OutPut
-
-  new CfnOutput(scope, 'viewerCountArnOutPut', {
-    value: getViewerCountFunction.functionArn,
-    exportName: `viewerCountStack-GetViewerCountFunction-Arn-${buildConfig.Environment}`,
-  })
-
   return {
     saveViewerCountFunction,
     getViewerCountFunction,
