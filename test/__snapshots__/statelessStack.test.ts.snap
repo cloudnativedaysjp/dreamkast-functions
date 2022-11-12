@@ -25,17 +25,6 @@ exports[`snapshot test 1`] = `
         ],
       },
     },
-    "viewerCountArnOutPut": {
-      "Export": {
-        "Name": "viewerCountStack-GetViewerCountFunction-Arn-test",
-      },
-      "Value": {
-        "Fn::GetAtt": [
-          "getViewerCount01DE1D78",
-          "Arn",
-        ],
-      },
-    },
   },
   "Parameters": {
     "BootstrapVersion": {
