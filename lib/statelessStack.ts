@@ -7,6 +7,7 @@ import { newAPIGatewayResources } from './apigateway'
 import { newVoteCFPResources } from './voteCfpLambda'
 import { StatefulStack } from './statefulStack'
 import { newViewerCountResources } from './viewerCountLambda'
+import { newDkUiDataResources } from './dkUiDataLambda'
 
 export class StatelessStack extends Stack {
   constructor(
@@ -19,6 +20,7 @@ export class StatelessStack extends Stack {
   ) {
     super(scope, id, props)
 
+    // TODO remove unneeded fields like 'stackName'
     const viewerCountResources = newViewerCountResources(
       this,
       `viewerCount`,
@@ -32,7 +34,7 @@ export class StatelessStack extends Stack {
       statefulStack,
     )
 
-    const voteCFPStack = newVoteCFPResources(
+    const voteCFPResources = newVoteCFPResources(
       this,
       `voteCFP`,
       {
@@ -45,7 +47,7 @@ export class StatelessStack extends Stack {
       statefulStack,
     )
 
-    const profilePointStack = newProfilePointResources(
+    const profilePointResources = newProfilePointResources(
       this,
       `profilePoint`,
       {
@@ -58,6 +60,8 @@ export class StatelessStack extends Stack {
       statefulStack,
     )
 
+    const dkUiDataResources = newDkUiDataResources(this, buildConfig)
+
     const apiGatewayStack = newAPIGatewayResources(
       this,
       `apiGateway`,
@@ -66,9 +70,11 @@ export class StatelessStack extends Stack {
         hostedZone: certManagerStack.hostedZone,
         lambda: {
           getViewerCount: viewerCountResources.getViewerCountFunction,
-          voteCFP: voteCFPStack.voteCFPFunction,
-          postProfilePoint: profilePointStack.postProfilePointFunction,
-          getProfilePoint: profilePointStack.getProfilePointFunction,
+          voteCFP: voteCFPResources.voteCFPFunction,
+          postProfilePoint: profilePointResources.postProfilePointFunction,
+          getProfilePoint: profilePointResources.getProfilePointFunction,
+          getDkUiData: dkUiDataResources.getDkUiDataFunction,
+          patchDkUiData: dkUiDataResources.patchDkUiDataFunction,
         },
         stackName: `apiGateway`,
         env: {

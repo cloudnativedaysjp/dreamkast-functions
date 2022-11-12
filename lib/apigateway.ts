@@ -20,6 +20,8 @@ import {
   ProfilePointRequestSchema,
   ProfilePointsResponseSchema,
   VoteSchema,
+  DkUiDataSchema,
+  DkUiDataMutationSchema,
 } from './schemas'
 import { BuildConfig } from './buildConfig'
 
@@ -50,6 +52,8 @@ export interface APIGatewayProps extends StackProps {
     readonly voteCFP: IFunction
     readonly postProfilePoint: IFunction
     readonly getProfilePoint: IFunction
+    readonly getDkUiData: IFunction
+    readonly patchDkUiData: IFunction
   }
 }
 
@@ -157,14 +161,16 @@ export function newAPIGatewayResources(
   })
 
   // TRACKS
-  const tracks = apiv1.addResource('tracks')
-  const trackid = tracks.addResource('{trackId}')
-  const viewerCount = trackid.addResource('viewer_count', {
+  const tracks = apiv1.addResource('tracks', {
     defaultCorsPreflightOptions: {
       statusCode: 200,
-      allowOrigins: apigateway.Cors.ALL_ORIGINS,
+      allowOrigins: [buildConfig.AccessControlAllowOrigin],
+      allowMethods: apigateway.Cors.ALL_METHODS,
+      allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
     },
   })
+  const trackid = tracks.addResource('{trackId}')
+  const viewerCount = trackid.addResource('viewer_count')
 
   // TALKS
   const talks = apiv1.addResource('talks')
@@ -176,6 +182,13 @@ export function newAPIGatewayResources(
   const profileId = profiles.addResource('{profileId}')
   const point = profileId.addResource('point')
   const points = profileId.addResource('points')
+
+  // dk-ui AppData
+  const appData = apiv1
+    .addResource('app-data')
+    .addResource('{profileId}')
+    .addResource('conference')
+    .addResource('{conferenceName}')
 
   /* === [   MODEL   ] === */
 
@@ -201,6 +214,18 @@ export function newAPIGatewayResources(
     contentType: 'application/json',
     modelName: 'ProfilePoints',
     schema: ProfilePointsResponseSchema,
+  })
+
+  const dkUiDataModel = api.addModel('dkUiDataModel', {
+    contentType: 'application/json',
+    modelName: 'DkUiData',
+    schema: DkUiDataSchema,
+  })
+
+  const dkUiDataMutationModel = api.addModel('dkUiDataMutationModel', {
+    contentType: 'application/json',
+    modelName: 'DkUiDataMutation',
+    schema: DkUiDataMutationSchema,
   })
 
   /* === [   ResponseParameters   ] === */
@@ -412,7 +437,7 @@ export function newAPIGatewayResources(
     {
       requestValidator: requestValidator,
       requestParameters: {
-        'method.request.querystring.conference': true,
+        'method.request.querystring.conferenceName': true,
         'method.request.path.profileId': true,
       },
       methodResponses: [
@@ -423,6 +448,79 @@ export function newAPIGatewayResources(
             'application/json': profilePointsModel,
           },
         },
+        methodResponses400,
+        methodResponses500,
+      ],
+    },
+  )
+
+  // GET /app-data/{profileId}/conference/{conference}
+  appData.addMethod(
+    'GET',
+    // Integration
+    new apigateway.LambdaIntegration(props.lambda.getDkUiData, {
+      proxy: false,
+      credentialsRole: projectApiExecutionRole,
+      passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+      requestTemplates: {
+        'application/json': requestPassThroughTemplate,
+      },
+      integrationResponses: [
+        integrationResponse200,
+        integrationResponse400,
+        integrationResponse500,
+      ],
+    }),
+    // MethodOptions
+    {
+      requestValidator: requestValidator,
+      requestParameters: {
+        'method.request.path.conference': true,
+        'method.request.path.profileId': true,
+      },
+      methodResponses: [
+        {
+          statusCode: '200',
+          responseParameters: CorsMethodResponseParameters,
+          responseModels: {
+            'application/json': dkUiDataModel,
+          },
+        },
+        methodResponses400,
+        methodResponses500,
+      ],
+    },
+  )
+
+  // PATCH /app-data/{profileId}/conference/{conference}
+  appData.addMethod(
+    'PATCH',
+    // Integration
+    new apigateway.LambdaIntegration(props.lambda.patchDkUiData, {
+      proxy: false,
+      credentialsRole: projectApiExecutionRole,
+      passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+      requestTemplates: {
+        'application/json': requestPassThroughTemplate,
+      },
+      integrationResponses: [
+        integrationResponse200,
+        integrationResponse400,
+        integrationResponse500,
+      ],
+    }),
+    // MethodOptions
+    {
+      requestValidator: requestValidator,
+      requestParameters: {
+        'method.request.path.conference': true,
+        'method.request.path.profileId': true,
+      },
+      requestModels: {
+        'application/json': dkUiDataMutationModel,
+      },
+      methodResponses: [
+        methodResponses200,
         methodResponses400,
         methodResponses500,
       ],
