@@ -43,3 +43,12 @@ export function genTransformResponse(
     })
   }
 }
+
+export function isNumStr(v: string | undefined): boolean {
+  const vv = parseInt(v || '')
+  return !isNaN(vv)
+}
+
+export function getTimestamp(): number {
+  return Math.ceil(new Date().getTime() / 1000)
+}
