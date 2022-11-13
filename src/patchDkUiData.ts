@@ -54,7 +54,7 @@ export async function handleMain(
 ) {
   const transformResp = genTransformResponse(event)
   const { path, body } = transformEvent(event)
-  const { profileId, conferenceName } = path
+  const { profileId, conference } = path
   if (!isNumStr(path.profileId)) {
     throw new Error('Error400: profileId is NaN')
   }
@@ -64,21 +64,21 @@ export async function handleMain(
     resp = await handleTalkWatchedAction(
       ctx,
       profileId!,
-      conferenceName!,
+      conference!,
       body.payload as TalkWatchedAction,
     )
   } else if (body.action === ACTIONS.stampedFromUI) {
     resp = await handleStampedFromUIAction(
       ctx,
       profileId!,
-      conferenceName!,
+      conference!,
       body.payload as StampedFromUIAction,
     )
   } else if (body.action === ACTIONS.stampedFromQR) {
     resp = await handleStampedFromQRAction(
       ctx,
       profileId!,
-      conferenceName!,
+      conference!,
       body.payload as StampedFromQRAction,
     )
   } else {

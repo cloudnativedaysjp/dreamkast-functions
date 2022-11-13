@@ -28,11 +28,11 @@ export async function handleMain(
 ) {
   const transformResp = genTransformResponse(event)
   const { path } = transformEvent(event)
-  const { profileId, conferenceName } = path
+  const { profileId, conference } = path
   if (!isNumStr(path.profileId)) {
     throw new Error('Error400: profileId is NaN')
   }
 
-  const item = await ctx.repo.getOrNew(profileId!, conferenceName!)
+  const item = await ctx.repo.getOrNew(profileId!, conference!)
   return transformResp(item.view())
 }

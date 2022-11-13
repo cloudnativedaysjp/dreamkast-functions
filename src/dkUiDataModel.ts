@@ -157,14 +157,14 @@ export class DkUiDataRepository {
 
   async get(
     profileId: string,
-    conferenceName: string,
+    conference: string,
   ): Promise<DkUiDataModel | null> {
     const record = await this.dynamodb.send(
       new GetItemCommand({
         TableName: this.tableName,
         Key: {
           profileId: { N: profileId! },
-          conferenceName: { S: conferenceName! },
+          conferenceName: { S: conference! },
         },
       }),
     )
@@ -177,23 +177,23 @@ export class DkUiDataRepository {
 
   async getOrNew(
     profileId: string,
-    conferenceName: string,
+    conference: string,
   ): Promise<DkUiDataModel> {
-    const item = await this.get(profileId, conferenceName)
+    const item = await this.get(profileId, conference)
     if (!item) {
       return this.new()
     }
     return item
   }
 
-  async set(profileId: string, conferenceName: string, model: DkUiDataModel) {
+  async set(profileId: string, conference: string, model: DkUiDataModel) {
     try {
       await this.dynamodb.send(
         new PutItemCommand({
           TableName: this.tableName,
           Item: {
             profileId: { N: profileId },
-            conferenceName: { S: conferenceName },
+            conferenceName: { S: conference },
             appData: { S: JSON.stringify(model.data) },
           },
         }),
