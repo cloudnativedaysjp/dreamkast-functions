@@ -1,6 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda'
 import {
-  genTransformResponse, isNumber,
+  genTransformResponse,
+  isNumber,
   isNumStr,
   MappedEvent,
   transformEvent,
