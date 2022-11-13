@@ -492,9 +492,9 @@ export function newAPIGatewayResources(
     },
   )
 
-  // PATCH /app-data/{profileId}/conference/{conference}
+  // POST /app-data/{profileId}/conference/{conference}
   appData.addMethod(
-    'PATCH',
+    'POST',
     // Integration
     new apigateway.LambdaIntegration(props.lambda.patchDkUiData, {
       proxy: false,
