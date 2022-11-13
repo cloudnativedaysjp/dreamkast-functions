@@ -71,7 +71,7 @@ export function newAPIGatewayResources(
       loggingLevel: apigateway.MethodLoggingLevel.INFO,
       accessLogDestination: new apigateway.LogGroupLogDestination(
         new LogGroup(scope, 'ApiLogGroup', {
-          logGroupName: `${id}-apiGateway`,
+          logGroupName: `${id}-apiGateway-${buildConfig.Environment}`,
           retention: RetentionDays.ONE_MONTH,
           removalPolicy: RemovalPolicy.DESTROY,
         }),
