@@ -1,6 +1,6 @@
 import { APIGatewayEvent } from 'aws-lambda'
 import {
-  genTransformResponse,
+  genTransformResponse, isNumber,
   isNumStr,
   MappedEvent,
   transformEvent,
@@ -21,17 +21,17 @@ type Body = {
 }
 
 type TalkWatchedAction = {
-  talkId: number
-  trackId: number
-  slotId: number
+  talkId?: number
+  trackId?: number
+  slotId?: number
 }
 
 type StampedFromUIAction = {
-  slotId: number
+  slotId?: number
 }
 
 type StampedFromQRAction = {
-  slotId: number
+  slotId?: number
 }
 
 export const handler = async (event: APIGatewayEvent | MappedEvent<Body>) => {
@@ -93,7 +93,7 @@ async function handleTalkWatchedAction(
   confName: string,
   { slotId, trackId, talkId }: TalkWatchedAction,
 ) {
-  if (!slotId || !trackId || !talkId) {
+  if (!isNumber(slotId) || !isNumber(trackId) || !isNumber(talkId)) {
     throw new Error('Error400: missing required field')
   }
 
@@ -114,8 +114,8 @@ async function handleStampedFromUIAction(
   confName: string,
   { slotId }: StampedFromUIAction,
 ) {
-  if (!slotId) {
-    throw new Error('Error400: slotId is not set')
+  if (!isNumber(slotId)) {
+    throw new Error('Error400: slotId is not number')
   }
 
   const model = await ctx.repo.getOrNew(profileId, confName)
@@ -133,8 +133,8 @@ async function handleStampedFromQRAction(
   confName: string,
   { slotId }: StampedFromQRAction,
 ) {
-  if (!slotId) {
-    throw new Error('Error400: slotId is not set')
+  if (!isNumber(slotId)) {
+    throw new Error('Error400: slotId is not number')
   }
 
   const model = await ctx.repo.getOrNew(profileId, confName)

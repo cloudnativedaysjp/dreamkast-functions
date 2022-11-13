@@ -49,6 +49,10 @@ export function isNumStr(v: string | undefined): boolean {
   return !isNaN(vv)
 }
 
+export function isNumber(v: unknown): v is number {
+  return typeof v === 'number'
+}
+
 export function getTimestamp(): number {
   return Math.ceil(new Date().getTime() / 1000)
 }
