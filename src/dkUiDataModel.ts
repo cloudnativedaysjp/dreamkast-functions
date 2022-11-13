@@ -41,10 +41,8 @@ export class DkUiDataModel {
   data: DkUiData
 
   COUNT_PERIOD = 120
-  // TODO fix to 10
-  TOTAL_COUNT_FOR_STAMP = 3
-  // TODO fix to 110
-  GUARD_PERIOD = 1 // COUNT_PERIOD - 10
+  TOTAL_COUNT_FOR_STAMP = 10
+  GUARD_PERIOD = 110 // COUNT_PERIOD - 10
 
   constructor(data: DkUiData) {
     this.data = data
