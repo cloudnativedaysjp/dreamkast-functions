@@ -33,9 +33,6 @@ export async function handleMain(
     throw new Error('Error400: profileId is NaN')
   }
 
-  const item = await ctx.repo.get(profileId!, conferenceName!)
-  if (!item) {
-    throw new Error('Error404: not found')
-  }
+  const item = await ctx.repo.getOrNew(profileId!, conferenceName!)
   return transformResp(item.view())
 }
