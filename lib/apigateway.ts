@@ -188,7 +188,7 @@ export function newAPIGatewayResources(
     .addResource('app-data')
     .addResource('{profileId}')
     .addResource('conference')
-    .addResource('{conferenceName}')
+    .addResource('{conference}')
 
   /* === [   MODEL   ] === */
 
@@ -437,7 +437,7 @@ export function newAPIGatewayResources(
     {
       requestValidator: requestValidator,
       requestParameters: {
-        'method.request.querystring.conferenceName': true,
+        'method.request.querystring.conference': true,
         'method.request.path.profileId': true,
       },
       methodResponses: [
