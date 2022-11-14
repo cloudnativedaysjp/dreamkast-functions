@@ -20,6 +20,7 @@ export type DkUiData = {
         talkId: number
         trackId: number
         timestamp: number
+        period: number
       }[]
     }
     prevTimestamp: number
@@ -40,6 +41,7 @@ export type DkUiView = {
 export class DkUiDataModel {
   data: DkUiData
 
+  SESSION_PERIOD = 2400
   COUNT_PERIOD = 120
   TOTAL_COUNT_FOR_STAMP = 10
   GUARD_PERIOD = 110 // COUNT_PERIOD - 10
@@ -55,10 +57,32 @@ export class DkUiDataModel {
       return false
     }
     const history = this.data.watchedTalksOnline.history[slotId] || []
-    history.push({ trackId, talkId, timestamp: currTimestamp })
+    history.push({
+      trackId,
+      talkId,
+      timestamp: currTimestamp,
+      period: this.COUNT_PERIOD,
+    })
     this.data.watchedTalksOnline.history[slotId] = history
     this.data.watchedTalksOnline.prevTimestamp = currTimestamp
     return true
+  }
+
+  forceSetWatchedTalkFromOffline(
+    slotId: number,
+    trackId: number,
+    talkId: number,
+  ) {
+    const currTimestamp = getTimestamp()
+    this.data.watchedTalksOnline.history[slotId] = [
+      {
+        trackId,
+        talkId,
+        timestamp: currTimestamp,
+        period: this.SESSION_PERIOD,
+      },
+    ]
+    this.data.watchedTalksOnline.prevTimestamp = currTimestamp
   }
 
   setStampChallengeWhenFulfilled(slotId: number) {
@@ -125,7 +149,7 @@ export class DkUiDataModel {
         watchingTime: Object.entries(
           this.data.watchedTalksOnline.history,
         ).reduce((accum, [k, v]) => {
-          accum[k] = v.length * this.COUNT_PERIOD
+          accum[k] = v.reduce((t, vv) => t + vv.period, 0)
           return accum
         }, {} as Record<string, number>),
         prevTimestamp: this.data.watchedTalksOnline.prevTimestamp,

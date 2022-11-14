@@ -32,6 +32,8 @@ type StampedFromUIAction = {
 }
 
 type StampedFromQRAction = {
+  talkId?: number
+  trackId?: number
   slotId?: number
 }
 
@@ -132,13 +134,14 @@ async function handleStampedFromQRAction(
   ctx: Context,
   profileId: string,
   confName: string,
-  { slotId }: StampedFromQRAction,
+  { slotId, trackId, talkId }: StampedFromQRAction,
 ) {
-  if (!isNumber(slotId)) {
-    throw new Error('Error400: slotId is not number')
+  if (!isNumber(slotId) || !isNumber(trackId) || !isNumber(talkId)) {
+    throw new Error('Error400: missing required field')
   }
 
   const model = await ctx.repo.getOrNew(profileId, confName)
+  model.forceSetWatchedTalkFromOffline(slotId, trackId, talkId)
   model.stampSpecifiedOneAndSkipOthers(slotId)
   await ctx.repo.set(profileId, confName, model)
 
