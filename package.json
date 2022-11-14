@@ -19,11 +19,13 @@
     "cdk:stg-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=stg --require-approval never --all",
     "cdk:prd-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=prd --require-approval never --all",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}' --quiet && eslint '*/**/*.{js,ts}' --quiet ",
-    "lint-fix": "prettier --write '**/*.{js,jsx,ts,tsx}' && eslint --fix './**/*.{js,jsx,ts,tsx}' && eslint '*/**/*.{js,ts}' --quiet --fix"
+    "lint-fix": "prettier --write '**/*.{js,jsx,ts,tsx}' && eslint --fix './**/*.{js,jsx,ts,tsx}' && eslint '*/**/*.{js,ts}' --quiet --fix",
+    "load-point-event": "ts-node bin/loadPointEvent.ts"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
     "@types/jest": "29.2.0",
+    "@types/js-yaml": "^4.0.5",
     "@types/node": "18.11.9",
     "@types/node-fetch": "2.6.2",
     "@types/prettier": "2.7.1",
@@ -43,6 +45,7 @@
     "eslint": "8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "js-yaml": "^4.1.0",
     "node-fetch": "3.2.10",
     "prettier": "^2.7.1",
     "source-map-support": "0.5.21"
