@@ -2637,6 +2637,123 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "pushViewerCountMetrics05C9C47E": {
+      "DependsOn": [
+        "pushViewerCountMetricsServiceRoleDefaultPolicyDCBF48F6",
+        "pushViewerCountMetricsServiceRoleBADAAA80",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "[HASH REMOVED]",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "ENV": "test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "pushViewerCountMetricsServiceRoleBADAAA80",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "pushViewerCountMetricsDynamoDBEventSourcestatefulViewerCountTable623ADE6FC6E216B8": {
+      "Properties": {
+        "BatchSize": 100,
+        "EventSourceArn": {
+          "Fn::ImportValue": "test:ExportsOutputFnGetAttViewerCountTable44C1ED92StreamArn5806939D",
+        },
+        "FunctionName": {
+          "Ref": "pushViewerCountMetrics05C9C47E",
+        },
+        "StartingPosition": "LATEST",
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "pushViewerCountMetricsServiceRoleBADAAA80": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pushViewerCountMetricsServiceRoleDefaultPolicyDCBF48F6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:GetShardIterator",
+                "dynamodb:GetRecords",
+                "dynamodb:ListStream",
+                "dynamodb:DescribeStream",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "test:ExportsOutputFnGetAttViewerCountTable44C1ED92Arn37B19637",
+              },
+            },
+            {
+              "Action": "dynamodb:ListStreams",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "test:ExportsOutputFnGetAttViewerCountTable44C1ED92StreamArn5806939D",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pushViewerCountMetricsServiceRoleDefaultPolicyDCBF48F6",
+        "Roles": [
+          {
+            "Ref": "pushViewerCountMetricsServiceRoleBADAAA80",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "saveViewerCount311FBA34": {
       "DependsOn": [
         "saveViewerCountServiceRoleDefaultPolicyA5138DFA",
