@@ -2,103 +2,100 @@ conference: cndt2022
 pointEvents:
   - id: 101800
     point: 15
-    desc: 'session watch: day1 am'
+    desc: 'セッション視聴: 1日目 スロット1'
   - id: 101801
     point: 15
-    desc: 'session watch: day1 1pm'
+    desc: 'セッション視聴: 1日目 スロット2'
   - id: 101802
     point: 15
-    desc: 'session watch: day1 2pm'
+    desc: 'セッション視聴: 1日目 スロット3'
   - id: 101803
     point: 15
-    desc: 'session watch: day1 3pm'
+    desc: 'セッション視聴: 1日目 スロット4'
   - id: 101804
     point: 15
-    desc: 'session watch: day1 4pm'
+    desc: 'セッション視聴: 1日目 スロット5'
   - id: 101805
     point: 15
-    desc: 'session watch: day1 5pm'
+    desc: 'セッション視聴: 1日目 スロット6'
   - id: 101900
     point: 15
-    desc: 'session watch: day2 am'
+    desc: 'セッション視聴: 2日目 スロット1'
   - id: 101901
     point: 15
-    desc: 'session watch: day2 1pm'
+    desc: 'セッション視聴: 2日目 スロット2'
   - id: 101902
     point: 15
-    desc: 'session watch: day2 2pm'
+    desc: 'セッション視聴: 2日目 スロット3'
   - id: 101903
     point: 15
-    desc: 'session watch: day2 3pm'
+    desc: 'セッション視聴: 2日目 スロット4'
   - id: 101904
     point: 15
-    desc: 'session watch: day2 4pm'
+    desc: 'セッション視聴: 2日目 スロット5'
   - id: 101905
     point: 15
-    desc: 'session watch: day2 5pm'
+    desc: 'セッション視聴: 2日目 スロット6'
   - id: 111800
     point: 5
-    desc: 'session comment: day1 am'
+    desc: 'セッションにコメント: 1日目 スロット1'
   - id: 111801
     point: 5
-    desc: 'session comment: day1 1pm'
+    desc: 'セッションにコメント: 1日目 スロット2'
   - id: 111802
     point: 5
-    desc: 'session comment: day1 2pm'
+    desc: 'セッションにコメント: 1日目 スロット3'
   - id: 111803
     point: 5
-    desc: 'session comment: day1 3pm'
+    desc: 'セッションにコメント: 1日目 スロット4'
   - id: 111804
     point: 5
-    desc: 'session comment: day1 4pm'
+    desc: 'セッションにコメント: 1日目 スロット5'
   - id: 111805
     point: 5
-    desc: 'session comment: day1 5pm'
+    desc: 'セッションにコメント: 1日目 スロット6'
   - id: 111900
     point: 5
-    desc: 'session comment: day2 am'
+    desc: 'セッションにコメント: 2日目 スロット1'
   - id: 111901
     point: 5
-    desc: 'session comment: day2 1pm'
+    desc: 'セッションにコメント: 2日目 スロット2'
   - id: 111902
     point: 5
-    desc: 'session comment: day2 2pm'
+    desc: 'セッションにコメント: 2日目 スロット3'
   - id: 111903
     point: 5
-    desc: 'session comment: day2 3pm'
+    desc: 'セッションにコメント: 2日目 スロット4'
   - id: 111904
     point: 5
-    desc: 'session comment: day2 4pm'
+    desc: 'セッションにコメント: 2日目 スロット5'
   - id: 111905
     point: 5
-    desc: 'session comment: day2 5pm'
-  - id: 121800
+    desc: 'セッションにコメント: 2日目 スロット6'
+  - id: 120001
     point: 60
-    desc: 'stamp complete: day1'
-  - id: 121900
-    point: 60
-    desc: 'stamp complete: day2'
+    desc: 'スタンプコンプリート！'
   - id: 130001
     point: 0
-    desc: 'session watch offline: JUST for QR-code generation: TrackA'
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackA'
   - id: 130002
     point: 0
-    desc: 'session watch offline: JUST for QR-code generation: TrackB'
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackB'
   - id: 130003
     point: 0
-    desc: 'session watch offline: JUST for QR-code generation: TrackC'
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackC'
   - id: 130004
     point: 0
-    desc: 'session watch offline: JUST for QR-code generation: TrackD'
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackD'
   - id: 130005
     point: 0
-    desc: 'session watch offline: JUST for QR-code generation: TrackE'
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackE'
   - id: 130006
     point: 0
-    desc: 'session watch offline: JUST for QR-code generation: TrackF'
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackF'
   - id: 200001
     point: 30
-    desc: 'check-in'
+    desc: '会場チェックイン'
   - id: 200002
     point: 30
-    desc: 'pre-registration'
+    desc: '事前登録ボーナス'
