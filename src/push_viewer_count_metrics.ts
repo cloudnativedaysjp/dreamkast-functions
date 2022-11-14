@@ -1,5 +1,4 @@
 import { DynamoDBStreamEvent } from 'aws-lambda'
-import { MappedEvent } from './common'
 
 import { Metrics, MetricUnits } from '@aws-lambda-powertools/metrics'
 
@@ -7,17 +6,17 @@ const metrics = new Metrics({
   namespace: 'DreamKastFunctions',
   serviceName: 'ViewerCount',
   defaultDimensions: { 
-    'environment': process.env.ENV || "", 
-    'foo':'bar',
+    'environment': process.env.ENV || 'UNKNOWN',
   },
 });
 
 export const handler = async (event: DynamoDBStreamEvent ) => {
 
   event.Records.forEach(r => {
-    // eventName is INSERT/MODIFY/REMOVE
-    console.log(r.dynamodb?.NewImage)
-    //metrics.addMetric('viewerCount', MetricUnits.Count, r.dynamodb?.NewImage.N || 0 );
+    const singleMetric = metrics.singleMetric()
+    singleMetric.addDimension('trackName', r.dynamodb?.NewImage?.trackName?.S || 'UNKNOWN' )
+    singleMetric.addMetric('viewerCount', MetricUnits.Count, parseInt(r.dynamodb?.NewImage?.viewerCount?.N || '') || 0 );
+    singleMetric.publishStoredMetrics()
   })
 
 }
