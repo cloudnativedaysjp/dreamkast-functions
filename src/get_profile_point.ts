@@ -11,6 +11,7 @@ type profilePointResponse = {
   point: number
   pointEventId: string
   timestamp: number
+  desc: string
 }
 
 export const handler = async (event: APIGatewayEvent | MappedEvent<null>) => {
@@ -83,6 +84,7 @@ export const handler = async (event: APIGatewayEvent | MappedEvent<null>) => {
           point: per['point'],
           pointEventId: per['pointEventId'],
           timestamp: parseInt(ppr['conference#timestamp'].split('#')[1]),
+          desc: per['desc'],
         }
       }
     })
