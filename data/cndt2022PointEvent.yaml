@@ -1,0 +1,104 @@
+conference: cndt2022
+pointEvents:
+  - id: 101800
+    point: 15
+    desc: 'session watch: day1 am'
+  - id: 101801
+    point: 15
+    desc: 'session watch: day1 1pm'
+  - id: 101802
+    point: 15
+    desc: 'session watch: day1 2pm'
+  - id: 101803
+    point: 15
+    desc: 'session watch: day1 3pm'
+  - id: 101804
+    point: 15
+    desc: 'session watch: day1 4pm'
+  - id: 101805
+    point: 15
+    desc: 'session watch: day1 5pm'
+  - id: 101900
+    point: 15
+    desc: 'session watch: day2 am'
+  - id: 101901
+    point: 15
+    desc: 'session watch: day2 1pm'
+  - id: 101902
+    point: 15
+    desc: 'session watch: day2 2pm'
+  - id: 101903
+    point: 15
+    desc: 'session watch: day2 3pm'
+  - id: 101904
+    point: 15
+    desc: 'session watch: day2 4pm'
+  - id: 101905
+    point: 15
+    desc: 'session watch: day2 5pm'
+  - id: 111800
+    point: 5
+    desc: 'session comment: day1 am'
+  - id: 111801
+    point: 5
+    desc: 'session comment: day1 1pm'
+  - id: 111802
+    point: 5
+    desc: 'session comment: day1 2pm'
+  - id: 111803
+    point: 5
+    desc: 'session comment: day1 3pm'
+  - id: 111804
+    point: 5
+    desc: 'session comment: day1 4pm'
+  - id: 111805
+    point: 5
+    desc: 'session comment: day1 5pm'
+  - id: 111900
+    point: 5
+    desc: 'session comment: day2 am'
+  - id: 111901
+    point: 5
+    desc: 'session comment: day2 1pm'
+  - id: 111902
+    point: 5
+    desc: 'session comment: day2 2pm'
+  - id: 111903
+    point: 5
+    desc: 'session comment: day2 3pm'
+  - id: 111904
+    point: 5
+    desc: 'session comment: day2 4pm'
+  - id: 111905
+    point: 5
+    desc: 'session comment: day2 5pm'
+  - id: 121800
+    point: 60
+    desc: 'stamp complete: day1'
+  - id: 121900
+    point: 60
+    desc: 'stamp complete: day2'
+  - id: 130001
+    point: 0
+    desc: 'session watch offline: JUST for QR-code generation: TrackA'
+  - id: 130002
+    point: 0
+    desc: 'session watch offline: JUST for QR-code generation: TrackB'
+  - id: 130003
+    point: 0
+    desc: 'session watch offline: JUST for QR-code generation: TrackC'
+  - id: 130004
+    point: 0
+    desc: 'session watch offline: JUST for QR-code generation: TrackD'
+  - id: 130005
+    point: 0
+    desc: 'session watch offline: JUST for QR-code generation: TrackE'
+  - id: 130006
+    point: 0
+    desc: 'session watch offline: JUST for QR-code generation: TrackF'
+  - id: 200001
+    point: 30
+    desc: 'check-in'
+  - id: 200002
+    point: 30
+    desc: 'pre-registration'
