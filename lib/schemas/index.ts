@@ -54,19 +54,19 @@ export const ProfilePointResponseSchema: JsonSchema = {
   title: 'profilePointResponse',
   type: JsonSchemaType.OBJECT,
   additionalProperties: false,
-  required: ['pointEventId', 'conference'],
+  required: ['point', 'pointEventId', 'timestamp', 'desc'],
   properties: {
     point: {
       type: JsonSchemaType.NUMBER,
-    },
-    conference: {
-      type: JsonSchemaType.STRING,
     },
     pointEventId: {
       type: JsonSchemaType.STRING,
     },
     timestamp: {
       type: JsonSchemaType.NUMBER,
+    },
+    desc: {
+      type: JsonSchemaType.STRING,
     },
   },
 }
