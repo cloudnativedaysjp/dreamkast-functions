@@ -24,14 +24,14 @@ export function newDkUiDataResources(
     }),
   )
 
-  const patchDkUiDataFunction = new NodejsFunction(scope, 'patchDkUiData', {
-    entry: 'src/patchDkUiData.ts',
+  const postDkUiDataFunction = new NodejsFunction(scope, 'patchDkUiData', {
+    entry: 'src/postDkUiData.ts',
     environment: {
       TABLENAME: tableNames.dkUiData,
       EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
     },
   })
-  patchDkUiDataFunction.addToRolePolicy(
+  postDkUiDataFunction.addToRolePolicy(
     new PolicyStatement({
       resources: ['arn:aws:dynamodb:*:*:table/*'],
       actions: ['dynamodb:PutItem'],
@@ -40,6 +40,6 @@ export function newDkUiDataResources(
 
   return {
     getDkUiDataFunction,
-    patchDkUiDataFunction,
+    postDkUiDataFunction,
   }
 }

@@ -74,7 +74,7 @@ export class StatelessStack extends Stack {
           postProfilePoint: profilePointResources.postProfilePointFunction,
           getProfilePoint: profilePointResources.getProfilePointFunction,
           getDkUiData: dkUiDataResources.getDkUiDataFunction,
-          patchDkUiData: dkUiDataResources.patchDkUiDataFunction,
+          postDkUiData: dkUiDataResources.postDkUiDataFunction,
         },
         stackName: `apiGateway`,
         env: {

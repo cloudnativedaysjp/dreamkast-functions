@@ -53,7 +53,7 @@ export interface APIGatewayProps extends StackProps {
     readonly postProfilePoint: IFunction
     readonly getProfilePoint: IFunction
     readonly getDkUiData: IFunction
-    readonly patchDkUiData: IFunction
+    readonly postDkUiData: IFunction
   }
 }
 
@@ -496,7 +496,7 @@ export function newAPIGatewayResources(
   appData.addMethod(
     'POST',
     // Integration
-    new apigateway.LambdaIntegration(props.lambda.patchDkUiData, {
+    new apigateway.LambdaIntegration(props.lambda.postDkUiData, {
       proxy: false,
       credentialsRole: projectApiExecutionRole,
       passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
