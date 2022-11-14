@@ -14,7 +14,6 @@ export function newDkUiDataResources(
     entry: 'src/getDkUiData.ts',
     environment: {
       TABLENAME: tableNames.dkUiData,
-      EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
     },
   })
   getDkUiDataFunction.addToRolePolicy(
@@ -28,7 +27,6 @@ export function newDkUiDataResources(
     entry: 'src/postDkUiData.ts',
     environment: {
       TABLENAME: tableNames.dkUiData,
-      EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
     },
   })
   postDkUiDataFunction.addToRolePolicy(

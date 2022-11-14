@@ -134,7 +134,14 @@ export function newAPIGatewayResources(
   /* === [ RESOURCES ] === */
 
   const root = api.root
-  const apiv1 = root.addResource('api').addResource('v1')
+  const apiv1 = root.addResource('api').addResource('v1', {
+    defaultCorsPreflightOptions: {
+      statusCode: 200,
+      allowOrigins: [buildConfig.AccessControlAllowOrigin],
+      allowMethods: apigateway.Cors.ALL_METHODS,
+      allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
+    },
+  })
 
   // Dreamkast
   new apigateway.ProxyResource(scope, 'ProxyResource', {
@@ -161,14 +168,7 @@ export function newAPIGatewayResources(
   })
 
   // TRACKS
-  const tracks = apiv1.addResource('tracks', {
-    defaultCorsPreflightOptions: {
-      statusCode: 200,
-      allowOrigins: [buildConfig.AccessControlAllowOrigin],
-      allowMethods: apigateway.Cors.ALL_METHODS,
-      allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
-    },
-  })
+  const tracks = apiv1.addResource('tracks')
   const trackid = tracks.addResource('{trackId}')
   const viewerCount = trackid.addResource('viewer_count')
 
