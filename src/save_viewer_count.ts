@@ -60,10 +60,10 @@ export const handler = async (_: APIGatewayEvent | MappedEvent<null>) => {
         TableName: TABLENAME,
         Item: {
           trackId: { N: String(record['trackId']) },
-          trackName: { S: String(record['trackName'])},
+          trackName: { S: String(record['trackName']) },
           channelArn: { S: record['channelArn'] },
           viewerCount: { N: String(record['viewerCount']) },
-          confName: { S: String(record['confName'])},
+          confName: { S: String(record['confName']) },
         },
       })
       await dynamodb.send(command)

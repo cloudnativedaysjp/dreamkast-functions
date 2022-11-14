@@ -59,12 +59,16 @@ export function newViewerCountResources(
 
   // Lambda: PushViewerCountMetrics
 
-  const pushViewerCountMetrics = new NodejsFunction(scope, 'pushViewerCountMetrics', {
-    entry: 'src/push_viewer_count_metrics.ts',
-    environment: {
-      ENV: buildConfig.Environment,
+  const pushViewerCountMetrics = new NodejsFunction(
+    scope,
+    'pushViewerCountMetrics',
+    {
+      entry: 'src/push_viewer_count_metrics.ts',
+      environment: {
+        ENV: buildConfig.Environment,
+      },
     },
-  })
+  )
   pushViewerCountMetrics.addToRolePolicy(
     new PolicyStatement({
       resources: [statefulStack.viewerCountTable.tableArn],
@@ -77,9 +81,9 @@ export function newViewerCountResources(
     }),
   )
   pushViewerCountMetrics.addEventSource(
-    new DynamoEventSource( statefulStack.viewerCountTable,{
+    new DynamoEventSource(statefulStack.viewerCountTable, {
       startingPosition: StartingPosition.LATEST,
-    })
+    }),
   )
 
   return {

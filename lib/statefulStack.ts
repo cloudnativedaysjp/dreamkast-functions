@@ -1,6 +1,11 @@
 import { Construct } from 'constructs'
 import { Stack, StackProps, RemovalPolicy } from 'aws-cdk-lib'
-import { AttributeType, StreamViewType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
+import {
+  AttributeType,
+  StreamViewType,
+  BillingMode,
+  Table,
+} from 'aws-cdk-lib/aws-dynamodb'
 import { BuildConfig } from './buildConfig'
 import { Stream } from 'stream'
 
