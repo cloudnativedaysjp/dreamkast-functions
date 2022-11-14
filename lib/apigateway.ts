@@ -232,8 +232,7 @@ export function newAPIGatewayResources(
 
   const CorsResponseParameters = {
     'method.response.header.Access-Control-Allow-Methods': "'GET,POST'",
-    'method.response.header.Access-Control-Allow-Origin':
-      buildConfig.AccessControlAllowOrigin,
+    'method.response.header.Access-Control-Allow-Origin': `'${buildConfig.AccessControlAllowOrigin}'`,
     'method.response.header.Access-Control-Allow-Headers':
       "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
   }
