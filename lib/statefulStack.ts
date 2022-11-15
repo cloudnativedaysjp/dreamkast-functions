@@ -9,6 +9,7 @@ export function tableNameMap(env: string) {
     profilePoint: `profilePoint-${env}`,
     pointEvent: `pointEvent-${env}`,
     vote: `vote-${env}`,
+    dkUiData: `dkUiData-${env}`,
   }
 }
 
@@ -17,6 +18,7 @@ export class StatefulStack extends Stack {
   profilePointTable: Table
   pointEventTable: Table
   voteTable: Table
+  dkUiDataTable: Table
 
   constructor(
     scope: Construct,
@@ -57,6 +59,14 @@ export class StatefulStack extends Stack {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'eventAbbr', type: AttributeType.STRING },
       sortKey: { name: 'timestamp', type: AttributeType.NUMBER },
+      removalPolicy: RemovalPolicy.RETAIN,
+    })
+
+    this.dkUiDataTable = new Table(this, 'DkUiDataTable', {
+      tableName: tableNames.dkUiData,
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: { name: 'profileId', type: AttributeType.NUMBER },
+      sortKey: { name: 'conferenceName', type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.RETAIN,
     })
   }

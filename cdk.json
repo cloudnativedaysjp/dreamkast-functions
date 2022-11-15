@@ -41,7 +41,7 @@
       "DomainName" : "api.dev.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
       "ZoneName" : "cloudnativedays.jp",
-      "AccessControlAllowOrigin": "'*'",
+      "AccessControlAllowOrigin": "*",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
       "Environment": "dev"
     },
@@ -51,7 +51,7 @@
       "DomainName" : "api.stg.cloudnativedays.jp",
       "HostedZoneID" : "Z0898116244TOPT4X7AGI",
       "ZoneName" : "cloudnativedays.jp",
-      "AccessControlAllowOrigin": "'*'",
+      "AccessControlAllowOrigin": "*",
       "GetTracksURL": "https://staging.dev.cloudnativedays.jp/api/v1/tracks",
       "Environment": "stg"
     },

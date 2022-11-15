@@ -10,6 +10,35 @@ exports[`snapshot test 1`] = `
     },
   },
   "Resources": {
+    "DkUiDataTable299553F2": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "profileId",
+            "AttributeType": "N",
+          },
+          {
+            "AttributeName": "conferenceName",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "profileId",
+            "KeyType": "HASH",
+          },
+          {
+            "AttributeName": "conferenceName",
+            "KeyType": "RANGE",
+          },
+        ],
+        "TableName": "dkUiData-test",
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
     "PointEventTableCC881BC1": {
       "DeletionPolicy": "Retain",
       "Properties": {

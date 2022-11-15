@@ -1,7 +1,7 @@
 import {
-  JsonSchemaVersion,
-  JsonSchemaType,
   JsonSchema,
+  JsonSchemaType,
+  JsonSchemaVersion,
 } from 'aws-cdk-lib/aws-apigateway'
 
 export const ViewerCountSchema: JsonSchema = {
@@ -84,6 +84,66 @@ export const ProfilePointsResponseSchema: JsonSchema = {
     },
     total: {
       type: JsonSchemaType.NUMBER,
+    },
+  },
+}
+
+export const DkUiDataSchema: JsonSchema = {
+  schema: JsonSchemaVersion.DRAFT4,
+  title: 'dkUiData',
+  type: JsonSchemaType.OBJECT,
+  additionalProperties: true,
+  required: ['watchedTalksOnline', 'stampChallenges'],
+  properties: {
+    watchedTalksOnline: {
+      type: JsonSchemaType.OBJECT,
+      properties: {
+        watchingTime: {
+          type: JsonSchemaType.OBJECT,
+          additionalProperties: true,
+        },
+        prevTimestamp: {
+          type: JsonSchemaType.NUMBER,
+        },
+      },
+    },
+    stampChallenges: {
+      type: JsonSchemaType.ARRAY,
+      items: {
+        type: JsonSchemaType.OBJECT,
+        required: ['slotId', 'waiting'],
+        properties: {
+          slotId: {
+            type: JsonSchemaType.NUMBER,
+          },
+          waiting: {
+            type: JsonSchemaType.BOOLEAN,
+          },
+          condition: {
+            type: JsonSchemaType.STRING,
+          },
+          timestamp: {
+            type: JsonSchemaType.NUMBER,
+          },
+        },
+      },
+    },
+  },
+}
+
+export const DkUiDataMutationSchema: JsonSchema = {
+  schema: JsonSchemaVersion.DRAFT4,
+  title: 'dkUiDataMutation',
+  type: JsonSchemaType.OBJECT,
+  additionalProperties: false,
+  required: ['action', 'payload'],
+  properties: {
+    action: {
+      type: JsonSchemaType.STRING,
+    },
+    payload: {
+      type: JsonSchemaType.OBJECT,
+      additionalProperties: true,
     },
   },
 }
