@@ -239,9 +239,10 @@ exports[`snapshot test 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "dkFunctionsApiDeployment04779041510bed1b95e6354be3d323b9542a13ec": {
+    "dkFunctionsApiDeployment04779041686dda4d8c2c4f8e6ccbfb739f9de475": {
       "DependsOn": [
         "ApiRequestValidatorAB2F6E5B",
+        "dkFunctionsApicommonResponseModel8E8393A9",
         "dkFunctionsApiapiF0E97CB4",
         "dkFunctionsApiapiv1appdataprofileIdconferenceconferenceGET81ABBFE2",
         "dkFunctionsApiapiv1appdataprofileIdconferenceconferenceOPTIONS1DEDDF0C",
@@ -301,7 +302,7 @@ exports[`snapshot test 1`] = `
           "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","user":"$context.identity.user","caller":"$context.identity.caller","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
         },
         "DeploymentId": {
-          "Ref": "dkFunctionsApiDeployment04779041510bed1b95e6354be3d323b9542a13ec",
+          "Ref": "dkFunctionsApiDeployment04779041686dda4d8c2c4f8e6ccbfb739f9de475",
         },
         "MethodSettings": [
           {
@@ -726,7 +727,7 @@ exports[`snapshot test 1`] = `
                 ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "patchDkUiData56BB7ED1",
+                    "postDkUiData36FB614B",
                     "Arn",
                   ],
                 },
@@ -738,7 +739,9 @@ exports[`snapshot test 1`] = `
         "MethodResponses": [
           {
             "ResponseModels": {
-              "application/json": "Empty",
+              "application/json": {
+                "Ref": "dkFunctionsApicommonResponseModel8E8393A9",
+              },
             },
             "ResponseParameters": {
               "method.response.header.Access-Control-Allow-Headers": true,
@@ -796,7 +799,7 @@ exports[`snapshot test 1`] = `
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "patchDkUiData56BB7ED1",
+            "postDkUiData36FB614B",
             "Arn",
           ],
         },
@@ -829,7 +832,7 @@ exports[`snapshot test 1`] = `
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "patchDkUiData56BB7ED1",
+            "postDkUiData36FB614B",
             "Arn",
           ],
         },
@@ -1099,7 +1102,9 @@ exports[`snapshot test 1`] = `
         "MethodResponses": [
           {
             "ResponseModels": {
-              "application/json": "Empty",
+              "application/json": {
+                "Ref": "dkFunctionsApicommonResponseModel8E8393A9",
+              },
             },
             "ResponseParameters": {
               "method.response.header.Access-Control-Allow-Headers": true,
@@ -1664,7 +1669,9 @@ exports[`snapshot test 1`] = `
         "MethodResponses": [
           {
             "ResponseModels": {
-              "application/json": "Empty",
+              "application/json": {
+                "Ref": "dkFunctionsApicommonResponseModel8E8393A9",
+              },
             },
             "ResponseParameters": {
               "method.response.header.Access-Control-Allow-Headers": true,
@@ -2002,6 +2009,30 @@ exports[`snapshot test 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Method",
+    },
+    "dkFunctionsApicommonResponseModel8E8393A9": {
+      "Properties": {
+        "ContentType": "application/json",
+        "Name": "CommonResponse",
+        "RestApiId": {
+          "Ref": "dkFunctionsApiC9834555",
+        },
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "additionalProperties": true,
+          "properties": {
+            "message": {
+              "type": "string",
+            },
+            "status": {
+              "type": "string",
+            },
+          },
+          "title": "commonResponse",
+          "type": "object",
+        },
+      },
+      "Type": "AWS::ApiGateway::Model",
     },
     "dkFunctionsApidkUiDataModel552C5581": {
       "Properties": {
@@ -2473,10 +2504,10 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "patchDkUiData56BB7ED1": {
+    "postDkUiData36FB614B": {
       "DependsOn": [
-        "patchDkUiDataServiceRoleDefaultPolicy9D9D6C1B",
-        "patchDkUiDataServiceRole6687604B",
+        "postDkUiDataServiceRoleDefaultPolicy94BD7954",
+        "postDkUiDataServiceRole25D74AA4",
       ],
       "Properties": {
         "Code": {
@@ -2494,7 +2525,7 @@ exports[`snapshot test 1`] = `
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "patchDkUiDataServiceRole6687604B",
+            "postDkUiDataServiceRole25D74AA4",
             "Arn",
           ],
         },
@@ -2502,7 +2533,7 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "patchDkUiDataServiceRole6687604B": {
+    "postDkUiDataServiceRole25D74AA4": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2533,22 +2564,25 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "patchDkUiDataServiceRoleDefaultPolicy9D9D6C1B": {
+    "postDkUiDataServiceRoleDefaultPolicy94BD7954": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "dynamodb:PutItem",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+              ],
               "Effect": "Allow",
               "Resource": "arn:aws:dynamodb:*:*:table/*",
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "patchDkUiDataServiceRoleDefaultPolicy9D9D6C1B",
+        "PolicyName": "postDkUiDataServiceRoleDefaultPolicy94BD7954",
         "Roles": [
           {
-            "Ref": "patchDkUiDataServiceRole6687604B",
+            "Ref": "postDkUiDataServiceRole25D74AA4",
           },
         ],
       },
