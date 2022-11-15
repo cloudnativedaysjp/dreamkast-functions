@@ -22,6 +22,7 @@ import {
   VoteSchema,
   DkUiDataSchema,
   DkUiDataMutationSchema,
+  CommonResponseSchema,
 } from './schemas'
 import { BuildConfig } from './buildConfig'
 
@@ -230,6 +231,12 @@ export function newAPIGatewayResources(
     schema: DkUiDataMutationSchema,
   })
 
+  const commonResponseModel = api.addModel('commonResponseModel', {
+    contentType: 'application/json',
+    modelName: 'CommonResponse',
+    schema: CommonResponseSchema,
+  })
+
   /* === [   ResponseParameters   ] === */
 
   const CorsResponseParameters = {
@@ -283,7 +290,7 @@ export function newAPIGatewayResources(
     statusCode: '200',
     responseParameters: CorsMethodResponseParameters,
     responseModels: {
-      'application/json': apigateway.Model.EMPTY_MODEL,
+      'application/json': commonResponseModel,
     },
   }
   const methodResponses400 = {

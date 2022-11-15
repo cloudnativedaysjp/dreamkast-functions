@@ -123,11 +123,15 @@ async function handleStampedFromUIAction(
 
   const model = await ctx.repo.getOrNew(profileId, confName)
   const updated = model.stampExistingOneAndSkipOthers(slotId)
-  if (updated) {
-    await ctx.repo.set(profileId, confName, model)
+  if (!updated) {
+    return {
+      status: 'skipped',
+      message: 'not fulfilled',
+    }
   }
+  await ctx.repo.set(profileId, confName, model)
 
-  return { message: 'ok' }
+  return { status: 'ok' }
 }
 
 async function handleStampedFromQRAction(
@@ -142,8 +146,14 @@ async function handleStampedFromQRAction(
 
   const model = await ctx.repo.getOrNew(profileId, confName)
   model.forceSetWatchedTalkFromOffline(slotId, trackId, talkId)
-  model.stampSpecifiedOneAndSkipOthers(slotId)
+  const updated = model.stampSpecifiedOneAndSkipOthers(slotId)
+  if (!updated) {
+    return {
+      status: 'skipped',
+      message: 'already stamped',
+    }
+  }
   await ctx.repo.set(profileId, confName, model)
 
-  return { message: 'ok' }
+  return { status: 'ok' }
 }

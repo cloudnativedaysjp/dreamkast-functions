@@ -119,10 +119,13 @@ export class DkUiDataModel {
     return true
   }
 
-  stampSpecifiedOneAndSkipOthers(slotId: number) {
+  stampSpecifiedOneAndSkipOthers(slotId: number): boolean {
     const stampChallenge = this.data.stampChallenges.find(
       (i) => i.slotId === slotId,
     )
+    if (stampChallenge?.condition === 'stamped') {
+      return false
+    }
     if (stampChallenge) {
       stampChallenge.waiting = false
       stampChallenge.condition = 'stamped'
@@ -141,6 +144,7 @@ export class DkUiDataModel {
         i.waiting = false
       }
     })
+    return true
   }
 
   view(): DkUiView {
