@@ -23,7 +23,7 @@ export function newDkUiDataResources(
     }),
   )
 
-  const postDkUiDataFunction = new NodejsFunction(scope, 'patchDkUiData', {
+  const postDkUiDataFunction = new NodejsFunction(scope, 'postDkUiData', {
     entry: 'src/postDkUiData.ts',
     environment: {
       TABLENAME: tableNames.dkUiData,
@@ -32,7 +32,7 @@ export function newDkUiDataResources(
   postDkUiDataFunction.addToRolePolicy(
     new PolicyStatement({
       resources: ['arn:aws:dynamodb:*:*:table/*'],
-      actions: ['dynamodb:PutItem'],
+      actions: ['dynamodb:GetItem', 'dynamodb:PutItem'],
     }),
   )
 

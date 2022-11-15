@@ -4,6 +4,21 @@ import {
   JsonSchemaVersion,
 } from 'aws-cdk-lib/aws-apigateway'
 
+export const CommonResponseSchema: JsonSchema = {
+  schema: JsonSchemaVersion.DRAFT4,
+  title: 'commonResponse',
+  type: JsonSchemaType.OBJECT,
+  additionalProperties: true,
+  properties: {
+    status: {
+      type: JsonSchemaType.STRING,
+    },
+    message: {
+      type: JsonSchemaType.STRING,
+    },
+  },
+}
+
 export const ViewerCountSchema: JsonSchema = {
   schema: JsonSchemaVersion.DRAFT4,
   title: 'viewerCountResponse',
