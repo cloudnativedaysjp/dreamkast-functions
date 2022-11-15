@@ -1,0 +1,101 @@
+conference: cndt2022
+pointEvents:
+  - id: 101800
+    point: 15
+    desc: 'セッション視聴: 1日目 スロット1'
+  - id: 101801
+    point: 15
+    desc: 'セッション視聴: 1日目 スロット2'
+  - id: 101802
+    point: 15
+    desc: 'セッション視聴: 1日目 スロット3'
+  - id: 101803
+    point: 15
+    desc: 'セッション視聴: 1日目 スロット4'
+  - id: 101804
+    point: 15
+    desc: 'セッション視聴: 1日目 スロット5'
+  - id: 101805
+    point: 15
+    desc: 'セッション視聴: 1日目 スロット6'
+  - id: 101900
+    point: 15
+    desc: 'セッション視聴: 2日目 スロット1'
+  - id: 101901
+    point: 15
+    desc: 'セッション視聴: 2日目 スロット2'
+  - id: 101902
+    point: 15
+    desc: 'セッション視聴: 2日目 スロット3'
+  - id: 101903
+    point: 15
+    desc: 'セッション視聴: 2日目 スロット4'
+  - id: 101904
+    point: 15
+    desc: 'セッション視聴: 2日目 スロット5'
+  - id: 101905
+    point: 15
+    desc: 'セッション視聴: 2日目 スロット6'
+  - id: 111800
+    point: 5
+    desc: 'セッションにコメント: 1日目 スロット1'
+  - id: 111801
+    point: 5
+    desc: 'セッションにコメント: 1日目 スロット2'
+  - id: 111802
+    point: 5
+    desc: 'セッションにコメント: 1日目 スロット3'
+  - id: 111803
+    point: 5
+    desc: 'セッションにコメント: 1日目 スロット4'
+  - id: 111804
+    point: 5
+    desc: 'セッションにコメント: 1日目 スロット5'
+  - id: 111805
+    point: 5
+    desc: 'セッションにコメント: 1日目 スロット6'
+  - id: 111900
+    point: 5
+    desc: 'セッションにコメント: 2日目 スロット1'
+  - id: 111901
+    point: 5
+    desc: 'セッションにコメント: 2日目 スロット2'
+  - id: 111902
+    point: 5
+    desc: 'セッションにコメント: 2日目 スロット3'
+  - id: 111903
+    point: 5
+    desc: 'セッションにコメント: 2日目 スロット4'
+  - id: 111904
+    point: 5
+    desc: 'セッションにコメント: 2日目 スロット5'
+  - id: 111905
+    point: 5
+    desc: 'セッションにコメント: 2日目 スロット6'
+  - id: 120001
+    point: 60
+    desc: 'スタンプコンプリート！'
+  - id: 130001
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackA'
+  - id: 130002
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackB'
+  - id: 130003
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackC'
+  - id: 130004
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackD'
+  - id: 130005
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackE'
+  - id: 130006
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackF'
+  - id: 200001
+    point: 30
+    desc: '会場チェックイン'
+  - id: 200002
+    point: 30
+    desc: '事前登録ボーナス'
