@@ -15,10 +15,10 @@ type Manifest = {
 }
 
 async function main() {
-  const [filePath, dynamoTableName] = process.argv.slice(2)
+  const [filePath, dynamoTableName, salt] = process.argv.slice(2)
   if (!filePath || !dynamoTableName) {
     console.info(
-      'Usage: npm run load-point-event [filePath] [dynamoTableName]\n\n',
+      'Usage: npm run load-point-event [filePath] [dynamoTableName] [salt]\n\n',
     )
     throw new Error('Filepath and dynamoTableName are required.')
   }
@@ -28,7 +28,7 @@ async function main() {
   const dynamodb = new DynamoDB({})
 
   for (const ev of pointEvents) {
-    const pointEventId = getSHA1(conference, ev.id)
+    const pointEventId = getSHA1(salt || conference, ev.id)
 
     try {
       await dynamodb.send(
@@ -51,9 +51,9 @@ async function main() {
   }
 }
 
-function getSHA1(conference: string, eventNum: number) {
+function getSHA1(salt: string, eventNum: number) {
   const shasum = createHash('sha1')
-  return shasum.update(`${conference}/${eventNum}`).digest('hex')
+  return shasum.update(`${salt}/${eventNum}`).digest('hex')
 }
 
 main()
