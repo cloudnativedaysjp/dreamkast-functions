@@ -184,50 +184,6 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "ProxyResourceOPTIONS91B2F771": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "RequestParameters": {
-          "method.request.path.proxy": true,
-        },
-        "ResourceId": {
-          "Ref": "ProxyResourceD65343FB",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
     "dkFunctionsApiAccountA7BC248F": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
@@ -283,7 +239,7 @@ exports[`snapshot test 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "dkFunctionsApiDeployment04779041dacc61e4502afe0b8a24e253fea8adbc": {
+    "dkFunctionsApiDeployment04779041510bed1b95e6354be3d323b9542a13ec": {
       "DependsOn": [
         "ApiRequestValidatorAB2F6E5B",
         "dkFunctionsApiapiF0E97CB4",
@@ -291,14 +247,9 @@ exports[`snapshot test 1`] = `
         "dkFunctionsApiapiv1appdataprofileIdconferenceconferenceOPTIONS1DEDDF0C",
         "dkFunctionsApiapiv1appdataprofileIdconferenceconferencePOST6A7E66AB",
         "dkFunctionsApiapiv1appdataprofileIdconferenceconference662C960A",
-        "dkFunctionsApiapiv1appdataprofileIdconferenceOPTIONSE3A5759B",
         "dkFunctionsApiapiv1appdataprofileIdconferenceF1622B1A",
-        "dkFunctionsApiapiv1appdataprofileIdOPTIONSEA835CC6",
         "dkFunctionsApiapiv1appdataprofileIdA67EC516",
-        "dkFunctionsApiapiv1appdataOPTIONS510AF61B",
         "dkFunctionsApiapiv1appdata9FE23A17",
-        "dkFunctionsApiapiv1OPTIONS2B8024C9",
-        "dkFunctionsApiapiv1profileprofileIdOPTIONSF1FDA9D0",
         "dkFunctionsApiapiv1profileprofileIdpointOPTIONS15FC5DB1",
         "dkFunctionsApiapiv1profileprofileIdpointPOSTC602EA7B",
         "dkFunctionsApiapiv1profileprofileIdpointDBDEEAF5",
@@ -306,22 +257,17 @@ exports[`snapshot test 1`] = `
         "dkFunctionsApiapiv1profileprofileIdpointsOPTIONSA3286AB2",
         "dkFunctionsApiapiv1profileprofileIdpoints49944CE8",
         "dkFunctionsApiapiv1profileprofileId5C432D2B",
-        "dkFunctionsApiapiv1profileOPTIONS570A8AA8",
         "dkFunctionsApiapiv1profile4FDD0D74",
         "dkFunctionsApiapiv131D6C896",
-        "dkFunctionsApiapiv1talkstalkIdOPTIONS05B5EC91",
         "dkFunctionsApiapiv1talkstalkId78EEC939",
         "dkFunctionsApiapiv1talkstalkIdvoteOPTIONS7B1E326F",
         "dkFunctionsApiapiv1talkstalkIdvotePOSTB27A2612",
         "dkFunctionsApiapiv1talkstalkIdvoteFBE9426C",
-        "dkFunctionsApiapiv1talksOPTIONS035D53D3",
         "dkFunctionsApiapiv1talksB0BA12F9",
-        "dkFunctionsApiapiv1trackstrackIdOPTIONSDC0132DA",
         "dkFunctionsApiapiv1trackstrackId67C58612",
         "dkFunctionsApiapiv1trackstrackIdviewercountGETBD29CDA4",
         "dkFunctionsApiapiv1trackstrackIdviewercountOPTIONS4D301753",
         "dkFunctionsApiapiv1trackstrackIdviewercountCD2AE862",
-        "dkFunctionsApiapiv1tracksOPTIONS45233FE7",
         "dkFunctionsApiapiv1tracksECC8C314",
         "dkFunctionsApidkUiDataModel552C5581",
         "dkFunctionsApidkUiDataMutationModel751BACD9",
@@ -330,7 +276,6 @@ exports[`snapshot test 1`] = `
         "dkFunctionsApiviewerCountModel89CA9AD0",
         "dkFunctionsApivoteModel23CDE1C0",
         "ProxyResourceANYD2521206",
-        "ProxyResourceOPTIONS91B2F771",
         "ProxyResourceD65343FB",
       ],
       "Properties": {
@@ -356,7 +301,7 @@ exports[`snapshot test 1`] = `
           "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","user":"$context.identity.user","caller":"$context.identity.caller","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
         },
         "DeploymentId": {
-          "Ref": "dkFunctionsApiDeployment04779041dacc61e4502afe0b8a24e253fea8adbc",
+          "Ref": "dkFunctionsApiDeployment04779041510bed1b95e6354be3d323b9542a13ec",
         },
         "MethodSettings": [
           {
@@ -402,47 +347,6 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "dkFunctionsApiapiv1OPTIONS2B8024C9": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv131D6C896",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
     "dkFunctionsApiapiv1appdata9FE23A17": {
       "Properties": {
         "ParentId": {
@@ -454,47 +358,6 @@ exports[`snapshot test 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Resource",
-    },
-    "dkFunctionsApiapiv1appdataOPTIONS510AF61B": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1appdata9FE23A17",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
     },
     "dkFunctionsApiapiv1appdataprofileIdA67EC516": {
       "Properties": {
@@ -508,47 +371,6 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "dkFunctionsApiapiv1appdataprofileIdOPTIONSEA835CC6": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1appdataprofileIdA67EC516",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
     "dkFunctionsApiapiv1appdataprofileIdconferenceF1622B1A": {
       "Properties": {
         "ParentId": {
@@ -560,47 +382,6 @@ exports[`snapshot test 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Resource",
-    },
-    "dkFunctionsApiapiv1appdataprofileIdconferenceOPTIONSE3A5759B": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1appdataprofileIdconferenceF1622B1A",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
     },
     "dkFunctionsApiapiv1appdataprofileIdconferenceconference662C960A": {
       "Properties": {
@@ -1092,47 +873,6 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "dkFunctionsApiapiv1profileOPTIONS570A8AA8": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1profile4FDD0D74",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
     "dkFunctionsApiapiv1profileprofileId5C432D2B": {
       "Properties": {
         "ParentId": {
@@ -1144,47 +884,6 @@ exports[`snapshot test 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Resource",
-    },
-    "dkFunctionsApiapiv1profileprofileIdOPTIONSF1FDA9D0": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1profileprofileId5C432D2B",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
     },
     "dkFunctionsApiapiv1profileprofileIdpointDBDEEAF5": {
       "Properties": {
@@ -1739,47 +1438,6 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "dkFunctionsApiapiv1talksOPTIONS035D53D3": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1talksB0BA12F9",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
     "dkFunctionsApiapiv1talkstalkId78EEC939": {
       "Properties": {
         "ParentId": {
@@ -1791,47 +1449,6 @@ exports[`snapshot test 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Resource",
-    },
-    "dkFunctionsApiapiv1talkstalkIdOPTIONS05B5EC91": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1talkstalkId78EEC939",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
     },
     "dkFunctionsApiapiv1talkstalkIdvoteFBE9426C": {
       "Properties": {
@@ -2111,47 +1728,6 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "dkFunctionsApiapiv1tracksOPTIONS45233FE7": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1tracksECC8C314",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
     "dkFunctionsApiapiv1trackstrackId67C58612": {
       "Properties": {
         "ParentId": {
@@ -2163,47 +1739,6 @@ exports[`snapshot test 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Resource",
-    },
-    "dkFunctionsApiapiv1trackstrackIdOPTIONSDC0132DA": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'hoge.com'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "200",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "200",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "dkFunctionsApiapiv1trackstrackId67C58612",
-        },
-        "RestApiId": {
-          "Ref": "dkFunctionsApiC9834555",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
     },
     "dkFunctionsApiapiv1trackstrackIdviewercountCD2AE862": {
       "Properties": {

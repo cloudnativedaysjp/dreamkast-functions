@@ -133,15 +133,17 @@ export function newAPIGatewayResources(
 
   /* === [ RESOURCES ] === */
 
-  const root = api.root
-  const apiv1 = root.addResource('api').addResource('v1', {
+  const apiOptions = {
     defaultCorsPreflightOptions: {
       statusCode: 200,
       allowOrigins: [buildConfig.AccessControlAllowOrigin],
       allowMethods: apigateway.Cors.ALL_METHODS,
       allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
     },
-  })
+  }
+
+  const root = api.root
+  const apiv1 = root.addResource('api').addResource('v1')
 
   // Dreamkast
   new apigateway.ProxyResource(scope, 'ProxyResource', {
@@ -170,25 +172,25 @@ export function newAPIGatewayResources(
   // TRACKS
   const tracks = apiv1.addResource('tracks')
   const trackid = tracks.addResource('{trackId}')
-  const viewerCount = trackid.addResource('viewer_count')
+  const viewerCount = trackid.addResource('viewer_count', apiOptions)
 
   // TALKS
   const talks = apiv1.addResource('talks')
   const talkId = talks.addResource('{talkId}')
-  const vote = talkId.addResource('vote')
+  const vote = talkId.addResource('vote', apiOptions)
 
   // Profile
   const profiles = apiv1.addResource('profile')
   const profileId = profiles.addResource('{profileId}')
-  const point = profileId.addResource('point')
-  const points = profileId.addResource('points')
+  const point = profileId.addResource('point', apiOptions)
+  const points = profileId.addResource('points', apiOptions)
 
   // dk-ui AppData
   const appData = apiv1
     .addResource('app-data')
     .addResource('{profileId}')
     .addResource('conference')
-    .addResource('{conference}')
+    .addResource('{conference}', apiOptions)
 
   /* === [   MODEL   ] === */
 
