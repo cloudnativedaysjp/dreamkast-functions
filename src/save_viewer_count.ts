@@ -9,16 +9,18 @@ const ivs = new IvsClient({})
 
 const TABLENAME = process.env.TABLENAME || ''
 const GET_TRACKS_URL = process.env.GET_TRACKS_URL || ''
-const EVENTABBR = process.env.EVENTABBR || ''
+const CONFERENCE_NAME = process.env.EVENTABBR || ''
 
 type Record = {
   trackId: number
+  trackName: string
   channelArn: string
   viewerCount: number
+  confName: string
 }
 
 export const handler = async (_: APIGatewayEvent | MappedEvent<null>) => {
-  const url = GET_TRACKS_URL + '?eventAbbr=' + EVENTABBR
+  const url = GET_TRACKS_URL + '?eventAbbr=' + CONFERENCE_NAME
 
   const response: any = await fetch(url, {
     method: 'GET',
@@ -44,8 +46,10 @@ export const handler = async (_: APIGatewayEvent | MappedEvent<null>) => {
 
       return {
         trackId: track['id'],
+        trackName: track['name'],
         channelArn: track['channelArn'],
         viewerCount: viewerCount,
+        confName: CONFERENCE_NAME,
       }
     }),
   )
@@ -56,8 +60,10 @@ export const handler = async (_: APIGatewayEvent | MappedEvent<null>) => {
         TableName: TABLENAME,
         Item: {
           trackId: { N: String(record['trackId']) },
+          trackName: { S: String(record['trackName']) },
           channelArn: { S: record['channelArn'] },
           viewerCount: { N: String(record['viewerCount']) },
+          confName: { S: String(record['confName']) },
         },
       })
       await dynamodb.send(command)

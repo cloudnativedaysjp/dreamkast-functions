@@ -113,6 +113,9 @@ exports[`snapshot test 1`] = `
             "KeyType": "HASH",
           },
         ],
+        "StreamSpecification": {
+          "StreamViewType": "NEW_IMAGE",
+        },
         "TableName": "viewerCount-test",
       },
       "Type": "AWS::DynamoDB::Table",

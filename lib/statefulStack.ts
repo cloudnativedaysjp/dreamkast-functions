@@ -1,7 +1,13 @@
 import { Construct } from 'constructs'
 import { Stack, StackProps, RemovalPolicy } from 'aws-cdk-lib'
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
+import {
+  AttributeType,
+  StreamViewType,
+  BillingMode,
+  Table,
+} from 'aws-cdk-lib/aws-dynamodb'
 import { BuildConfig } from './buildConfig'
+import { Stream } from 'stream'
 
 export function tableNameMap(env: string) {
   return {
@@ -36,6 +42,7 @@ export class StatefulStack extends Stack {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'trackId', type: AttributeType.NUMBER },
       removalPolicy: RemovalPolicy.DESTROY,
+      stream: StreamViewType.NEW_IMAGE,
     })
 
     this.profilePointTable = new Table(this, 'ProfilePointTable', {
