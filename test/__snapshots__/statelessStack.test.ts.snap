@@ -310,8 +310,8 @@ exports[`snapshot test 1`] = `
             "HttpMethod": "*",
             "LoggingLevel": "INFO",
             "ResourcePath": "/*",
-            "ThrottlingBurstLimit": 3000,
-            "ThrottlingRateLimit": 60,
+            "ThrottlingBurstLimit": 5000,
+            "ThrottlingRateLimit": 10000,
           },
         ],
         "RestApiId": {

@@ -70,8 +70,8 @@ export function newAPIGatewayResources(
     restApiName: `dk-functions-${buildConfig.Environment}`,
     deployOptions: {
       stageName: 'v1',
-      throttlingRateLimit: 60,
-      throttlingBurstLimit: 3000,
+      throttlingRateLimit: 10000,
+      throttlingBurstLimit: 5000,
       dataTraceEnabled: true,
       loggingLevel: apigateway.MethodLoggingLevel.INFO,
       accessLogDestination: new apigateway.LogGroupLogDestination(
