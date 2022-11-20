@@ -99,3 +99,63 @@ pointEvents:
   - id: 200002
     point: 30
     desc: '事前登録ボーナス'
+  - id: 210001
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210002
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210003
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210004
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210005
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210006
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210007
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210008
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210009
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210010
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210011
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210012
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210013
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210014
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210015
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210016
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210017
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210018
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210019
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210020
+    point: 20
+    desc: 'イースターエッグ'
