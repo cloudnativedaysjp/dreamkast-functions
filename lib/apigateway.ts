@@ -73,6 +73,7 @@ export function newAPIGatewayResources(
       throttlingRateLimit: 10000,
       throttlingBurstLimit: 5000,
       dataTraceEnabled: true,
+      metricsEnabled: true,
       loggingLevel: apigateway.MethodLoggingLevel.INFO,
       accessLogDestination: new apigateway.LogGroupLogDestination(
         new LogGroup(scope, 'ApiLogGroup', {

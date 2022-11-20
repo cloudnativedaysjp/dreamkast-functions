@@ -309,6 +309,7 @@ exports[`snapshot test 1`] = `
             "DataTraceEnabled": true,
             "HttpMethod": "*",
             "LoggingLevel": "INFO",
+            "MetricsEnabled": true,
             "ResourcePath": "/*",
             "ThrottlingBurstLimit": 5000,
             "ThrottlingRateLimit": 10000,
