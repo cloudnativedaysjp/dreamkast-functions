@@ -42,7 +42,7 @@
     "@aws-sdk/client-dynamodb": "3.212.0",
     "@aws-sdk/client-ivs": "3.212.0",
     "@aws-sdk/util-dynamodb": "3.212.0",
-    "@middy/core": "^3.6.2",
+    "@middy/core": "^4.0.0",
     "aws-cdk-lib": "2.50.0",
     "constructs": "10.1.162",
     "eslint": "8.27.0",
