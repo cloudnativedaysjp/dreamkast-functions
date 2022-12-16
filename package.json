@@ -20,7 +20,8 @@
     "cdk:prd-deploy": "EVENTABBR=$npm_package_config_eventcdk cdk deploy -c config=prd --require-approval never --all",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}' --quiet && eslint '*/**/*.{js,ts}' --quiet ",
     "lint-fix": "prettier --write '**/*.{js,jsx,ts,tsx}' && eslint --fix './**/*.{js,jsx,ts,tsx}' && eslint '*/**/*.{js,ts}' --quiet --fix",
-    "load-point-event": "ts-node bin/loadPointEvent.ts"
+    "load-point-event": "ts-node bin/loadPointEvent.ts",
+    "get-total-points": "ts-node bin/getTotalPoints.ts"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
@@ -45,6 +46,7 @@
     "@middy/core": "^4.0.0",
     "aws-cdk-lib": "2.50.0",
     "constructs": "10.1.162",
+    "csv-parse": "^5.3.2",
     "eslint": "8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
