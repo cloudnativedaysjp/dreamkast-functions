@@ -9,11 +9,12 @@ from boto3.dynamodb.conditions import Key
 from src.types import DynamoResponse, Col
 
 
-DYNAMO_VOTE_TABLE_PRD: Final[str] = "voteCFP-prd-VoteTableC0BC27A7-UKB7XFRIUIX1"
-DYNAMO_VOTE_TABLE_STG: Final[str] = "voteCFP-stg-VoteTableC0BC27A7-84BXPDSTU937"
+DYNAMO_VOTE_TABLE_PRD: Final[str] = "vote-prd"
+DYNAMO_VOTE_TABLE_STG: Final[str] = "vote-stg"
 
 VOTING_PERIOD: Final[dict[str, tuple[datetime, datetime]]] = {
-    "cndt2022": (datetime.fromisoformat('2022-10-01'), datetime.fromisoformat('2022-10-13T18:00:00Z+09:00'))
+    "cndt2022": (datetime.fromisoformat('2022-10-01'), datetime.fromisoformat('2022-10-13T18:00:00Z+09:00')),
+    "cicd2023": (datetime.fromisoformat('2023-01-01'), datetime.fromisoformat('2023-01-25T18:00:00Z+09:00'))
 }
 
 

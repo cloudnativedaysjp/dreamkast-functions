@@ -7,7 +7,7 @@ class Col:
     TS_BY_HOUR: Final[str] = "ts_by_hour"
     TALK_ID: Final[str] = "talkId"
     GLOBAL_IP: Final[str] = "globalIp"
-    EVENT_NAME: Final[str] = "eventName"
+    EVENT_NAME: Final[str] = "eventAbbr"
     COUNT: Final[str] = "count"
     SUM: Final[str] = "sum"
 
