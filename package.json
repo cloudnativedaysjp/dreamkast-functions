@@ -5,7 +5,7 @@
     "my-project": "bin/my-project.js"
   },
   "config": {
-    "event": "cndt2022"
+    "event": "cicd2023"
   },
   "scripts": {
     "build": "tsc",
