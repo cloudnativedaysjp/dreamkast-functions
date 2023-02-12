@@ -1,5 +1,5 @@
 import { Construct } from 'constructs'
-import { Stack, StackProps, Duration, CfnOutput } from 'aws-cdk-lib'
+import { StackProps, Duration } from 'aws-cdk-lib'
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets'

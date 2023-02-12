@@ -1,6 +1,6 @@
 import { Construct } from 'constructs'
-import { Stack, StackProps, Fn, RemovalPolicy } from 'aws-cdk-lib'
-import { Function, IFunction } from 'aws-cdk-lib/aws-lambda'
+import { StackProps, RemovalPolicy } from 'aws-cdk-lib'
+import { IFunction } from 'aws-cdk-lib/aws-lambda'
 import {
   Effect,
   PolicyDocument,
