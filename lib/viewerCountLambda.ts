@@ -20,8 +20,6 @@ export function newViewerCountResources(
 
   // Lambda: SaveViewerCount
 
-  console.log('hogehoge')
-  console.log(scope.node.tryGetContext('EVENTABBR') as string)
   const saveViewerCountFunction = new NodejsFunction(scope, 'saveViewerCount', {
     entry: 'src/saveViewerCount.ts',
     environment: {
