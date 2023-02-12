@@ -2,7 +2,7 @@
 
 ## Overview
 
-![Overview](./overview.png)
+Dreamkast-funciton is the Microservicized API backend for dreamkast/dreamkast-ui.
 
 ## Requirement
 
