@@ -20,8 +20,10 @@ export function newViewerCountResources(
 
   // Lambda: SaveViewerCount
 
+  console.log('hogehoge')
+  console.log(scope.node.tryGetContext('EVENTABBR') as string)
   const saveViewerCountFunction = new NodejsFunction(scope, 'saveViewerCount', {
-    entry: 'src/save_viewer_count.ts',
+    entry: 'src/saveViewerCount.ts',
     environment: {
       TABLENAME: tableNames.viewerCount,
       EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
@@ -45,7 +47,7 @@ export function newViewerCountResources(
   // Lambda: GetViewerCount
 
   const getViewerCountFunction = new NodejsFunction(scope, 'getViewerCount', {
-    entry: 'src/get_viewer_count.ts',
+    entry: 'src/getViewerCount.ts',
     environment: {
       TABLENAME: tableNames.viewerCount,
     },
@@ -63,7 +65,7 @@ export function newViewerCountResources(
     scope,
     'pushViewerCountMetrics',
     {
-      entry: 'src/push_viewer_count_metrics.ts',
+      entry: 'src/pushViewerCountMetrics.ts',
       environment: {
         ENV: buildConfig.Environment,
       },

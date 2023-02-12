@@ -5,5 +5,5 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
-  snapshotSerializers: ['<rootDir>/test/snapshot-serializer.ts'],
+  snapshotSerializers: ['<rootDir>/test/snapshotSerializer.ts'],
 }

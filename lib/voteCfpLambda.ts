@@ -17,7 +17,7 @@ export function newVoteCFPResources(
 
   // Lambda: Vote
   const voteCFPFunction = new NodejsFunction(scope, 'voteCFP', {
-    entry: 'src/vote_cfp.ts',
+    entry: 'src/voteCfp.ts',
     environment: {
       TABLENAME: tableNames.vote,
     },
