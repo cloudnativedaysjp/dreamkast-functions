@@ -7,7 +7,6 @@ import {
   Table,
 } from 'aws-cdk-lib/aws-dynamodb'
 import { BuildConfig } from './buildConfig'
-import { Stream } from 'stream'
 
 export function tableNameMap(env: string) {
   return {

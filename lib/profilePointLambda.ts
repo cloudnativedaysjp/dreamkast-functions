@@ -1,5 +1,5 @@
 import { Construct } from 'constructs'
-import { Stack, StackProps } from 'aws-cdk-lib'
+import { StackProps } from 'aws-cdk-lib'
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { StatefulStack, tableNameMap } from './statefulStack'
@@ -22,7 +22,7 @@ export function newProfilePointResources(
     scope,
     'postProfilePoint',
     {
-      entry: 'src/post_profile_point.ts',
+      entry: 'src/postProfilePoint.ts',
       environment: {
         TABLENAME: tableNames.profilePoint,
       },
@@ -38,7 +38,7 @@ export function newProfilePointResources(
   // Lambda: GetProfilePoint
 
   const getProfilePointFunction = new NodejsFunction(scope, 'getProfilePoint', {
-    entry: 'src/get_profile_point.ts',
+    entry: 'src/getProfilePoint.ts',
     environment: {
       PROFILE_POINT_TABLENAME: tableNames.profilePoint,
       POINT_EVENT_TABLENAME: tableNames.pointEvent,
