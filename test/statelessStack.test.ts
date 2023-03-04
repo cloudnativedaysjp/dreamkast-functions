@@ -9,6 +9,7 @@ test('snapshot test', () => {
   const buildConfig = {
     DreamkastApiBaseUrl: 'https://staging.dev.cloudnativedays.jp',
     AWSProfileRegion: 'us-east-2',
+    IVSRegion: 'us-east-1',
     Environment: 'test',
     DomainName: 'api.test.cloudnativedays.jp',
     HostedZoneID: 'Z0898116244TOPT4X7AGI',

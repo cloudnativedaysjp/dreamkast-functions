@@ -7,4 +7,5 @@ export interface BuildConfig {
   readonly AccessControlAllowOrigin: string
   readonly GetTracksURL: string
   readonly AWSProfileRegion: string
+  readonly IVSRegion: string
 }

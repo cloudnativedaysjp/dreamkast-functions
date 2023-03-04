@@ -5,7 +5,9 @@ import { APIGatewayEvent } from 'aws-lambda'
 import { MappedEvent } from './common'
 
 const dynamodb = new DynamoDB({})
-const ivs = new IvsClient({})
+const ivs = new IvsClient({
+  region: process.env.IVS_REGION,
+})
 
 const TABLENAME = process.env.TABLENAME || ''
 const GET_TRACKS_URL = process.env.GET_TRACKS_URL || ''

@@ -17,6 +17,7 @@ test('snapshot test', () => {
     {
       DreamkastApiBaseUrl: 'https://staging.dev.cloudnativedays.jp',
       AWSProfileRegion: 'us-east-2',
+      IVSRegion: 'us-east-1',
       Environment: 'test',
       DomainName: 'api.test.cloudnativedays.jp',
       HostedZoneID: 'test',
