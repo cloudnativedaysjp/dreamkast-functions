@@ -2805,6 +2805,7 @@ exports[`snapshot test 1`] = `
           "Variables": {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
             "GET_TRACKS_URL": "https://test.cloudnativedays.jp",
+            "IVS_REGION": "us-east-1",
             "TABLENAME": "viewerCount-test",
           },
         },
