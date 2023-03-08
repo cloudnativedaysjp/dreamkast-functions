@@ -47,6 +47,7 @@ function getConfig() {
     ),
     GetTracksURL: ensureString(unparsedEnv, 'GetTracksURL'),
     AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
+    IVSRegion: ensureString(unparsedEnv, 'IVSRegion'),
   }
 
   return buildConfig

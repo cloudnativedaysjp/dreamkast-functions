@@ -26,6 +26,7 @@ export function newViewerCountResources(
       TABLENAME: tableNames.viewerCount,
       EVENTABBR: scope.node.tryGetContext('EVENTABBR') as string,
       GET_TRACKS_URL: buildConfig.GetTracksURL,
+      IVS_REGION: buildConfig.IVSRegion,
     },
   })
   saveViewerCountFunction.addToRolePolicy(
