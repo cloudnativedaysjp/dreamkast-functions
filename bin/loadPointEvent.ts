@@ -52,6 +52,13 @@ function isEnvValid(env: string): asserts env is Env {
   }
 }
 
+function isFilePathValid(filePath: string) {
+  if (!filePath) {
+    console.info('Usage: npm run load-point-event [filePath] [env] [salt]\n\n')
+    throw new Error('Filepath is required.')
+  }
+}
+
 function mkdir(dir: string) {
   if (fs.existsSync(dir)) {
     return
@@ -61,10 +68,7 @@ function mkdir(dir: string) {
 
 async function main() {
   const [filePath, env, salt] = process.argv.slice(2)
-  if (!filePath) {
-    console.info('Usage: npm run load-point-event [filePath] [env] [salt]\n\n')
-    throw new Error('Filepath and dynamoTableName are required.')
-  }
+  isFilePathValid(filePath)
   isEnvValid(env)
 
   const outDir = `${OUT_DIR}_${env}`
@@ -100,10 +104,10 @@ async function main() {
 
     let url, fileName: string
     if (ev.point === 0) {
-      url = params.endpoint + `get-session-point?key=${pointEventId}`
+      url = params.endpoint + `get-session-point/${pointEventId}`
       fileName = `${outDir}/${ev.id}_for_session.png`
     } else {
-      url = params.endpoint + `get-point?key=${pointEventId}`
+      url = params.endpoint + `get-point/${pointEventId}`
       fileName = `${outDir}/${ev.id}_${ev.point}.png`
     }
     try {
