@@ -1,0 +1,86 @@
+conference: cicd2023
+pointEvents:
+  - id: 102101
+    point: 50
+    desc: 'セッション視聴: スロット1'
+  - id: 102102
+    point: 50
+    desc: 'セッション視聴: スロット2'
+  - id: 102103
+    point: 50
+    desc: 'セッション視聴: スロット3'
+  - id: 102104
+    point: 50
+    desc: 'セッション視聴: スロット4'
+  - id: 102105
+    point: 50
+    desc: 'セッション視聴: スロット5'
+  - id: 102106
+    point: 50
+    desc: 'セッション視聴: スロット6'
+  - id: 112101
+    point: 20
+    desc: 'セッションにコメント: スロット1'
+  - id: 112102
+    point: 20
+    desc: 'セッションにコメント: スロット2'
+  - id: 112103
+    point: 20
+    desc: 'セッションにコメント: スロット3'
+  - id: 112104
+    point: 20
+    desc: 'セッションにコメント: スロット4'
+  - id: 112105
+    point: 20
+    desc: 'セッションにコメント: スロット5'
+  - id: 112106
+    point: 20
+    desc: 'セッションにコメント: スロット6'
+  - id: 120001
+    point: 100
+    desc: 'スタンプコンプリート！'
+  - id: 130001
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackA'
+  - id: 130002
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackB'
+  - id: 130003
+    point: 0
+    desc: 'セッション視聴 オフライン: JUST for QR-code generation: TrackC'
+  - id: 200001
+    point: 50
+    desc: '会場チェックイン'
+  - id: 200002
+    point: 50
+    desc: '事前登録ボーナス'
+  - id: 210001
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210002
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210003
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210004
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210005
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210006
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210007
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210008
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210009
+    point: 20
+    desc: 'イースターエッグ'
+  - id: 210010
+    point: 20
+    desc: 'イースターエッグ'
