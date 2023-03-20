@@ -103,7 +103,7 @@ async function handleTalkWatchedAction(
   const model = await ctx.repo.getOrNew(profileId, confName)
   const ok = model.addWatchedTalk(slotId, trackId, talkId)
   if (!ok) {
-    throw new Error('Error400: Too many requests')
+    return { message: 'too short requests' }
   }
   model.setStampChallengeWhenFulfilled(slotId)
   await ctx.repo.set(profileId, confName, model)
