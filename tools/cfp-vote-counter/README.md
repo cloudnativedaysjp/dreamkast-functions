@@ -25,13 +25,10 @@ aws sso login
 
 # Generate CSV
 ./main.py generate_csv cndt2022 [stg]
-
-# Show time-series graph
-./main.py time_series cndt2022 [stg]
 ```
 
 Help
 
 ```
-./main.py generate -h
+./main.py generate_csv -h
 ```
