@@ -10,6 +10,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 
 
 DKW_ENDPOINT: Final[dict[str, str]] = {
+    "stg": "https://dkw.dev.cloudnativedays.jp/query",
     "prd": "https://dkw.cloudnativedays.jp/query",
 }
 
