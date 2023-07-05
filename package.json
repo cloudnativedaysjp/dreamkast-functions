@@ -46,7 +46,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "node-fetch": "3.3.0",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.0",
     "source-map-support": "0.5.21"
   }
 }
