@@ -43,7 +43,7 @@
     "aws-cdk-lib": "^2.64.0",
     "constructs": "10.1.248",
     "eslint": "8.34.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "node-fetch": "3.3.0",
     "prettier": "^2.7.1",
